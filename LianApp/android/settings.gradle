@@ -1,4 +1,6 @@
 rootProject.name = 'LianApp'
+include ':react-native-languages'
+project(':react-native-languages').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-languages/android')
 include ':react-native-scrypt'
 project(':react-native-scrypt').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-scrypt/android')
 //include ':react-native-scrypt'

@@ -36,6 +36,7 @@
     "react-native": "0.57.1",
     "react-native-crypto": "^2.1.2",
     "react-native-i18n": "^2.0.15",
+    "react-native-languages": "^3.0.1",
     "react-native-level-fs": "^3.0.0",
     "react-native-os": "^1.0.1",
     "react-native-pwd-input": "^1.0.1",

@@ -148,6 +148,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-languages')
     compile project(':react-native-scrypt')
     //compile project(':react-native-scrypt')
     compile project(':react-native-randombytes')

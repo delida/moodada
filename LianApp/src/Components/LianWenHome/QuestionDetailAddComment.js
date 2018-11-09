@@ -10,12 +10,12 @@ var {height, width} = Dimensions.get('window');
 import MainLogic from '../../logic/MainLogic';
 import LoginLogic from '../../logic/LoginLogic';
 import LoadingView from '../CommonComp/LoadingView';
-
+import i18n from '../../../i18n/i18n';
 export default class QuestionDetailAddComment extends NavigationPage {
 
     static defaultProps = {
       ...NavigationPage.defaultProps,
-      title: '回答问题',
+      title: i18n.t('LianWenHome.questionDetailAddComment.answer'),
       showBackButton: true,
     };
   
@@ -59,7 +59,7 @@ export default class QuestionDetailAddComment extends NavigationPage {
 _saveComment(e){
   var begin=new Date();
     if(this.state.text==''||this.state.text.length>200||this.state.text.length<=0){
-        Toast.fail('输入内容有误');
+        Toast.fail(i18n.t('FAIL.input_content_exception'));
         return;
     }
     this.setState({showLoading:true});
@@ -78,18 +78,18 @@ _saveComment(e){
              var time=end-begin;
             // console.log("评论总消耗时间为="+time);
               this.setState({showLoading:false});
-                Toast.success("评论成功");
+                Toast.success(i18n.t('SUCCESS.comment_success'));
                 this.navigator.pop();
             }
             else if(resData.isSuccess==0)
             {
               this.setState({showLoading:false});
-                Toast.fail('回答失败');
+                Toast.fail(i18n.t('FAIL.answer_fail'));
             }
             else
             {
               this.setState({showLoading:false});
-                Toast.fail('回答已过期，不允许回答');
+                Toast.fail(i18n.t('FAIL.expired_answer'));
             }
         })
         })
@@ -111,13 +111,13 @@ _saveComment(e){
           behavior="padding"
         >
             <View style={{height: 20}} />
-            <ListRow  detail={<Label text={'已输入'+this.state.text.length+'个文字'}   type='title' />} />
+            <ListRow  detail={<Label text={i18n.t('LianWenHome.questionDetailAddComment.typed')+this.state.text.length+i18n.t('LianWenHome.questionDetailAddComment.words')}   type='title' />} />
             <ListRow  detail={
             <View style={styles.item}>
             <TouchableOpacity activeOpacity={1} style={styles.inputContainer} onPress={() => this.TextInput.focus()}>
   
                 <TextInput
-                    placeholder={'请输入回答(最多140字)'}
+                    placeholder={i18n.t('PLACEHOLDER.input_answer')}
                     placeholderTextColor={'#bbbbbb'}
                     underlineColorAndroid={'transparent'}
                     multiline

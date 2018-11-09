@@ -11,7 +11,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
-
+import i18n from '../../../i18n/i18n';
 
 
 export default class QuestionDetailItemForMy extends Component {

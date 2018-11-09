@@ -102,11 +102,11 @@ export default class RegisterLogin extends NavigationPage {
       
       }
       else {
-        Toast.fail('输入的密码长度不少于12位');
+        Toast.fail(i18n.t('FAIL.length_password'));
       }
     }
     else {
-      Toast.fail('两次输入密码不一致');
+      Toast.fail(i18n.t('FAIL.unmatch_password'));
     }
    }
   
@@ -154,7 +154,7 @@ export default class RegisterLogin extends NavigationPage {
   renderPage() {
 
     let vAccountShow = this.state.reVisiable ? (<View style={{ flex: 1 }}>
-      <ListRow title='账户地址' detail={
+      <ListRow title={i18n.t('LoginView.registerLogin.account_addr')} detail={
         this.state.userName
       }
         titlePlace='top'
@@ -170,12 +170,12 @@ export default class RegisterLogin extends NavigationPage {
       />
        <ListRow detail={
                 <View style={styles.contentImput}>
-                       <Button title='备份keyStore' type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={() => this._importData()} />
+                       <Button title={i18n.t('LoginView.registerLogin.keyStore_backup')} type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={() => this._importData()} />
                 </View>
                 } style={{ backgroundColor: 'rgba(178,178,178,0.1)' }} />
                    <ListRow detail={
                 <View style={styles.contentImput}>
-                       <Button title='登    陆' type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._login(e)} />
+                       <Button title={i18n.t('ACTION.login')} type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._login(e)} />
                 </View>
                 } style={{ backgroundColor: 'rgba(178,178,178,0.1)' }} />
 
@@ -209,7 +209,7 @@ export default class RegisterLogin extends NavigationPage {
                     onChangeText={(text) => {
                       this.setState({ userPW: text })
                     }}
-                    placeholder='请输入新密码'
+                    placeholder={i18n.t('PLACEHOLDER.input_new_password')}
                     secureTextEntry={true}
                     value={this.state.userPW}
                     keyboardType='numeric'
@@ -228,7 +228,7 @@ export default class RegisterLogin extends NavigationPage {
                     }}
                     secureTextEntry={true}
                     multiline={true}
-                    placeholder='请重复新密码'
+                    placeholder={i18n.t('PLACEHOLDER.repeat_new_password')}
                     value={this.state.userRPW}
                     keyboardType='numeric'
                   />
@@ -238,7 +238,7 @@ export default class RegisterLogin extends NavigationPage {
               />
                 <ListRow detail={
                 <View style={styles.contentImput}>
-                       <Button title='注    册' type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._register(e)} />
+                       <Button title={i18n.t('ACTION.sign_up')} type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._register(e)} />
                 </View>
                 } style={{ backgroundColor: 'rgba(178,178,178,0.0)' }} />
 
@@ -277,7 +277,7 @@ export default class RegisterLogin extends NavigationPage {
    
       {/*   <ListRow detail={<Button title='注            册' type='primary' style={{ margin: 2, width: width - 20 ,height:50}} size='lg' onPress={(e) => this._register(e)} />}  style={{backgroundColor:'rgba(178,178,178,0.1)'}}/> */}
         <View style={{ height: 5 }} />
-        <ListRow detail={"注册成功后，请保存好自己的账户地址和keyStore值以及密码，请务必多备份几份，请勿告诉其他人。本登录账号为个人保管无后台操作，丢失后无法找回"} titlePlace='top' style={{backgroundColor:'rgba(178,178,178,0.1)'}} detailStyle={{color:'white'}} />
+        <ListRow detail={i18n.t('REMINDER.after_register')} titlePlace='top' style={{backgroundColor:'rgba(178,178,178,0.1)'}} detailStyle={{color:'white'}} />
 
         {vAccountShow}
         <LoadingView showLoading={ this.state.showLoading } loadingViewClick={()=>{this.setState({showLoading:false})}}/>

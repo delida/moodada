@@ -17,7 +17,7 @@ import {
 const {width, height} = Dimensions.get('window');
 // 导入外部的组件
 import BottomCommonCell from './BottomCommonCell';
-
+import i18n from '../../../i18n/i18n';
 import RefreshListView, { RefreshState } from 'react-native-refresh-list-view';
 import QuestionDetail from './QuestionDetail';
 import {Theme, TeaNavigator, NavigationPage, BasePage, ListRow, TabView, Label, PullPicker} from 'teaset';
@@ -112,8 +112,8 @@ export default class LianWenHomeYouLike extends NavigationPage{
                       </View>
                        <Text style={{color:'gray'}}>{rowData.desc}</Text>
                        <View  style={styles.rightBottomViewStyle}>
-                           <Text style={{color:'red'}}>时间:{rowData.duration}</Text>
-                           <Text>悬赏:{rowData.award}coin</Text>
+                           <Text style={{color:'red'}}>{i18n.t('LianWenHome.lianWenHomeYouLike.award')}:{rowData.duration}</Text>
+                           <Text>{i18n.t('LianWenHome.lianWenHomeYouLike.award')}:{rowData.award}coin</Text>
                        </View>
                    </View>
                </View>
@@ -127,7 +127,7 @@ export default class LianWenHomeYouLike extends NavigationPage{
              <View style={styles.container}>
                  <BottomCommonCell
                      leftIcon='../../styles/icons/cnxh.png'
-                     leftTitle='最新问题'
+                     leftTitle={i18n.t('LianWenHome.lianWenHomeYouLike.latest_question')}
                  />
                  {/*列表*/}
                  <RefreshListView

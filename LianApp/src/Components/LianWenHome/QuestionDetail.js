@@ -14,7 +14,7 @@ import {
     Dimensions,
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
-
+import i18n from '../../../i18n/i18n';
 import { NavigationPage, Theme, ListRow, Label, Toast } from 'teaset';
 
 
@@ -48,7 +48,7 @@ export default class QuestionDetail extends NavigationPage {
 
     static defaultProps = {
         ...NavigationPage.defaultProps,
-        title: '提问评论列表',
+        title: i18n.t('LianWenHome.lianWenSettlement.comment_list_for_questions'),
         showBackButton: true,
     };
 
@@ -85,12 +85,12 @@ export default class QuestionDetail extends NavigationPage {
             MainLogic.updateContentStatus(res.userAddr,res.userPwd,res.keystore,this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp,hash,0,2).then(data=>{
               if(data==1)
               {
-                Toast.success('恢复成功');
+                Toast.success(i18n.t('SUCCESS.recover_success'));
                 this.onHeaderRefresh();
               }
               else
               {
-                Toast.fail('请求恢复失败');
+                Toast.fail(i18n.t('FAIL.recover_request_fail'));
               }
             })
           }
@@ -107,12 +107,12 @@ export default class QuestionDetail extends NavigationPage {
             MainLogic.updateContentStatus(res.userAddr,res.userPwd,res.keystore,this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp,hash,1,2).then(data=>{
               if(data==1)
               {
-                Toast.success('屏蔽成功');
+                Toast.success(i18n.t('SUCCESS.block_success'));
                 this.onHeaderRefresh();
               }
               else
               {
-                Toast.fail('请求屏蔽失败');
+                Toast.fail(i18n.t('FAIL.block_request_fail'));
               }
             })
           }
@@ -192,7 +192,7 @@ export default class QuestionDetail extends NavigationPage {
                     <View style={{width:width,height:1,backgroundColor:'rgba(180,176,173,0.2)'}}></View>
                     <View style={{width:width,height:1,backgroundColor:'rgba(180,176,173,0.1)'}}></View>
                </View>
-                    <ListRow title='新增评论' icon={require('../../styles/png/tanhao.png')} titleStyle={{ color: '#00A29A' }} onPress={() => this._addNewComment()} />
+                    <ListRow title={i18n.t('LianWenHome.questionDetail.new_comment')} icon={require('../../styles/png/tanhao.png')} titleStyle={{ color: '#00A29A' }} onPress={() => this._addNewComment()} />
                 </View>
 
                 {/*列表数据*/}
@@ -250,7 +250,7 @@ export default class QuestionDetail extends NavigationPage {
     }
 
     _chongfudianzan = () => {
-        Toast.fail('不能重复点赞');
+        Toast.fail(i18n.t('FAIL.repeated_thumbUp'));
     }
 
     _getCommentListByServer() {
@@ -277,7 +277,7 @@ export default class QuestionDetail extends NavigationPage {
                    /*  isOwner:1, */
                     refreshState: dataList.length < 1 ? RefreshState.EmptyData : RefreshState.Idle,
                 })
-                Toast.fail('问题已超时');
+                Toast.fail(i18n.t('FAIL.expired_question'));
 
             }
 
@@ -355,8 +355,8 @@ export default class QuestionDetail extends NavigationPage {
                 }
                 swipeActions={
                     [
-                    <ListRow.SwipeActionButton title='恢复'  onPress={() => this._renderHuiFu(resultStr)} />,
-                    <ListRow.SwipeActionButton title='屏蔽' type='danger' onPress={() => this._renderPingBi(resultStr)}/>,          
+                    <ListRow.SwipeActionButton title={i18n.t('ACTION.recover')}  onPress={() => this._renderHuiFu(resultStr)} />,
+                    <ListRow.SwipeActionButton title={i18n.t('ACTION.block')} type='danger' onPress={() => this._renderPingBi(resultStr)}/>,
                   ]}
     
                     titlePlace='top'
@@ -403,8 +403,8 @@ export default class QuestionDetail extends NavigationPage {
                 }
                 swipeActions={
                     [
-                    <ListRow.SwipeActionButton title='恢复'  onPress={() => this._renderHuiFu(resultStr)} />,
-                    <ListRow.SwipeActionButton title='屏蔽' type='danger' onPress={() => this._renderPingBi(resultStr)}/>,          
+                    <ListRow.SwipeActionButton title={i18n.t('ACTION.recover')}  onPress={() => this._renderHuiFu(resultStr)} />,
+                    <ListRow.SwipeActionButton title={i18n.t('ACTION.block')} type='danger' onPress={() => this._renderPingBi(resultStr)}/>,
                   ]}
     
                     titlePlace='top'

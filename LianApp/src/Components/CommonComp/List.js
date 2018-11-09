@@ -19,11 +19,11 @@ import Scroller from './Scroller';
 // 图标
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Theme, TeaNavigator, NavigationPage, BasePage, ListRow, TabView, Label, PullPicker} from 'teaset';
-
+import i18n from '../../../i18n/i18n';
  
 let {width} = Dimensions.get("window");
 var youLikeData = require('../../LocalData/LianWenList.json');
- 
+
 // 缓存列表中所有数据
 let cachedResults = {
   nextPage: 1, // 下一页
@@ -35,7 +35,7 @@ export default class List extends NavigationPage {
 
     static defaultProps = {
         ...NavigationPage.defaultProps,
-        title: '列表测试',
+        title: i18n.t('CommonComp.list.test_list'),
         showBackButton: true,
       };
 

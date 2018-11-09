@@ -11,7 +11,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import {NavigationPage, Input, ListRow, Label,Theme,Button} from 'teaset';
- 
+import i18n from '../../../i18n/i18n';
 export default class Scroller extends NavigationPage {
 
     static defaultProps = {
@@ -59,7 +59,7 @@ export default class Scroller extends NavigationPage {
               refreshing={isRefreshing}
               onRefresh={this._onRefresh.bind(this)}
               tintColor={"#ff6600"}
-              title={"拼命加载中..."}
+              title={"loading..."}
             />
           }
         />

@@ -5,6 +5,7 @@
  */
 
 import React, { Component } from 'react';
+import i18n from '../../../i18n/i18n';
 import {
     AppRegistry,
     StyleSheet,
@@ -27,7 +28,7 @@ export default class BottomCommonCell extends Component{
  
      render() {
          return (
-           <TouchableOpacity onPress={()=>alert('点了')}>
+           <TouchableOpacity onPress={()=>alert(i18n.t('ALERT.clicked'))}>
              <View style={styles.container}>
                  {/*左边*/}
                  <View style={styles.leftViewStyle}>

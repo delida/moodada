@@ -34,7 +34,7 @@ export default class About extends NavigationPage {
           <View style={styles.viewUserTop}>
             <Image style={styles.imgUserTitle} source={require('../../styles/menu/wen.png')}/>
           </View>
-          <Text style={styles.txtName}>LIANWEN</Text>
+          <Text style={styles.txtName}>{i18n.t('snapQA')}</Text>
           <Text style={styles.txtGF}>{i18n.t('Profile.about.version')}0.1.0</Text>
         </View>
          {/*  <View style={{height: 40}} />

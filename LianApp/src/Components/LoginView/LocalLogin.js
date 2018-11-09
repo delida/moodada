@@ -212,7 +212,7 @@ export default class LocalLogin extends NavigationPage {
               />
                 <ListRow detail={
                 <View style={styles.contentImput}>
-                       <Button title={i18n.t('ACTION.login')} type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._login(e)} />
+                       <Button title={i18n.t('ACTION.login')} type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F'}} Size='lg' onPress={(e) => this._login(e)} />
                 </View>
                 } style={{ backgroundColor: 'rgba(178,178,178,0.0)' }} />
 

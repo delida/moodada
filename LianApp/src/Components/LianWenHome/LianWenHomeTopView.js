@@ -14,7 +14,7 @@ import {
     ListView,
     Image
 } from 'react-native';
-
+import i18n from '../../../i18n/i18n';
 var Dimensions = require('Dimensions');
 var {width} = Dimensions.get('window');
 

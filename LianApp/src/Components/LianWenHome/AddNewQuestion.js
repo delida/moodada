@@ -12,12 +12,13 @@ import CoinLogic from '../../logic/CoinLogic';
 
 import LoadingView from '../CommonComp/LoadingView';
 import MainLogic from '../../logic/MainLogic';
+import i18n from '../../../i18n/i18n';
 
 export default class AddNewQuestion extends NavigationPage {
 
     static defaultProps = {
       ...NavigationPage.defaultProps,
-      title: '提问',
+      title: i18n.t('Lmain.question'),
       showBackButton: true,
     };
   
@@ -37,7 +38,7 @@ export default class AddNewQuestion extends NavigationPage {
           boackinfo:'',
           pertime:10,
           maxtime:10000,
-          peiinfo:'请输入10的倍数'
+          peiinfo:i18n.t('INFO.ten_multiples')
         };
 
         
@@ -63,7 +64,7 @@ export default class AddNewQuestion extends NavigationPage {
           showLoading:false,
         pertime:data.perTime,
         maxtime:data.maxTime,
-        peiinfo:'请输入'+data.perTime+'的倍数'
+        peiinfo:i18n.t('LianWenHome.addNewQuestion.please_input')+data.perTime+i18n.t('LianWenHome.addNewQuestion.multiples')
         })
 
       })
@@ -140,18 +141,18 @@ _addNewTopic(e){
     if(isNaN(award)||award<=0)
     {
      
-      Toast.fail('悬赏金额输入有误');
+      Toast.fail(i18n.t('FAIL.wrong_award_amount'));
       return;
     }
     let duration = Number.parseInt(this.state.duration)
     if(isNaN(duration)||duration<=0){
      
-      Toast.fail('持续时间输入有误');
+      Toast.fail(i18n.t('FAIL.wrong_duration_input'));
       return;
     }
 
     if(duration>this.state.maxtime){
-      Toast.fail('持续时间最大值为'+this.state.maxtime);
+      Toast.fail(i18n.t('FAIL.maximum_duration')+this.state.maxtime);
       return;
     }
 
@@ -159,14 +160,14 @@ _addNewTopic(e){
     if(yu!=0)
     {
    
-      Toast.fail('持续时间应输入为'+this.state.pertime+'的整数');
+      Toast.fail(i18n.t('LianWenHome.addNewQuestion.expect_duration')+this.state.pertime+i18n.t('LianWenHome.addNewQuestion.integer'));
       return;
     }
     
     if(this.state.text==''||this.state.text.length>200||this.state.text.length<=0)
     {
       
-      Toast.fail('输入的问题有误');
+      Toast.fail(i18n.t('FAIL.wrong_input_question'));
       return;
     }
     this.setState({showLoading:true});
@@ -174,7 +175,7 @@ _addNewTopic(e){
     if(this.state.coin<award)
     {
       this.setState({showLoading:false});
-      Toast.fail('coin币不足');
+      Toast.fail(i18n.t('LianWenHome.addNewQuestion.not_enough_coin'));
      return;
     }
     else
@@ -187,7 +188,7 @@ _addNewTopic(e){
      var time=end-begin;
     // console.log("总创建问题消耗时间为="+time);
            // console.log('加载结束');
-            Toast.success('提问成功,请等待20秒后刷新列表查看');
+            Toast.success(i18n.t('SUCCESS.question_success'));
             this.setState({showLoading:false});
             this.navigator.pop();
           }
@@ -263,7 +264,7 @@ _addNewTopic(e){
           <TouchableOpacity activeOpacity={1} style={styles.inputContainer} onPress={() => this.TextInput.focus()}>
 
               <TextInput
-                  placeholder={'请输入问题(最多140字)'}
+                  placeholder={i18n.t('PLACEHOLDER.input_question')}
                   placeholderTextColor={'#bbbbbb'}
                   underlineColorAndroid={'transparent'}
                   multiline
@@ -277,7 +278,7 @@ _addNewTopic(e){
       </View>
         }/>
           <View style={{height: 2}} />
-          <ListRow title='悬赏金额' detail={
+          <ListRow title={i18n.t('LianWenHome.addNewQuestion.award')} detail={
             <TextInput
             style={{height: 35, width:200,borderColor: 'gray', borderWidth: 1}}
             onChangeText={(text) => {
@@ -290,7 +291,7 @@ _addNewTopic(e){
           />
           }/>
            <View style={{height: 2}} />
-          <ListRow title='持续时间(秒)' detail={
+          <ListRow title={i18n.t('LianWenHome.addNewQuestion.duration_time')} detail={
             <TextInput
             style={{height: 35, width:200,borderColor: 'gray', borderWidth: 1}}
             onChangeText={(text) => {

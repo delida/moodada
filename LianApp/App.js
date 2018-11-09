@@ -9,9 +9,11 @@
 import React, { Component } from 'react';
 import {TeaNavigator, Theme} from 'teaset';
 import Splash from "./src/Components/Splash";
+import i18n from "./i18n/i18n";
 
 
-Theme.set({fitIPhoneX: true,backButtonTitle: '返回',navColor:'#00A29A'});
+
+Theme.set({fitIPhoneX: true,backButtonTitle: i18n.t('ACTION.back'),navColor:'#00A29A'});
 
 
 export default class App extends Component {

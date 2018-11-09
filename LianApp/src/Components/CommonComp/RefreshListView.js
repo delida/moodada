@@ -3,6 +3,7 @@
  */
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import i18n from '../../../i18n/i18n';
 import {
   View,
   Text,
@@ -50,10 +51,10 @@ export default class RefreshListView extends PureComponent {
  
   static defaultProps = {
     disabledHeaderRefresh: false,
-    footerRefreshingText: '数据加载中…',
-    footerFailureText: '点击重新加载',
-    footerNoMoreDataText: '已加载全部数据',
-    footerEmptyDataText: '暂时没有相关数据',
+    footerRefreshingText :i18n.t('INFO.footerRefreshingText'),
+    footerFailureText :i18n.t('INFO.footerFailureText'),
+    footerNoMoreDataText :i18n.t('INFO.footerNoMoreDataText'),
+    footerEmptyDataText :i18n.t('INFO.footerEmptyDataText')
   }
  
   componentWillReceiveProps(nextProps) {}
@@ -139,7 +140,7 @@ export default class RefreshListView extends PureComponent {
           >
             {footerEmptyDataComponent ? footerEmptyDataComponent : (
               <View style={styles.footerContainer}>
-                <Text style={styles.footerText}>{footerEmptyDataText}</Text>
+                <Text style={styles.footerText}>/*{footerEmptyDataText}*/</Text>
               </View>
             )}
           </TouchableOpacity>

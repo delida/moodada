@@ -19,6 +19,7 @@ import {Theme, NavigationButton, NavigationPage, BasePage, ListRow, TabView, Lab
 import LianWenGroup from './LianWenGroup';
 import Scroller from '../CommonComp/Scroller';
 import QuestionDetail from './QuestionDetail';
+import i18n from '../../../i18n/i18n';
 
 import LianWenHomeTopView from './LianWenHomeTopView';
 var {width, height}=Dimensions.get('window')
@@ -36,7 +37,7 @@ export default class MyLianWenList extends NavigationPage {
 
     static defaultProps = {
       ...NavigationPage.defaultProps,
-      title: '模块分组',
+      title: i18n.t('LianWenHome.lianWenGroup.module_group'),
       showBackButton: true,
     };
   

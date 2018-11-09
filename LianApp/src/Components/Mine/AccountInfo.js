@@ -68,13 +68,13 @@ export default class AccountInfo extends NavigationPage {
         keystore: user.keystore
       }
       Clipboard.setString(JSON.stringify(jsonData));
-      Toast.success(i18t.t('SUCCESS.userInfo_clip'));
+      Toast.success(i18n.t('SUCCESS.userInfo_clip'));
     })
   }
 
   _resumeAccountInfo(){
     Clipboard.setString(this.props.userAddr);
-    Toast.success(i18t.t('SUCCESS.accountAddr_clip'));
+    Toast.success(i18n.t('SUCCESS.accountAddr_clip'));
   }
 
   _clearAll() {
@@ -101,7 +101,7 @@ export default class AccountInfo extends NavigationPage {
                 timeindex++;
                 if (timeindex >= 3) {
                   this.setState({ showLoading: false });
-                  Toast.success(i18t.t('SUCCESS.recharge_request_sent'));
+                  Toast.success(i18n.t('SUCCESS.recharge_request_sent'));
                   this._getBalance();
                   //停止掉
                   clearInterval(this.timer);
@@ -114,14 +114,14 @@ export default class AccountInfo extends NavigationPage {
             }
             else {
               this.setState({ showLoading: false });
-              Toast.fail(i18t.t('FAIL.recharge_fail'));
+              Toast.fail(i18n.t('FAIL.recharge_fail'));
             }
           })
         })
       }
       else {
         this.setState({ showLoading: false });
-        Toast.fail(i18t.t('FAIL.not_logged_in'));
+        Toast.fail(i18n.t('FAIL.not_logged_in'));
       }
     })
 
@@ -144,7 +144,7 @@ export default class AccountInfo extends NavigationPage {
 
     Alert.alert(i18n.t('ALERT.recharge_confirm'), '', [
       { text: i18n.t('ACTION.confirm'), onPress: () => this._buyMintToken(num) },
-      { text: i18n.t('ACTION.cancel'), onPress: () => Toast.success(i18n.t('cancel_success')) }
+      { text: i18n.t('ACTION.cancel'), onPress: () => Toast.success(i18n.t('SUCCESS.cancel_success')) }
     ])
 
   }
@@ -172,7 +172,7 @@ export default class AccountInfo extends NavigationPage {
                 timeindex++;
                 if (timeindex >= 3) {
                   this.setState({ showLoading: false });
-                  Toast.success(i18n.t('withdraw_request_sent'));
+                  Toast.success(i18n.t('SUCCESS.withdraw_request_sent'));
                   this._getBalance();
                   //停止掉
                   clearInterval(this.timer);
@@ -212,7 +212,7 @@ export default class AccountInfo extends NavigationPage {
     }
 
 
-    Alert.alert(i18n.t('ALERT.withdraw.confirm'), '', [
+    Alert.alert(i18n.t('ALERT.withdraw_confirm'), '', [
       { text: i18n.t('ACTION.confirm'), onPress: () => this._sellMintToken(num) },
       { text: i18n.t('ACTION.cancel'), onPress: () => Toast.success(i18n.t('SUCCESS.cancel_success')) }
     ])
@@ -246,7 +246,7 @@ export default class AccountInfo extends NavigationPage {
               value={this.state.rechargemoac}
               keyboardType='numeric'
             />
-            <Button title={`coin${i18n.t('ACTION.recharge')}`} type='primary' style={{ flex: 3,backgroundColor:'#00A29A',borderColor:'#00A29A' }} onPress={(e) => this._show(e)} />
+            <Button title={`${i18n.t('ACTION.recharge')}`} type='primary' style={{ flex: 3,backgroundColor:'#00A29A',borderColor:'#00A29A' }} onPress={(e) => this._show(e)} />
           </View>
         } />
         {/*  <ListRow  detail={<Button title='充值' type='primary' style={{padding:6,width:width-20}} onPress={(e)=>this._show(e)} />} /> */}
@@ -263,7 +263,7 @@ export default class AccountInfo extends NavigationPage {
               value={this.state.rechargecoin}
               keyboardType='numeric'
             />
-            <Button title={i18n.t('withdraw')} type='primary' style={{ flex: 3,backgroundColor:'#00A29A',borderColor:'#00A29A' }} onPress={(e) => this._showsell(e)} />
+            <Button title={i18n.t('ACTION.withdraw')} type='primary' style={{ flex: 3,backgroundColor:'#00A29A',borderColor:'#00A29A' }} onPress={(e) => this._showsell(e)} />
           </View>
         } />
         <View style={{ height: 10 }} />
@@ -274,7 +274,7 @@ export default class AccountInfo extends NavigationPage {
           <ListRow detail={
             <View>
               <Label text={i18n.t('REMINDER.reminder')} type='title'  />
-              <Text> {i18n.t('REMINDER.reminder_text1')} </Text>
+              <Text>{i18n.t('REMINDER.reminder_text1')} </Text>
             </View>
 
           } titlePlace='top'  detailMultiLine={true}  />

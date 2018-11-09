@@ -18,7 +18,7 @@ import {
 import { Theme, TeaNavigator, NavigationPage, BasePage, ListRow, Toast, Label, PullPicker } from 'teaset';
 import QuestionDetail from './QuestionDetail';
 
-
+import i18n from '../../../i18n/i18n';
 import MainLogic from '../../logic/MainLogic';
 import LoginLogic from '../../logic/LoginLogic';
 
@@ -46,7 +46,7 @@ export default class LianWenHome extends NavigationPage {
 
   static defaultProps = {
     ...NavigationPage.defaultProps,
-    title: '链问',
+    title: i18n.t('snapQA'),
     showBackButton: true,
   };
 
@@ -129,12 +129,12 @@ export default class LianWenHome extends NavigationPage {
         MainLogic.updateContentStatus(res.userAddr,res.userPwd,res.keystore,this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp,hash,0,1).then(data=>{
           if(data==1)
           {
-            Toast.success('恢复成功');
+            Toast.success(i18n.t('SUCCESS.recover_success'));
             this.onHeaderRefresh();
           }
           else
           {
-            Toast.fail('请求恢复失败');
+            Toast.fail(i18n.t('FAIL.recover_request_fail'));
           }
         })
       }
@@ -151,12 +151,12 @@ export default class LianWenHome extends NavigationPage {
         MainLogic.updateContentStatus(res.userAddr,res.userPwd,res.keystore,this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp,hash,1,1).then(data=>{
           if(data==1)
           {
-            Toast.success('屏蔽成功');
+            Toast.success(i18n.t('SUCCESS.block_success'));
             this.onHeaderRefresh();
           }
           else
           {
-            Toast.fail('请求屏蔽失败');
+            Toast.fail(i18n.t('FAIL.block_request_fail'));
           }
         })
       }
@@ -334,8 +334,8 @@ export default class LianWenHome extends NavigationPage {
 
               swipeActions={
                 [
-                <ListRow.SwipeActionButton title='恢复'  onPress={() => this._renderHuiFu(resultStr)} />,
-                <ListRow.SwipeActionButton title='屏蔽' type='danger' onPress={() => this._renderPingBi(resultStr)}/>,          
+                <ListRow.SwipeActionButton title={i18n.t('ACTION.recover')}  onPress={() => this._renderHuiFu(resultStr)} />,
+                <ListRow.SwipeActionButton title={i18n.t('ACTION.block')} type='danger' onPress={() => this._renderPingBi(resultStr)}/>,
               ]}
 
               titlePlace='top'
@@ -412,8 +412,8 @@ export default class LianWenHome extends NavigationPage {
           }
           swipeActions={
             [
-            <ListRow.SwipeActionButton title='恢复'  onPress={() => this._renderHuiFu(resultStr)} />,
-            <ListRow.SwipeActionButton title='屏蔽' type='danger' onPress={() => this._renderPingBi(resultStr)}/>,          
+            <ListRow.SwipeActionButton title={i18n.t('ACTION.recover')}  onPress={() => this._renderHuiFu(resultStr)} />,
+            <ListRow.SwipeActionButton title={i18n.t('ACTION.block')} type='danger' onPress={() => this._renderPingBi(resultStr)}/>,
           ]}
           titlePlace='top'
         />

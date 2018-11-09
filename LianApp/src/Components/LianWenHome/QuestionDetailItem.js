@@ -13,7 +13,7 @@ import {
 const { width, height } = Dimensions.get('window');
 
 import { NavigationPage, Toast, ListRow, Label, Button } from 'teaset';
-
+import i18n from '../../../i18n/i18n';
 
 
 

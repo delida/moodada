@@ -227,7 +227,7 @@ export default class TransferAccounts extends NavigationPage {
           <View style={{height: 5}} />
           <ListRow title={i18n.t('moac_balance')} detail={<Label text={this.state.moac} type='title' />} />
           <ListRow title={i18n.t('coin_balance')}detail={<Label text={this.state.coin} type='title' />} />
-          <ListRow title={i18n.t('PROFILE.transferAccounts.dist_address')} detail={
+          <ListRow title={i18n.t('Profile.transferAccounts.dist_address')} detail={
             <TextInput
             style={{marginLeft:5,marginRight:5,height: 35, flex:1,borderColor: 'gray', borderWidth: 1}}
             onChangeText={(text) => {
@@ -238,7 +238,7 @@ export default class TransferAccounts extends NavigationPage {
              keyboardType='numeric'
           />
           }/>
-          <ListRow title={i18n.t('PROFILE.transferAccounts.transfer_amount')} detail={
+          <ListRow title={i18n.t('Profile.transferAccounts.transfer_amount')} detail={
 
 <View style={{flex:1,flexDirection:'row'}}>
 <TextInput
@@ -250,14 +250,14 @@ export default class TransferAccounts extends NavigationPage {
             value={this.state.rechargemoac}
              keyboardType='numeric'
           />
-          <Button title={'moac' + i18n.t('ACTION.transfer')}type='primary'  style={{flex:3,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._show(e)} />
+          <Button title={i18n.t('Profile.transferAccounts.moac_transfer')}type='primary'  style={{flex:3,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._show(e)} />
 </View>
 
            
           }/>
           
           <View style={{height: 5}} />
-          <ListRow title={i18n.t('PROFILE.transferAccounts.transfer_amount')} detail={
+          <ListRow title={i18n.t('Profile.transferAccounts.transfer_amount')} detail={
               <View style={{flex:1,flexDirection:'row'}}>
               <TextInput
             style={{marginLeft:5,marginRight:5,height: 35, flex:7,borderColor: 'gray', borderWidth: 1}}
@@ -268,7 +268,7 @@ export default class TransferAccounts extends NavigationPage {
             value={this.state.rechargecoin}
              keyboardType='numeric'
           />
-          <Button title= {'coin'+i18n.t('ACTION.transfer')} type='primary' style={{flex:3,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._showsell(e)} />
+          <Button title= {i18n.t('Profile.transferAccounts.coin_transfer')} type='primary' style={{flex:3,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._showsell(e)} />
               </View>
             
           }/>

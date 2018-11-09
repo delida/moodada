@@ -16,7 +16,7 @@ import {
     Platform
 } from 'react-native';
 import LianWenGroup from './LianWenGroup';
-
+import i18n from '../../../i18n/i18n';
 import {Theme, TeaNavigator, NavigationPage, BasePage, ListRow, TabView, Label, PullPicker} from 'teaset';
 
 

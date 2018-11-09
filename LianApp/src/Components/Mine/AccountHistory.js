@@ -98,8 +98,8 @@ export default class AccountHistory extends NavigationPage{
        // 列表 Item
   _renderRow(row) {
     let rowData = row.item;
-    let state = rowData.status == 1?(<Badge style={{backgroundColor: '#20D6A9'}} type='square' count={i18n.t('Profile.accountHistory.completed')} />):(<Badge style={{backgroundColor: '#5bc0de'}} type='square' count='进行中' />);
-    let itemName = rowData.itemType == 1?`$i18n.t('ACTION.recharge')coin`:`$i18n.t('ACTION.withdraw')coin`;
+    let state = rowData.status == 1?(<Badge style={{backgroundColor: '#20D6A9'}} type='square' count={i18n.t('Profile.accountHistory.completed')} />):(<Badge style={{backgroundColor: '#5bc0de'}} type='square' count={i18n.t('ACTION.processing')} />);
+    let itemName = rowData.itemType == 1?`${i18n.t('ACTION.recharge')}coin`:`${i18n.t('ACTION.withdraw')}coin`;
     let image = rowData.itemType == 1?chongzhi:tibi;
     let amount = rowData.itemType == 1?('+'+rowData.amount):('-'+rowData.amount);
     return (

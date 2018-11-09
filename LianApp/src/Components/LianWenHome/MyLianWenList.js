@@ -14,7 +14,7 @@ import {
   ScrollView
 } from 'react-native';
 
-
+import i18n from '../../../i18n/i18n';
 import { Theme, TeaNavigator, NavigationPage, BasePage, ListRow, Toast, Label, PullPicker } from 'teaset';
 import LianWenGroup from './LianWenGroup';
 import Scroller from '../CommonComp/Scroller';
@@ -48,7 +48,7 @@ export default class MyLianWenList extends NavigationPage {
 
   static defaultProps = {
     ...NavigationPage.defaultProps,
-    title: '提问录',
+    title: i18n.t('Lmain.question_list'),
     showBackButton: false,
   };
 

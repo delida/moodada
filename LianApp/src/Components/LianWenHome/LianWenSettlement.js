@@ -15,7 +15,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
-
+import i18n from '../../../i18n/i18n';
 import { NavigationPage, Theme, ListRow, Label, Toast } from 'teaset';
 
 
@@ -46,7 +46,7 @@ export default class LianWenSettlement extends NavigationPage {
 
     static defaultProps = {
         ...NavigationPage.defaultProps,
-        title: '提问评论列表',
+        title: i18n.t('LianWenHome.lianWenSettlement.comment_list_for_questions'),
         showBackButton: true,
     };
 
@@ -142,7 +142,7 @@ export default class LianWenSettlement extends NavigationPage {
                     <View style={{width:width,height:1,backgroundColor:'rgba(180,176,173,0.1)'}}></View>
                </View>
              
-                <ListRow title='评论列表' icon={require('../../styles/png/tanhao.png')} titleStyle={{ color: '#00A29A' }} />
+                <ListRow title={i18n.t('LianWenHome.lianWenSettlement.comment_list')} icon={require('../../styles/png/tanhao.png')} titleStyle={{ color: '#00A29A' }} />
 
                {/*  <ScrollView 
                 style={{borderColor:'red',borderWidth:2}}
@@ -222,7 +222,7 @@ export default class LianWenSettlement extends NavigationPage {
                     dataList: dataList,
                     refreshState: dataList.length < 1 ? RefreshState.EmptyData : RefreshState.Idle,
                 })
-                Toast.fail('问题已超时');
+                Toast.fail(i18n.t('FAIL.expired_question'));
 
             }
 

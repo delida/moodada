@@ -40,12 +40,12 @@ import MenuMain from '../MenuMain';
 
 import LoadingView from '../CommonComp/LoadingView';
 import Madoka from '../../UI/Madoka';
-
+import i18n from '../../../i18n/i18n';
 export default class KeyStoreLogin extends NavigationPage {
 
   static defaultProps = {
     ...NavigationPage.defaultProps,
-    title: 'keyStore登录',
+    title: i18n.t('LoginView.keyStoreLoginView.keyStoreLogin'),
     showBackButton: true,
   };
 
@@ -111,7 +111,7 @@ export default class KeyStoreLogin extends NavigationPage {
     var begin = new Date().getTime();
     //console.log('showLoading', this.state.showLoading);
     if (kong(this.state.keystoreinput)) {
-      Toast.fail('keyStore输入有误');
+      Toast.fail(i18n.t('FAIL.wrong_keyStore'));
       isload=false;
     }
     try {
@@ -121,20 +121,20 @@ export default class KeyStoreLogin extends NavigationPage {
      // console.log('user', user);
     }
     catch (error) {
-      Toast.fail('异常:keyStore输入有误');
+      Toast.fail(i18n.t('FAIL.exception_keyStore'));
       isload=false;
     }
 
     if (kong(this.state.userName)) {
-      Toast.fail('账户地址输入有误');
+      Toast.fail(i18n.t('FAIL.wrong_account_addr'));
       isload=false;
     }
     if (kong(this.state.userPW)) {
-      Toast.fail("密码输入有误");
+      Toast.fail(i18n.t('FAIL.incorrect_password'));
       isload=false;
     }
     if (kong(this.state.keyStore)) {
-      Toast.fail("keystore不允许为空值");
+      Toast.fail(i18n.t('FAIL.empty_keyStore'));
       isload=false;
     }
 
@@ -149,7 +149,7 @@ export default class KeyStoreLogin extends NavigationPage {
             LoginLogic.keyStoreLogin(this.state.userName, this.state.userPW, this.state.keyStore).then((result) => {
               if (result == 1) {
                 this.setState({ showLoading: false });
-                Toast.success('登录成功');
+                Toast.success(i18n.t('SUCCESS.login_success'));
                 var end = new Date().getTime();
                 var time = end - begin;
                // console.log("总消耗时间为=" + time);
@@ -158,11 +158,11 @@ export default class KeyStoreLogin extends NavigationPage {
               }
               else if (result == 0) {
                 this.setState({ showLoading: false });
-                Toast.fail('登录失败');
+                Toast.fail(i18n.t('FAIL.login_fail'));
               }
               else {
                 this.setState({ showLoading: false });
-                Toast.fail('密码错误');
+                Toast.fail(i18n.t('FAIL.incorrect_password'));
               }
                 //停止掉
                 clearInterval(this.timer);
@@ -206,7 +206,7 @@ export default class KeyStoreLogin extends NavigationPage {
                     onChangeText={(text) => {
                       this.setState({ userPW: text })
                     }}
-                    placeholder='请输入密码'
+                    placeholder={i18n.t('PLACEHOLDER.input_password')}
                     value={this.state.userPW}
                     keyboardType='numeric'
                     secureTextEntry={true}
@@ -225,7 +225,7 @@ export default class KeyStoreLogin extends NavigationPage {
                     }}
                    
                     multiline={true}
-                    placeholder='请输入keyStore'
+                    placeholder={i18n.t('PLACEHOLDER.input_keyStore')}
                     value={this.state.keystoreinput}
                     keyboardType='numeric'
                   />
@@ -235,7 +235,7 @@ export default class KeyStoreLogin extends NavigationPage {
               />
                 <ListRow detail={
                 <View style={styles.contentImput}>
-                       <Button title='登    陆' type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._login(e)} />
+                       <Button title={i18n.t('ACTION.login')} type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._login(e)} />
                 </View>
                 } style={{ backgroundColor: 'rgba(178,178,178,0.0)' }} />
 
@@ -244,8 +244,8 @@ export default class KeyStoreLogin extends NavigationPage {
           </ImageBackground>
        {/*  <ListRow detail={<Button title='登            陆' type='primary' style={{ margin: 2, width: width - 20 ,height:50}} size='lg' onPress={(e) => this._login(e)}  />}  style={{backgroundColor:'rgba(178,178,178,0.1)'}}/> */}
         <View style={{ height: 5 }} />
-        <ListRow title='切换本地登陆' onPress={() => this.navigator.push({ view: <LocalLogin BoardList={this.state.BoardList} /> })}  style={{backgroundColor:'rgba(178,178,178,0.1)'}} titleStyle={{color:'white'}} />
-        <ListRow title='注册' onPress={() => this.navigator.push({ view: <RegisterLogin BoardList={this.state.BoardList} /> })}  style={{backgroundColor:'rgba(178,178,178,0.1)'}} titleStyle={{color:'white'}}/>
+        <ListRow title={i18n.t('LoginView.keyStoreLoginView.localLogin')} onPress={() => this.navigator.push({ view: <LocalLogin BoardList={this.state.BoardList} /> })}  style={{backgroundColor:'rgba(178,178,178,0.1)'}} titleStyle={{color:'white'}} />
+        <ListRow title={i18n.t('ACTION.sign_up')} onPress={() => this.navigator.push({ view: <RegisterLogin BoardList={this.state.BoardList} /> })}  style={{backgroundColor:'rgba(178,178,178,0.1)'}} titleStyle={{color:'white'}}/>
         <LoadingView showLoading={this.state.showLoading} loadingViewClick={() => { this.setState({ showLoading: false }) }} />
         
       </ScrollView>

@@ -6,11 +6,12 @@ import React, {Component} from 'react';
 import {StyleSheet,View, ScrollView,Image,Text} from 'react-native';
 
 import {Theme, TeaNavigator, NavigationPage, BasePage, ListRow, TabView, Label} from 'teaset';
+import i18n from '../../../i18n/i18n';
 export default class About extends NavigationPage {
 
     static defaultProps = {
       ...NavigationPage.defaultProps,
-      title: '关于链问',
+      title: i18n.t('Profile.about.about'),
       showBackButton: true,
     };
   
@@ -34,7 +35,7 @@ export default class About extends NavigationPage {
             <Image style={styles.imgUserTitle} source={require('../../styles/menu/wen.png')}/>
           </View>
           <Text style={styles.txtName}>LIANWEN</Text>
-          <Text style={styles.txtGF}>版本号：0.1.0</Text>
+          <Text style={styles.txtGF}>{i18n.t('Profile.about.version')}0.1.0</Text>
         </View>
          {/*  <View style={{height: 40}} />
     

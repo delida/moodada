@@ -18,13 +18,14 @@ import AccountHistory from './AccountHistory';
 
 import List from '../CommonComp/List';
 import LoginLogic from '../../logic/LoginLogic';
+import i18n from '../../../i18n/i18n';
 
 
 export default class MyLianWenList extends NavigationPage {
 
     static defaultProps = {
       ...NavigationPage.defaultProps,
-      title: '个人中心',
+      title: i18n.t('Profile.personalCenter.personal_center'),
       showBackButton: false,
     };
 
@@ -33,7 +34,7 @@ export default class MyLianWenList extends NavigationPage {
       super(props);
       this.state = {
         isload:false,
-        logintitle:'登陆',
+        logintitle:i18n.t('ACTION.login'),
         userAddr:'',
         BoardList:this.props.BoardList,
         loginstate:false
@@ -66,7 +67,7 @@ export default class MyLianWenList extends NavigationPage {
               let result = user.online;
               this.setState({
                 isload:result,
-                logintitle:(result?'退出登陆':'登陆'),
+                logintitle:(result?i18n.t('ACTION.logout'):i18n.t('ACTION.login')),
                 userAddr:user.userAddr,
                 loginstate:result
                });
@@ -92,10 +93,10 @@ export default class MyLianWenList extends NavigationPage {
 
     _show(modal) {
       let items = [
-        {title: '退出登陆', onPress: () => this._exitLogin()},
-        {title: '切换账号',onPress:()=>{this._changeAccount()}},
+        {title: i18n.t('ACTION.logout'), onPress: () => this._exitLogin()},
+        {title: i18n.t('Profile.changeAccount.switch_account'),onPress:()=>{this._changeAccount()}},
       ];
-      let cancelItem = {title: '取消'};
+      let cancelItem = {title: i18n.t('ACTION.cancel')};
       ActionSheet.show(items, cancelItem, {modal});
     }
 
@@ -110,7 +111,7 @@ export default class MyLianWenList extends NavigationPage {
       LoginLogic.exitLogin(this.state.userAddr).then((re)=>{
         this.setState({
           isload:false,
-          logintitle:'登陆'
+          logintitle:i18n.t('ACTION.login')
          });
       });
     
@@ -258,7 +259,7 @@ var jsonData = {
   keystore: keystore_youTest2
 }
 Clipboard.setString(JSON.stringify(jsonData));
-Toast.success('已复制到剪切板，请将剪切板中的内容粘贴到您要备份的位置');
+Toast.success(i18n.t('SCCUESS.userInfo_clip'));
 
 }
 
@@ -268,16 +269,16 @@ Toast.success('已复制到剪切板，请将剪切板中的内容粘贴到您�
       return (
         <ScrollView style={{flex: 1,backgroundColor: '#F5FCFF'}}>
           <View style={{height: 2}} />
-          <ListRow title='账号信息'  onPress={(e) => this._getAccountInfo(e)} />
+          <ListRow title={i18n.t('Profile.accountInfo.accountInfo')}  onPress={(e) => this._getAccountInfo(e)} />
           <View style={{height: 2}} />
-          <ListRow title='登录'  onPress={() => this._login() } />
+          <ListRow title={i18n.t('ACTION.login')}  onPress={() => this._login() } />
          {/*  <ListRow title='切换账户' icon={require('../../styles/icons/changeaccount.png')} onPress={() =>this._changeAccount()} /> */}
        
           {/*  <ListRow title='提币' icon={require('../../styles/icons/quxian.png')} onPress={() => this._tibi() } /> */}
           <View style={{height: 2}} />
-          <ListRow title='区块链信息'  onPress={() => this._mainchaininfo() } />
+          <ListRow title={i18n.t('INFO.blockChain_Info')}  onPress={() => this._mainchaininfo() } />
           <View style={{height: 2}} />
-          <ListRow title='关于链问' detail='版本号 0.1.0' topSeparator='full' onPress={() =>this.navigator.push({view: <About />})} />
+          <ListRow title={i18n.t('Profile.about.about')} detail={`${i18n.t('Profile.about.version')}0.1.0`} topSeparator='full' onPress={() =>this.navigator.push({view: <About />})} />
          
         </ScrollView>
       );
@@ -287,17 +288,17 @@ Toast.success('已复制到剪切板，请将剪切板中的内容粘贴到您�
         return(
         <ScrollView style={{flex: 1,backgroundColor: '#F5FCFF'}}>
         <View style={{height: 2}} />
-        <ListRow title='账号信息' onPress={(e) => this._getAccountInfo(e)} />
+        <ListRow title={i18n.t('Profile.accountInfo.accountInfo')} onPress={(e) => this._getAccountInfo(e)} />
         <View style={{height: 2}} />
-        <ListRow title='切换账户'  onPress={() =>this._changeAccount()} />
+        <ListRow title= {i18n.t('Profile.changeAccount.switch_account')}  onPress={() =>this._changeAccount()} />
         <View style={{height: 2}} />
-        <ListRow title='充值提币记录'  onPress={() => this._chongtihistory() }  />
+        <ListRow title={i18n.t('Profile.accountHistory.record')}  onPress={() => this._chongtihistory() }  />
         <View style={{height: 2}} />
-        <ListRow title='转账'  onPress={() => this._zhuanzhang() }  />
+        <ListRow title={i18n.t('ACTION.transfer')}  onPress={() => this._zhuanzhang() }  />
         <View style={{height: 2}} />
-        <ListRow title='区块链信息'  onPress={() => this._mainchaininfo() } />
+        <ListRow title={i18n.t('INFO.blockChain_Info')}  onPress={() => this._mainchaininfo() } />
         <View style={{height: 2}} />
-        <ListRow title='关于链问'  detail='版本号 0.1.0'  onPress={() =>this.navigator.push({view: <About />})} />
+        <ListRow title={i18n.t('Profile.about.about')} detail={`${i18n.t('Profile.about.version')}0.1.0`}  onPress={() =>this.navigator.push({view: <About />})} />
       </ScrollView>
         );
       }

@@ -27,14 +27,14 @@ const { width, height } = Dimensions.get('window');
 import LoginLogic from '../../logic/LoginLogic';
 import Lmain from '../Lmain';
 import LoadingView from '../CommonComp/LoadingView';
-
 import Madoka from '../../UI/Madoka';
+import i18n from '../../../i18n/i18n';
 
 export default class RegisterLogin extends NavigationPage {
 
   static defaultProps = {
     ...NavigationPage.defaultProps,
-    title: '注册',
+    title: i18n.t('ACTION.sign_up'),
     showBackButton: true,
   };
 
@@ -67,7 +67,7 @@ export default class RegisterLogin extends NavigationPage {
 
    if(this.state.userPW==''|| this.state.userRPW=='')
    {
-       Toast.fail('密码不能输入空值');
+       Toast.fail(i18n.t('FAIL.empty_password'));
    }
    else
    {
@@ -89,7 +89,7 @@ export default class RegisterLogin extends NavigationPage {
                   keyStore: JSON.stringify(user.keystore),
                   reVisiable: true
                 });
-                Toast.success('注册成功，请备份好账户地址和keyStore');
+                Toast.success(i18n.t('SUCCESS.register_success'));
               }
                 //停止掉
                 clearInterval(this.timer);
@@ -127,11 +127,11 @@ export default class RegisterLogin extends NavigationPage {
          }
          else if (result == 0) {
           this.setState({showLoading:false});
-           Toast.fail('登录失败');
+           Toast.fail(i18n.t('FAIL.login_fail'));
          }
          else {
           this.setState({showLoading:false});
-           Toast.fail('密码错误');
+           Toast.fail(i18n.t('FAIL.incorrect_password'));
          }
           //停止掉
           clearInterval(this.timer);
@@ -148,7 +148,7 @@ export default class RegisterLogin extends NavigationPage {
       keystore: JSON.parse(this.state.keyStore)
     }
     Clipboard.setString(JSON.stringify(jsonData));
-    Toast.success('已复制到剪切板，请将剪切板中的内容粘贴到您要备份的位置');
+    Toast.success(i18n.t('SUCCESS.userInfo_clip'));
   }
 
   renderPage() {

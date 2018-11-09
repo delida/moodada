@@ -1,7 +1,7 @@
 
 
 'use strict';
-
+import i18n from '../../../i18n/i18n';
 import React, { Component } from 'react';
 
 import {
@@ -47,7 +47,7 @@ export default class ChangeAccountLogin extends NavigationPage {
 
   static defaultProps = {
     ...NavigationPage.defaultProps,
-    title: '切换账号',
+    title: i18n.t('Profile.changeAccount.switch_account'),
     showBackButton: true,
   };
 
@@ -116,7 +116,7 @@ export default class ChangeAccountLogin extends NavigationPage {
     if(this.state.userName==''||this.state.userPW=='')
     {
      
-      Toast.fail('用户名或密码输入有误');
+      Toast.fail(i18n.t('FAIL.incorrect_UP'));
       return;
     }
     LoginLogic.getUserByUserAddr(this.state.userName).then((res)=>{
@@ -124,7 +124,7 @@ export default class ChangeAccountLogin extends NavigationPage {
       if(res==null||typeof(res)=='undefined')
       {
       
-         Toast.fail('未获取到keyStore值，请切换keyStore登录');
+         Toast.fail(i18n.t('FAIL. no_available_export_keyStore'));
       }
       else
       {
@@ -142,11 +142,11 @@ export default class ChangeAccountLogin extends NavigationPage {
               }
               else if (result == 0) {
                 this.setState({showLoading:false});
-                Toast.fail('登录失败');
+                Toast.fail(i18n.t('FAIL.login_fail'));
               }
               else {
                 this.setState({showLoading:false});
-                Toast.fail('密码错误');
+                Toast.fail(i18n.t('FAIL.incorrect_password'));
               }
   
               //停止掉
@@ -197,7 +197,7 @@ export default class ChangeAccountLogin extends NavigationPage {
                     onChangeText={(text) => {
                       this.setState({ userName: text })
                     }}
-                    placeholder='请输入用户名'
+                    placeholder={i18n.t('PLACEHOLDER.input_username')}
                     value={this.state.userName}
                     keyboardType='numeric'
                   />
@@ -215,7 +215,7 @@ export default class ChangeAccountLogin extends NavigationPage {
                     }}
                     secureTextEntry={true}
                     multiline={true}
-                    placeholder='请输入密码'
+                    placeholder={i18n.t('PLACEHOLDER.input_password')}
                     value={this.state.userPW}
                     keyboardType='numeric'
                   />
@@ -225,7 +225,7 @@ export default class ChangeAccountLogin extends NavigationPage {
               />
                 <ListRow detail={
                 <View style={styles.contentImput}>
-                       <Button title='登    陆' type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._login(e)} />
+                       <Button title={i18n.t('ACTION.login')} type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._login(e)} />
                 </View>
                 } style={{ backgroundColor: 'rgba(178,178,178,0.0)' }} />
 
@@ -235,8 +235,8 @@ export default class ChangeAccountLogin extends NavigationPage {
         </View>
       {/*   <ListRow detail={<Button title='登            陆' type='primary' style={{ margin: 2, width: width - 20 ,height:50}} size='lg' onPress={(e) => this._login(e)} />} style={{backgroundColor:'rgba(178,178,178,0.1)'}} /> */}
         <View style={{ height: 5 }} />
-        <ListRow title='切换keyStore登陆' onPress={() => this.navigator.push({ view: <KeyStoreLogin BoardList={this.state.BoardList}/> })} style={{backgroundColor:'rgba(178,178,178,0.1)'}} titleStyle={{color:'white'}} />
-        <ListRow title='注册' onPress={() => this.navigator.push({ view: <RegisterLogin BoardList={this.state.BoardList}/> })} style={{backgroundColor:'rgba(178,178,178,0.1)'}} titleStyle={{color:'white'}}/>
+        <ListRow title={i18n.t('LoginView.changeAccountLogin.keyStoreLogin')} onPress={() => this.navigator.push({ view: <KeyStoreLogin BoardList={this.state.BoardList}/> })} style={{backgroundColor:'rgba(178,178,178,0.1)'}} titleStyle={{color:'white'}} />
+        <ListRow title={i18n.t('ACTION.sign_up')} onPress={() => this.navigator.push({ view: <RegisterLogin BoardList={this.state.BoardList}/> })} style={{backgroundColor:'rgba(178,178,178,0.1)'}} titleStyle={{color:'white'}}/>
 
         <LoadingView showLoading={ this.state.showLoading } loadingViewClick={()=>{this.setState({showLoading:false})}}/>
       

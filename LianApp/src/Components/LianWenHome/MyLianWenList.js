@@ -79,7 +79,7 @@ export default class MyLianWenList extends NavigationPage {
         let result = user.online;
         this.setState({
           isload: result,
-          logintitle: (result ? '退出登陆' : '登陆'),
+          logintitle: (result ? i18n.t('ACTION.logout') : i18n.t('ACTION.login')),
           userAddr: user.userAddr,
         });
         if (!result) {
@@ -112,10 +112,10 @@ export default class MyLianWenList extends NavigationPage {
           // onFooterRefresh={this.onFooterRefresh}
 
           // 可选
-          footerRefreshingText='玩命加载中 >.<'
-          footerFailureText='我擦嘞，居然失败了 =.=!'
-          footerNoMoreDataText='-我是有底线的-'
-          footerEmptyDataText='-好像什么东西都没有-'
+              footerRefreshingText ={i18n.t('INFO.footerRefreshingText')}
+              footerFailureText ={i18n.t('INFO.footerFailureText')}
+              footerNoMoreDataText ={i18n.t('INFO.footerNoMoreDataText')}
+              footerEmptyDataText ={i18n.t('INFO.footerEmptyDataText')}
         />
       </View>
     );
@@ -159,7 +159,7 @@ export default class MyLianWenList extends NavigationPage {
       }
       else {
         this.setState({ showLoading: false });
-        Toast.fail('请先登录');
+        Toast.fail(i18n.t('FAIL.not_logged_in'));
       }
     })
 

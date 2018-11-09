@@ -7,7 +7,7 @@ import {Toast, TeaNavigator, NavigationPage, Badge, ListRow, TabView, Label} fro
 import { kong } from '../../CommonMethod';
 import RefreshListView, { RefreshState } from 'react-native-refresh-list-view'
 import CoinLogic from '../../logic/CoinLogic';
-
+import i18n from '../../../i18n/i18n';
 const chongzhi = require('../../styles/png/chongzhi256.png');
 const tibi = require('../../styles/png/tibi256.png');
 
@@ -16,7 +16,7 @@ export default class AccountHistory extends NavigationPage{
     
     static defaultProps = {
         ...NavigationPage.defaultProps,
-        title: '提币充值记录',
+        title: i18n.t('Profile.accountHistory.record'),
         showBackButton: true,
       };
 
@@ -98,8 +98,8 @@ export default class AccountHistory extends NavigationPage{
        // 列表 Item
   _renderRow(row) {
     let rowData = row.item;
-    let state = rowData.status == 1?(<Badge style={{backgroundColor: '#20D6A9'}} type='square' count='已完成' />):(<Badge style={{backgroundColor: '#5bc0de'}} type='square' count='进行中' />);
-    let itemName = rowData.itemType == 1?'充值coin':'提币coin';
+    let state = rowData.status == 1?(<Badge style={{backgroundColor: '#20D6A9'}} type='square' count={i18n.t('Profile.accountHistory.completed')} />):(<Badge style={{backgroundColor: '#5bc0de'}} type='square' count='进行中' />);
+    let itemName = rowData.itemType == 1?`$i18n.t('ACTION.recharge')coin`:`$i18n.t('ACTION.withdraw')coin`;
     let image = rowData.itemType == 1?chongzhi:tibi;
     let amount = rowData.itemType == 1?('+'+rowData.amount):('-'+rowData.amount);
     return (
@@ -110,7 +110,7 @@ export default class AccountHistory extends NavigationPage{
       renderPage() {
         return (
           <View style={styles.container}>
-           <ListRow title='账号地址' icon={require('../../styles/mine/accountinfo.png')} detail={this.props.userAddr} titlePlace='top' detailStyle={{fontSize:12}} />
+           <ListRow title={i18n.t('accountAddr')} icon={require('../../styles/mine/accountinfo.png')} detail={this.props.userAddr} titlePlace='top' detailStyle={{fontSize:12}} />
             <View style={{height:5}}></View>
             <RefreshListView
               data={this.state.dataList}
@@ -121,10 +121,10 @@ export default class AccountHistory extends NavigationPage{
               //onFooterRefresh={this.onFooterRefresh}
     
               // 可选
-              footerRefreshingText='玩命加载中 >.<'
-              footerFailureText='我擦嘞，居然失败了 =.=!'
-              footerNoMoreDataText='-我是有底线的-'
-              footerEmptyDataText='-好像什么东西都没有-'
+              footerRefreshingText ={i18n.t('INFO.footerRefreshingText')}
+              footerFailureText ={i18n.t('INFO.footerFailureText')}
+              footerNoMoreDataText ={i18n.t('INFO.footerNoMoreDataText')}
+              footerEmptyDataText ={i18n.t('INFO.footerEmptyDataText')}
             />
           </View>
         );

@@ -12,12 +12,13 @@ import CoinLogic from '../../logic/CoinLogic';
 import LoginLogic from '../../logic/LoginLogic';
 import { kong } from '../../CommonMethod';
 import LoadingView from '../CommonComp/LoadingView';
+import i18n from '../../../i18n/i18n';
 
 export default class ObtainMoac extends NavigationPage {
 
     static defaultProps = {
       ...NavigationPage.defaultProps,
-      title: '提币moac(coin->coin)',
+      title: i18n.t('ACTION.withdraw') + 'moac(coin->coin)',
       showBackButton: true,
     };
   
@@ -57,7 +58,7 @@ export default class ObtainMoac extends NavigationPage {
         }
         else
         {
-          Toast.fail('请登录');
+          Toast.fail(i18n.t('FAIL.not_logged_in'));
         }
       })
 
@@ -75,13 +76,13 @@ _sellMintToken(){
     if(isNaN(num)||num<=0)
     {
       this.setState({showLoading:false});
-      Toast.fail('输入的数值有误');
+      Toast.fail(i18n.t('FAIL.input_amount_exception'));
       return;
     }
     if(num>this.state.coin)
     {
       this.setState({showLoading:false});
-      Toast.fail('输入的coin值不能大于拥有的数量');
+      Toast.fail(i18n.t('FAIL.insufficient_coin_balance'));
       return;
     }
 
@@ -100,11 +101,11 @@ _sellMintToken(){
               var time=end-begin;
               //console.log("提币的总消耗时间为="+time);
               this.setState({showLoading:false});
-              Toast.success('提币成功');
+              Toast.success(i18n.t('SUCCESS.withdraw_request_sent'));
             }
             else{
               this.setState({showLoading:false});
-              Toast.fail('提币失败，请重新尝试');
+              Toast.fail(i18n.t('FAIL.withdraw_fail'));
             }
           })
         })
@@ -112,7 +113,7 @@ _sellMintToken(){
       else
       {
         this.setState({showLoading:false});
-        Toast.fail('请先登录');
+        Toast.fail(i18n.t('FAIL.not_logged_in'));
       }
     })
 
@@ -120,9 +121,9 @@ _sellMintToken(){
 }
 
     _show(e) {
-        Alert.alert('确定提币吗?', '', [
-            { text: '确定', onPress: () => this._sellMintToken() },
-            { text: '取消', onPress: () =>  Toast.success('取消成功')}
+        Alert.alert(i18n.t('ALERT.withdraw_confirm'), '', [
+            { text: i18n.t('ACTION.confirm'), onPress: () => this._sellMintToken() },
+            { text: i18n.t('ACTION.cancel'), onPress: () =>  Toast.success(i18n.t('SUCCESS.cancel_success'))}
         ])
 
     }
@@ -138,25 +139,25 @@ _sellMintToken(){
       return (
         <ScrollView style={{flex: 1,backgroundColor: '#F5FCFF'}}>
           <View style={{height: 20}} />
-          <ListRow title='账号地址' detail={<Label text={this.state.account} type='title' />} />
+          <ListRow title={i18n.t('accountAddr')} detail={<Label text={this.state.account} type='title' />} />
           <View style={{height: 20}} />
-          <ListRow title='moac余额' detail={<Label text={this.state.moac} type='title' />} />
-          <ListRow title='coin余额' detail={<Label text={this.state.coin} type='title' />} />
-          <ListRow title='coin兑换moac' detail={<Label text='1:1' type='title' />} />
+          <ListRow title={i18n.t('moac_balance')} detail={<Label text={this.state.moac} type='title' />} />
+          <ListRow title={i18n.t('coin_balance')} detail={<Label text={this.state.coin} type='title' />} />
+          <ListRow title={`coin${i18n.t('ACTION.exchange')}moac`} detail={<Label text='1:1' type='title' />} />
           <View style={{height: 20}} />
-          <ListRow title='数值' detail={
+          <ListRow title={i18n.t('amount')} detail={
             <TextInput
             style={{height: 35, width:200,borderColor: 'gray', borderWidth: 1}}
             onChangeText={(text) => {
               this.setState({rechargemoac: text})
             }}
-            placeholder='请输入参与兑换的coin币值'
+            placeholder={i18n.t('PLACEHOLDER.input_coin_exchange')}
             value={this.state.rechargemoac}
             //为了方便测试时输入字母，属性（keyboardType）不设置，实际使用时加上
              keyboardType='numeric'
           />
           }/>
-          <ListRow  detail={<Button title='提币' type='primary' style={{padding:6,width:width-20}} onPress={(e)=>this._show(e)} />} />
+          <ListRow  detail={<Button title={i18n.t('withdraw')} type='primary' style={{padding:6,width:width-20}} onPress={(e)=>this._show(e)} />} />
         
         </ScrollView>
       );

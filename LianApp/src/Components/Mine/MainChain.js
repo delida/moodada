@@ -10,13 +10,13 @@ import {Toast, TeaNavigator, NavigationPage, BasePage, ListRow, TabView, Label} 
 import CoinLogic from '../../logic/CoinLogic';
 import MainLogic from '../../logic/MainLogic';
 import { kong } from '../../CommonMethod';
-
+import i18n from '../../../i18n/i18n';
 
 export default class MainChain extends NavigationPage {
 
     static defaultProps = {
       ...NavigationPage.defaultProps,
-      title: '主链信息',
+      title: i18n.t('Profile.mainChain.mainChain_info'),
       showBackButton: true,
     };
   
@@ -78,11 +78,11 @@ componentWillUnmount() {
       return (
         <ScrollView style={{flex: 1,backgroundColor: '#F5FCFF'}}>
           <View style={{height: 20}} />
-          <ListRow title='账号地址' icon={require('../../styles/mine/accountinfo.png')} detail={this.state.account} titlePlace='top' detailStyle={{fontSize:12}} />
+          <ListRow title={i18n.t('accountAddr')} icon={require('../../styles/mine/accountinfo.png')} detail={this.state.account} titlePlace='top' detailStyle={{fontSize:12}} />
           <View style={{height: 20}} />
-          <ListRow title='moac余额' detail={<Label text={this.state.moac} type='title' />} />
-          <ListRow title='coin余额' detail={<Label text={this.state.coin} type='title' />} />
-          <ListRow title='主链高度/子链高度/刷新计时' detail={<Label text={this.state.boackinfo} type='title'  />}  />
+          <ListRow title={i18n.t('moac_balance')} detail={<Label text={this.state.moac} type='title' />} />
+          <ListRow title={i18n.t('coin_balance')} detail={<Label text={this.state.coin} type='title' />} />
+          <ListRow title={i18n.t('block_Info')} detail={<Label text={this.state.boackinfo} type='title'  />}  />
         </ScrollView>
       );
     }

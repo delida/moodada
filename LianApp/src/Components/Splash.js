@@ -11,6 +11,7 @@ import {
 
 import MainMenu from './MenuMain';
 
+
 var {height, width} = Dimensions.get('window');
 import { NavigationPage, Input, ListRow, Label, Button, Toast } from 'teaset';
 export default class Splash extends NavigationPage {
@@ -22,6 +23,7 @@ export default class Splash extends NavigationPage {
      this.timer=setTimeout(() => {
       InteractionManager.runAfterInteractions(() => {
           this.navigator.push({view:<MainMenu />})
+
       });
     }, 2500);
   }

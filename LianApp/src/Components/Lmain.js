@@ -13,6 +13,7 @@ import LocalLogin from './LoginView/LocalLogin';
 import MineMain from './Mine/MineMain';
 import LoginLogic from '../logic/LoginLogic';
 import MainLogic from '../logic/MainLogic';
+import i18n from'../../i18n/i18n'
 
 export default class Lmain extends BasePage {
 
@@ -30,7 +31,7 @@ export default class Lmain extends BasePage {
       BoardList:this.props.BoardList,
       num:0,
       boackinfo:'',
-      selecttab:'链问'
+      selecttab:i18n.t('snapQA')
     });
     this.auto = true;
     if(typeof(this.props.onlogin)!='undefined'&&this.props.onlogin)//已登录
@@ -120,7 +121,7 @@ _addNewTopic(){
     return (
       <TabView.Sheet
         type='button'
-        title='提问'
+        title= {i18n.t('Lmain.question')}
         icon={require('../styles/tab/edit.png')}
         activeIcon={require('../styles/tab/edit_active.png')}
         //iconContainerStyle={{justifyContent: 'flex-end'}}
@@ -141,15 +142,15 @@ _addNewTopic(){
     return (
       <View style={{flex:1, backgroundColor: '#F5FCFF'}}>
 
-    
+
       <TabView style={{flex: 1}} barStyle={customBarStyle} type={type}>
-      {this.renderItemSheet('链问',require('../styles/tab/home.png'),require('../styles/tab/home_active.png'),  <LianWenHome BoardList={this.state.BoardList}/>)}
+      {this.renderItemSheet(i18n.t('snapQA'),require('../styles/tab/home.png'),require('../styles/tab/home_active.png'),  <LianWenHome BoardList={this.state.BoardList}/>)}
       {this.renderCustomButton()}
      {/*  {this.renderItemSheet('提问',require('../styles/icons/edit.png'),require('../styles/icons/edit_active.png'),  <AddNewQuestion />)} */}
-      {this.renderItemSheet('提问录',require('../styles/tab/store.png'),require('../styles/tab/store_active.png'),  <MyLianWenList BoardList={this.state.BoardList}/>)}
-      {this.renderItemSheet('我的',require('../styles/tab/me.png'),require('../styles/tab/me_active.png'),  <MineMain BoardList={this.state.BoardList}/>)}
+      {this.renderItemSheet(i18n.t('Lmain.question_list'),require('../styles/tab/store.png'),require('../styles/tab/store_active.png'),  <MyLianWenList BoardList={this.state.BoardList}/>)}
+      {this.renderItemSheet(i18n.t('Lmain.profile'),require('../styles/tab/me.png'),require('../styles/tab/me_active.png'),  <MineMain BoardList={this.state.BoardList}/>)}
       </TabView>
-      <ListRow title='主链高度/子链高度/刷新计时' detail={<Label text={this.state.boackinfo} type='title' style={{color:'white'}} />} style={{backgroundColor:'#00A29A'}} titleStyle={{color:'white'}} />
+      <ListRow title={i18n.t('block_Info')} detail={<Label text={this.state.boackinfo} type='title' style={{color:'white'}} />} style={{backgroundColor:'#00A29A'}} titleStyle={{color:'white'}} />
       </View>
     );
   }

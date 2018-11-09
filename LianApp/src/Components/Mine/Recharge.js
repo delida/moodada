@@ -11,12 +11,13 @@ import CoinLogic from '../../logic/CoinLogic';
 import { kong } from '../../CommonMethod';
 import LoginLogic from '../../logic/LoginLogic';
 import LoadingView from '../CommonComp/LoadingView';
+import i18n from '../../../i18n/i18n';
 
 export default class Recharge extends NavigationPage {
 
     static defaultProps = {
       ...NavigationPage.defaultProps,
-      title: '充值coin(moac->coin)',
+      title: i18n.t('ACTION.recharge') + 'coin(moac->coin)',
       showBackButton: true,
     };
   
@@ -57,13 +58,13 @@ _buyMintToken(){
     if(isNaN(num)||num<=0)
     {
       this.setState({showLoading:false});
-      Toast.fail('输入的数值有误');
+      Toast.fail(i18n.t('FAIL.input_amount_exception'));
       return;
     }
     if(num>this.state.moac)
     {
       this.setState({showLoading:false});
-      Toast.fail('输入的moac值不能大于拥有的数量');
+      Toast.fail(i18n.t('FAIL.insufficient_moac_balance'));
       return;
     }
 
@@ -93,7 +94,7 @@ _buyMintToken(){
       else
       {
         this.setState({showLoading:false});
-        Toast.fail('请先登录');
+        Toast.fail(i18n.t('FAIL.not_logged_in'));
       }
     })
 
@@ -101,9 +102,9 @@ _buyMintToken(){
 }
 
     _show(e) {
-        Alert.alert('确定充值吗?', '', [
-            { text: '确定', onPress: () => this._buyMintToken() },
-            { text: '取消', onPress: () =>  Toast.success('取消成功')}
+        Alert.alert(i18n.t('ALERT.recharge_confirm'), '', [
+            { text: i18n.t('ACTION.confirm'), onPress: () => this._buyMintToken() },
+            { text: i18n.t('ACTION.cancel'), onPress: () =>  Toast.success(i18n.t('SUCCESS.cancel_success'))}
         ])
 
     }
@@ -127,13 +128,13 @@ _buyMintToken(){
           <ListRow title='coin余额' detail={<Label text={this.state.coin} type='title' />} />
           <ListRow title='moac兑换coin' detail={<Label text='1:1' type='title' />} />
           <View style={{height: 20}} />
-          <ListRow title='数值' detail={
+          <ListRow title={i18n.t('amount')} detail={
             <TextInput
             style={{height: 35, width:200,borderColor: 'gray', borderWidth: 1}}
             onChangeText={(text) => {
               this.setState({rechargemoac: text})
             }}
-            placeholder='请输入参与兑换的moac币值'
+            placeholder={i18n.t('PLACEHOLDER.input_moac_exchange')}
             value={this.state.rechargemoac}
             //为了方便测试时输入字母，属性（keyboardType）不设置，实际使用时加上
              keyboardType='numeric'

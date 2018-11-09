@@ -13,12 +13,13 @@ import LoadingView from '../CommonComp/LoadingView';
 var {height, width} = Dimensions.get('window');
 import { kong } from '../../CommonMethod';
 import MainLogic from '../../logic/MainLogic';
+import i18n from '../../../i18n/i18n';
 
 export default class TransferAccounts extends NavigationPage {
 
     static defaultProps = {
       ...NavigationPage.defaultProps,
-      title: '账户转账',
+      title: i18n.t('Profile.transferAccounts.user_transfer'),
       showBackButton: true,
     };
   
@@ -86,7 +87,7 @@ export default class TransferAccounts extends NavigationPage {
                 timeindex++;
                 if(timeindex>=3){
                   this.setState({showLoading:false});
-                Toast.success('转账请求已发送,大约几分钟后到账，请注意查看');
+                Toast.success(i18n.t('SUCCESS.transfer_request_sent'));
                 this._getBalance();
                   //停止掉
              clearInterval(this.timer);
@@ -99,7 +100,7 @@ export default class TransferAccounts extends NavigationPage {
               }
               else{
                 this.setState({showLoading:false});
-                Toast.fail('转账失败，请重新尝试');
+                Toast.fail(i18n.t('FAIL.transfer_fail'));
               }
             })
           })
@@ -107,7 +108,7 @@ export default class TransferAccounts extends NavigationPage {
         else
         {
           this.setState({showLoading:false});
-          Toast.fail('请先登录');
+          Toast.fail(i18n.t('FAIL.not_logged_in'));
         }
       })
   
@@ -119,24 +120,24 @@ export default class TransferAccounts extends NavigationPage {
         if(isNaN(num)||num<=0)
         {
          
-          Toast.fail('输入的数值有误');
+          Toast.fail(i18n.t('FAIL.input_amount_exception'));
           return;
         }
         if(num>this.state.moac)
         {
          
-          Toast.fail('输入的moac值不能大于拥有的数量');
+          Toast.fail(i18n.t('FAIL.insufficient_moac_balance'));
           return;
         }
     
         if(kong(this.state.rechargeAccount)){
          
-          Toast.fail('转入地址不能为空');
+          Toast.fail(i18n.t('FAIL.empty_dist'));
           return;
         }
-          Alert.alert('确定要转账吗?', '', [
-              { text: '确定', onPress: () => this._transferMoac(num) },
-              { text: '取消', onPress: () =>  Toast.success('取消成功')}
+          Alert.alert(i18n.t('ALERT.transfer_confirm'), '', [
+              { text: i18n.t('ACTION.confirm'), onPress: () => this._transferMoac(num) },
+              { text: i18n.t('ACTION.cancel'), onPress: () =>  Toast.success(i18n.t('SUCCESS.cancel_success'))}
           ])
   
       }
@@ -160,7 +161,7 @@ export default class TransferAccounts extends NavigationPage {
                       timeindex++;
                       if(timeindex>=3){
                         this.setState({showLoading:false});
-                        Toast.success('转账请求已发送,大约几分钟后到账，请注意查看');
+                        Toast.success(i18n.t('SUCCESS.transfer_request_sent'));
                         this._getBalance();
                         //停止掉
                    clearInterval(this.timer);
@@ -172,7 +173,7 @@ export default class TransferAccounts extends NavigationPage {
                   }
                   else{
                     this.setState({showLoading:false});
-                    Toast.fail('转账失败，请重新尝试');
+                    Toast.fail(i18n.t('FAIL.transfer_fail'));
                   }
                 })
               })
@@ -180,7 +181,7 @@ export default class TransferAccounts extends NavigationPage {
             else
             {
               this.setState({showLoading:false});
-              Toast.fail('请先登录');
+              Toast.fail(i18n.t('FAIL.not_logged_in'));
             }
           })
       
@@ -192,24 +193,24 @@ export default class TransferAccounts extends NavigationPage {
         if(isNaN(num)||num<=0)
         {
          
-          Toast.fail('输入的数值有误');
+          Toast.fail(i18n.t('FAIL.input_amount_exception'));
           return;
         }
         if(num>this.state.coin)
         {
          
-          Toast.fail('输入的coin值不能大于拥有的数量');
+          Toast.fail(i18n.t('FAIL.insufficient_coin_balance'));
           return;
         }
         if(kong(this.state.rechargeAccount)){
        
-          Toast.fail('转入地址不能为空');
+          Toast.fail(i18n.t('FAIL.empty_dist'));
           return;
         }
 
-        Alert.alert('确定要转账吗?', '', [
-            { text: '确定', onPress: () => this._transferCoin(num) },
-            { text: '取消', onPress: () =>  Toast.success('取消成功')}
+        Alert.alert(i18n.t('ALERT.transfer_confirm'), '', [
+            { text: i18n.t('ACTION.confirm'), onPress: () => this._transferCoin(num) },
+            { text: i18n.t('ACTION.cancel'), onPress: () =>  Toast.success(i18n.t('SUCCESS.cancel_success'))}
         ])
 
     }
@@ -222,22 +223,22 @@ export default class TransferAccounts extends NavigationPage {
       return (
         <ScrollView style={{flex: 1,backgroundColor: '#F5FCFF'}}>
           <View style={{height: 5}} />
-          <ListRow title='账号地址' icon={require('../../styles/mine/accountinfo.png')} detail={this.state.account} titlePlace='top' detailStyle={{fontSize:12}} />
+          <ListRow title={i18n.t('accountAddr')} icon={require('../../styles/mine/accountinfo.png')} detail={this.state.account} titlePlace='top' detailStyle={{fontSize:12}} />
           <View style={{height: 5}} />
-          <ListRow title='moac余额' detail={<Label text={this.state.moac} type='title' />} />
-          <ListRow title='coin余额' detail={<Label text={this.state.coin} type='title' />} />
-          <ListRow title='目标地址' detail={
+          <ListRow title={i18n.t('moac_balance')} detail={<Label text={this.state.moac} type='title' />} />
+          <ListRow title={i18n.t('coin_balance')}detail={<Label text={this.state.coin} type='title' />} />
+          <ListRow title={i18n.t('PROFILE.transferAccounts.dist_address')} detail={
             <TextInput
             style={{marginLeft:5,marginRight:5,height: 35, flex:1,borderColor: 'gray', borderWidth: 1}}
             onChangeText={(text) => {
               this.setState({rechargeAccount: text})
             }}
-            placeholder='请输入要转入的账户地址'
+            placeholder={i18n.t('PLACEHOLDER.input_dist_address')}
             value={this.state.rechargeAccount}
              keyboardType='numeric'
           />
           }/>
-          <ListRow title='转账数值' detail={
+          <ListRow title={i18n.t('PROFILE.transferAccounts.transfer_amount')} detail={
 
 <View style={{flex:1,flexDirection:'row'}}>
 <TextInput
@@ -245,29 +246,29 @@ export default class TransferAccounts extends NavigationPage {
             onChangeText={(text) => {
               this.setState({rechargemoac: text})
             }}
-            placeholder='请输入参与兑换的moac币值'
+            placeholder={i18n.t('PLACEHOLDER.input_moac_exchange')}
             value={this.state.rechargemoac}
              keyboardType='numeric'
           />
-          <Button title='moac转账' type='primary'  style={{flex:3,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._show(e)} />
+          <Button title={'moac' + i18n.t('ACTION.transfer')}type='primary'  style={{flex:3,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._show(e)} />
 </View>
 
            
           }/>
           
           <View style={{height: 5}} />
-          <ListRow title='转账数值' detail={
+          <ListRow title={i18n.t('PROFILE.transferAccounts.transfer_amount')} detail={
               <View style={{flex:1,flexDirection:'row'}}>
               <TextInput
             style={{marginLeft:5,marginRight:5,height: 35, flex:7,borderColor: 'gray', borderWidth: 1}}
             onChangeText={(text) => {
               this.setState({rechargecoin: text})
             }}
-            placeholder='请输入转账的coin币值'
+            placeholder={i18n.t('PLACEHOLDER.input_coin_transfer')}
             value={this.state.rechargecoin}
              keyboardType='numeric'
           />
-          <Button title='coin转账' type='primary' style={{flex:3,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._showsell(e)} />
+          <Button title= {'coin'+i18n.t('ACTION.transfer')} type='primary' style={{flex:3,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._showsell(e)} />
               </View>
             
           }/>
@@ -276,8 +277,8 @@ export default class TransferAccounts extends NavigationPage {
           <View style={{ height: 5 }} />
           <ListRow detail={
             <View>
-              <Label text='友情提示:' type='title'  />
-              <Text>每个子链应用板块中的coin不能在其他版块中使用，需要使用主链中的MOAC进行兑换</Text> 
+              <Label text={i18n.t('REMINDER.reminder')}  type='title'  />
+              <Text>{i18n.t('REMINDER.reminder_text1')}</Text>
             </View>
 
           } titlePlace='top'  detailMultiLine={true}  />

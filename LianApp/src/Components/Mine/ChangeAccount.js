@@ -14,11 +14,12 @@ import LoadingView from '../CommonComp/LoadingView';
 import MenuMain from '../MenuMain';
 
 import { kong } from '../../CommonMethod';
+import i18n from '../../../i18n/i18n';
 export default class ChangeAccount extends NavigationPage {
 
     static defaultProps = {
       ...NavigationPage.defaultProps,
-      title: '账号切换',
+      title: i18n.t('Profile.changeAccount.switch_account'),
       showBackButton: true,
     };
   
@@ -72,7 +73,7 @@ export default class ChangeAccount extends NavigationPage {
           <View style={{height: 40}} />
           {this._renderAccountInfo()}
           <View style={{height: 20}} />
-          <ListRow title='换个新账号登录'  onPress={() => this.navigator.push({view: <LocalLogin BoardList={this.state.BoardList}/>})} />
+          <ListRow title={i18n.t('Profile.changeAccount.new_account_login')}  onPress={() => this.navigator.push({view: <LocalLogin BoardList={this.state.BoardList}/>})} />
           <LoadingView showLoading={this.state.showLoading} loadingViewClick={() => { this.setState({ showLoading: false }) }} />
         </ScrollView>
       );
@@ -86,7 +87,7 @@ export default class ChangeAccount extends NavigationPage {
     //console.log('user',user);
     if(user==null ||user.userAddr==''||typeof(user)=='undefined'||typeof(user.userAddr)=='undefined'||user.userAddr=='undefined')
     {
-      Toast.fail('未获取到keyStore值，请切换keyStore登录');
+      Toast.fail(i18n.t('FAIL. no_available_export_keyStore'));
       return;
     }
 
@@ -104,11 +105,11 @@ export default class ChangeAccount extends NavigationPage {
           }
           else if (result == 0) {
             this.setState({ showLoading: false });
-            Toast.fail('登录失败');
+            Toast.fail(i18n.t('FAIL.login_fail'));
           }
           else {
             this.setState({ showLoading: false });
-            Toast.fail('密码错误');
+            Toast.fail(i18n.t('FAIL.incorrect_password'));
           }
 
             //停止掉

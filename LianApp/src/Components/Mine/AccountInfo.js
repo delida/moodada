@@ -12,12 +12,13 @@ import LoginLogic from '../../logic/LoginLogic';
 import LoadingView from '../CommonComp/LoadingView';
 var { height, width } = Dimensions.get('window');
 import { kong } from '../../CommonMethod';
+import i18n from '../../../i18n/i18n';
 
 export default class AccountInfo extends NavigationPage {
 
   static defaultProps = {
     ...NavigationPage.defaultProps,
-    title: '账户信息',
+    title: i18n.t('Profile.accountInfo.accountInfo'),
     showBackButton: true,
   };
 
@@ -67,15 +68,13 @@ export default class AccountInfo extends NavigationPage {
         keystore: user.keystore
       }
       Clipboard.setString(JSON.stringify(jsonData));
-      Toast.success('已复制到剪切板，请将剪切板中的内容粘贴到您要备份的位置');
+      Toast.success(i18t.t('SUCCESS.userInfo_clip'));
     })
-
-
   }
 
   _resumeAccountInfo(){
     Clipboard.setString(this.props.userAddr);
-    Toast.success('账号地址已复制到剪切板，请将剪切板中的内容粘贴到您要备份的位置');
+    Toast.success(i18t.t('SUCCESS.accountAddr_clip'));
   }
 
   _clearAll() {
@@ -102,7 +101,7 @@ export default class AccountInfo extends NavigationPage {
                 timeindex++;
                 if (timeindex >= 3) {
                   this.setState({ showLoading: false });
-                  Toast.success('充值请求已发送,大约几分钟后到账，请注意查看刷新计时');
+                  Toast.success(i18t.t('SUCCESS.recharge_request_sent'));
                   this._getBalance();
                   //停止掉
                   clearInterval(this.timer);
@@ -115,14 +114,14 @@ export default class AccountInfo extends NavigationPage {
             }
             else {
               this.setState({ showLoading: false });
-              Toast.fail('充值失败，请重新尝试');
+              Toast.fail(i18t.t('FAIL.recharge_fail'));
             }
           })
         })
       }
       else {
         this.setState({ showLoading: false });
-        Toast.fail('请先登录');
+        Toast.fail(i18t.t('FAIL.not_logged_in'));
       }
     })
 
@@ -134,18 +133,18 @@ export default class AccountInfo extends NavigationPage {
     let num = Number.parseFloat(this.state.rechargemoac);
     if (isNaN(num) || num <= 0) {
       this.setState({ showLoading: false });
-      Toast.fail('输入的数值有误');
+      Toast.fail(i18n.t('FAIL.input_amount_exception'));
       return;
     }
     if (num > this.state.moac) {
       this.setState({ showLoading: false });
-      Toast.fail('输入的moac值不能大于拥有的数量');
+      Toast.fail(i18n.t('FAIL.insufficient_moac_balance'));
       return;
     }
 
-    Alert.alert('确定充值吗?', '', [
-      { text: '确定', onPress: () => this._buyMintToken(num) },
-      { text: '取消', onPress: () => Toast.success('取消成功') }
+    Alert.alert(i18n.t('ALERT.recharge_confirm'), '', [
+      { text: i18n.t('ACTION.confirm'), onPress: () => this._buyMintToken(num) },
+      { text: i18n.t('ACTION.cancel'), onPress: () => Toast.success(i18n.t('cancel_success')) }
     ])
 
   }
@@ -173,7 +172,7 @@ export default class AccountInfo extends NavigationPage {
                 timeindex++;
                 if (timeindex >= 3) {
                   this.setState({ showLoading: false });
-                  Toast.success('提币请求已发送,大约几分钟后到账，请注意查看刷新计时');
+                  Toast.success(i18n.t('withdraw_request_sent'));
                   this._getBalance();
                   //停止掉
                   clearInterval(this.timer);
@@ -185,14 +184,14 @@ export default class AccountInfo extends NavigationPage {
             }
             else {
               this.setState({ showLoading: false });
-              Toast.fail('提币失败，请重新尝试');
+              Toast.fail(i18n.t('withdraw_fail'));
             }
           })
         })
       }
       else {
         this.setState({ showLoading: false });
-        Toast.fail('请先登录');
+        Toast.fail(i18n.t('FAIL.not_logged_in'));
       }
     })
 
@@ -203,19 +202,19 @@ export default class AccountInfo extends NavigationPage {
     let num = Number.parseFloat(this.state.rechargecoin);
     if (isNaN(num) || num <= 0) {
       this.setState({ showLoading: false });
-      Toast.fail('输入的数值有误');
+      Toast.fail(i18n.t('FAIL.input_amount_exception'));
       return;
     }
     if (num > this.state.coin) {
       this.setState({ showLoading: false });
-      Toast.fail('输入的coin值不能大于拥有的数量');
+      Toast.fail(i18n.t('FAIL.insufficient_coin_balance'));
       return;
     }
 
 
-    Alert.alert('确定提币吗?', '', [
-      { text: '确定', onPress: () => this._sellMintToken(num) },
-      { text: '取消', onPress: () => Toast.success('取消成功') }
+    Alert.alert(i18n.t('ALERT.withdraw.confirm'), '', [
+      { text: i18n.t('ACTION.confirm'), onPress: () => this._sellMintToken(num) },
+      { text: i18n.t('ACTION.cancel'), onPress: () => Toast.success(i18n.t('SUCCESS.cancel_success')) }
     ])
 
   }
@@ -227,14 +226,14 @@ export default class AccountInfo extends NavigationPage {
     return (
       <ScrollView style={{ flex: 1,backgroundColor: '#F5FCFF' }}>
         <View style={{ height: 10 }} />
-        <ListRow title='账号地址' icon={require('../../styles/mine/accountinfo.png')} detail={this.state.account} titlePlace='top' detailStyle={{fontSize:12}} />
+        <ListRow title={i18n.t('accountAddr')} icon={require('../../styles/mine/accountinfo.png')} detail={this.state.account} titlePlace='top' detailStyle={{fontSize:12}} />
         <View style={{ height: 10 }} />
-        <ListRow title='moac余额' detail={<Label text={this.state.moac} type='title' />} />
-        <ListRow title='coin余额' detail={<Label text={this.state.coin} type='title' />} />
-        <ListRow title='兑换比率' detail={<Label text={this.state.BoardList.exchangeRate.toString()} type='title' />} />
+        <ListRow title={i18n.t('moac_balance')} detail={<Label text={this.state.moac} type='title' />} />
+        <ListRow title={i18n.t('coin_balance')} detail={<Label text={this.state.coin} type='title' />} />
+        <ListRow title={i18n.t('Profile.accountInfo.exchange_rate')} detail={<Label text={this.state.BoardList.exchangeRate.toString()} type='title' />} />
         <View style={{ height: 10 }} />
 
-        <ListRow title='数值' detail={
+        <ListRow title={i18n.t('amount')} detail={
 
 
           <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -243,16 +242,16 @@ export default class AccountInfo extends NavigationPage {
               onChangeText={(text) => {
                 this.setState({ rechargemoac: text })
               }}
-              placeholder='请输入参与兑换的moac币值'
+              placeholder={i18n.t('PLACEHOLDER.input_moac_exchange')}
               value={this.state.rechargemoac}
               keyboardType='numeric'
             />
-            <Button title='coin充值' type='primary' style={{ flex: 3,backgroundColor:'#00A29A',borderColor:'#00A29A' }} onPress={(e) => this._show(e)} />
+            <Button title={`coin${i18n.t('ACTION.recharge')}`} type='primary' style={{ flex: 3,backgroundColor:'#00A29A',borderColor:'#00A29A' }} onPress={(e) => this._show(e)} />
           </View>
         } />
         {/*  <ListRow  detail={<Button title='充值' type='primary' style={{padding:6,width:width-20}} onPress={(e)=>this._show(e)} />} /> */}
         <View style={{ height: 10 }} />
-        <ListRow title='数值' detail={
+        <ListRow title={i18n.t('amount')} detail={
 
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <TextInput
@@ -260,22 +259,22 @@ export default class AccountInfo extends NavigationPage {
               onChangeText={(text) => {
                 this.setState({ rechargecoin: text })
               }}
-              placeholder='请输入参与兑换的coin币值'
+              placeholder={i18n.t('PLACEHOLDER.input_coin_exchange')}
               value={this.state.rechargecoin}
               keyboardType='numeric'
             />
-            <Button title='提币' type='primary' style={{ flex: 3,backgroundColor:'#00A29A',borderColor:'#00A29A' }} onPress={(e) => this._showsell(e)} />
+            <Button title={i18n.t('withdraw')} type='primary' style={{ flex: 3,backgroundColor:'#00A29A',borderColor:'#00A29A' }} onPress={(e) => this._showsell(e)} />
           </View>
         } />
         <View style={{ height: 10 }} />
-        <ListRow title='导出keystore' onPress={() => this._resumekeyStore()} />
-        <ListRow title='导出账号地址' onPress={() => this._resumeAccountInfo()} />
+        <ListRow title={i18n.t('Profile.accountInfo.export_keyStore')} onPress={() => this._resumekeyStore()} />
+        <ListRow title={i18n.t('Profile.accountInfo.export_accountAddr')} onPress={() => this._resumeAccountInfo()} />
 
            <View style={{ height: 5 }} />
           <ListRow detail={
             <View>
-              <Label text='友情提示:' type='title'  />
-              <Text>每个子链应用板块中的coin不能在其他版块中使用，需要使用主链中的MOAC进行兑换</Text> 
+              <Label text={i18n.t('REMINDER.reminder')} type='title'  />
+              <Text> {i18n.t('REMINDER.reminder_text1')} </Text>
             </View>
 
           } titlePlace='top'  detailMultiLine={true}  />

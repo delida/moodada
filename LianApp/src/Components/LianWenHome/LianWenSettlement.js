@@ -160,10 +160,10 @@ export default class LianWenSettlement extends NavigationPage {
                    //s onFooterRefresh={this.onFooterRefresh}
 
                     // 可选
-                    footerRefreshingText='玩命加载中 >.<'
-                    footerFailureText='我擦嘞，居然失败了 =.=!'
-                    footerNoMoreDataText='-我是有底线的-'
-                    footerEmptyDataText='-好像什么东西都没有-'
+              footerRefreshingText ={i18n.t('INFO.footerRefreshingText')}
+              footerFailureText ={i18n.t('INFO.footerFailureText')}
+              footerNoMoreDataText ={i18n.t('INFO.footerNoMoreDataText')}
+              footerEmptyDataText ={i18n.t('INFO.footerEmptyDataText')}
                 />
                 
 

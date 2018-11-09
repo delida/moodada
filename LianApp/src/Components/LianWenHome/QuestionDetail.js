@@ -79,7 +79,7 @@ export default class QuestionDetail extends NavigationPage {
         
           if (res == null || typeof (res) == 'undefined') {
     
-            Toast.fail('未获取到keyStore值，请切换keyStore登录');
+            Toast.fail(i18n.t('FAIL. no_available_export_keyStore'));
           }
           else{
             MainLogic.updateContentStatus(res.userAddr,res.userPwd,res.keystore,this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp,hash,0,2).then(data=>{
@@ -101,7 +101,7 @@ export default class QuestionDetail extends NavigationPage {
         LoginLogic.getUserByUserAddr(this.state.user.userAddr).then(res=>{
           if (res == null || typeof (res) == 'undefined') {
     
-            Toast.fail('未获取到keyStore值，请切换keyStore登录');
+            Toast.fail(i18n.t('FAIL. no_available_export_keyStore'));
           }
           else{
             MainLogic.updateContentStatus(res.userAddr,res.userPwd,res.keystore,this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp,hash,1,2).then(data=>{
@@ -205,10 +205,10 @@ export default class QuestionDetail extends NavigationPage {
                     //onFooterRefresh={this.onFooterRefresh}
 
                     // 可选
-                    footerRefreshingText='玩命加载中 >.<'
-                    footerFailureText='我擦嘞，居然失败了 =.=!'
-                    footerNoMoreDataText='-我是有底线的-'
-                    footerEmptyDataText='-好像什么东西都没有-'
+              footerRefreshingText ={i18n.t('INFO.footerRefreshingText')}
+              footerFailureText ={i18n.t('INFO.footerFailureText')}
+              footerNoMoreDataText ={i18n.t('INFO.footerNoMoreDataText')}
+              footerEmptyDataText ={i18n.t('INFO.footerEmptyDataText')}
 
 
                 />

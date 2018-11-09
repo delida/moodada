@@ -132,7 +132,7 @@ _saveComment(e){
           }/>
             <View style={{height: 20}} />
            
-            <ListRow  detail={<Button title='提交' type='primary' style={{margin:2,width:width-20,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._saveComment(e)} />} />
+            <ListRow  detail={<Button title={i18n.t('ACTION.submit')} type='primary' style={{margin:2,width:width-20,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._saveComment(e)} />} />
   
             <View style={{ height: 60 }} />
             <LoadingView showLoading={ this.state.showLoading } loadingViewClick={()=>{this.setState({showLoading:false})}}/>

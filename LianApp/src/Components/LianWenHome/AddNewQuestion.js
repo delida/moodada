@@ -283,7 +283,7 @@ _addNewTopic(e){
             onChangeText={(text) => {
               this.setState({award: text})
             }}
-            placeholder='请输入悬赏coin值'
+            placeholder={i18n.t('PLACEHOLDER.input_coin_award')}
             value={this.state.award}
             //为了方便测试时输入字母，属性（keyboardType）不设置，实际使用时加上
              keyboardType='numeric'
@@ -303,19 +303,19 @@ _addNewTopic(e){
           />
          
           }/>
-           <ListRow title='coin余额' detail={<Label text={this.state.coin} type='title' />} />
-          <ListRow  detail={<Button title='提交' type='primary' style={{margin:2,width:width-20,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._addNewTopic(e)} />} />
+           <ListRow title={i18n.t('coin_balance')} detail={<Label text={this.state.coin} type='title' />} />
+          <ListRow  detail={<Button title={i18n.t('ACTION.submit')} type='primary' style={{margin:2,width:width-20,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._addNewTopic(e)} />} />
           <View style={{ height: 5 }} />
           <ListRow detail={
             <View>
-              <Label text='友情提示:' type='title'  />
-              <Label text='1:提问后在子链高度变化后刷新显示' type='title'  />
-              <Label text='2:问题过期后仅自己可见' type='title'  />
+              <Label text={i18n.t('REMINDER.reminder')}  type='title'  />
+              <Label text={i18n.t('REMINDER.reminder_text2')} type='title'  />
+              <Label text={i18n.t('REMINDER.reminder_text3')} type='title'  />
             </View>
 
           } titlePlace='top'   />
         
-          <ListRow title='主链高度/子链高度/刷新计时' detail={<Label text={this.state.boackinfo} type='title'  />}  />
+          <ListRow title={i18n.t('block_Info')} detail={<Label text={this.state.boackinfo} type='title'  />}  />
           <LoadingView showLoading={ this.state.showLoading } loadingViewClick={()=>{this.setState({showLoading:false})}}/>
           </KeyboardAvoidingView>
       );

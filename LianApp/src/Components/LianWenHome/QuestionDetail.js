@@ -79,7 +79,7 @@ export default class QuestionDetail extends NavigationPage {
         
           if (res == null || typeof (res) == 'undefined') {
     
-            Toast.fail(i18n.t('FAIL. no_available_export_keyStore'));
+            Toast.fail(i18n.t('FAIL.no_available_export_keyStore'));
           }
           else{
             MainLogic.updateContentStatus(res.userAddr,res.userPwd,res.keystore,this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp,hash,0,2).then(data=>{
@@ -101,7 +101,7 @@ export default class QuestionDetail extends NavigationPage {
         LoginLogic.getUserByUserAddr(this.state.user.userAddr).then(res=>{
           if (res == null || typeof (res) == 'undefined') {
     
-            Toast.fail(i18n.t('FAIL. no_available_export_keyStore'));
+            Toast.fail(i18n.t('FAIL.no_available_export_keyStore'));
           }
           else{
             MainLogic.updateContentStatus(res.userAddr,res.userPwd,res.keystore,this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp,hash,1,2).then(data=>{

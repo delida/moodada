@@ -87,7 +87,7 @@ export default class ChangeAccount extends NavigationPage {
     //console.log('user',user);
     if(user==null ||user.userAddr==''||typeof(user)=='undefined'||typeof(user.userAddr)=='undefined'||user.userAddr=='undefined')
     {
-      Toast.fail(i18n.t('FAIL. no_available_export_keyStore'));
+      Toast.fail(i18n.t('FAIL.no_available_export_keyStore'));
       return;
     }
 

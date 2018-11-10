@@ -123,7 +123,7 @@ export default class LianWenHome extends NavigationPage {
     
       if (res == null || typeof (res) == 'undefined') {
 
-        Toast.fail(i18n.t('FAIL. no_available_export_keyStore'));
+        Toast.fail(i18n.t('FAIL.no_available_export_keyStore'));
       }
       else{
         MainLogic.updateContentStatus(res.userAddr,res.userPwd,res.keystore,this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp,hash,0,1).then(data=>{
@@ -145,7 +145,7 @@ export default class LianWenHome extends NavigationPage {
     LoginLogic.getUserByUserAddr(this.state.userAddr).then(res=>{
       if (res == null || typeof (res) == 'undefined') {
 
-        Toast.fail(i18n.t('FAIL. no_available_export_keyStore'));
+        Toast.fail(i18n.t('FAIL.no_available_export_keyStore'));
       }
       else{
         MainLogic.updateContentStatus(res.userAddr,res.userPwd,res.keystore,this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp,hash,1,1).then(data=>{

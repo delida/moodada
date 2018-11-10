@@ -117,7 +117,7 @@ export default class LocalLogin extends NavigationPage {
 
       if (res == null || typeof (res) == 'undefined') {
 
-        Toast.fail(i18n.t('FAIL. no_available_export_keyStore'));
+        Toast.fail(i18n.t('FAIL.no_available_export_keyStore'));
       }
       else {
 

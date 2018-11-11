@@ -7,16 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23f86c6f-99bf-4b13-a408-124722294a3a" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LianApp/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/LianApp/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LianApp/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/LianApp/android/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LianApp/i18n/en.js" beforeDir="false" afterPath="$PROJECT_DIR$/LianApp/i18n/en.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LianApp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/LianApp/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LianApp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/LianApp/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LianApp/src/Components/CommonComp/RefreshListView.js" beforeDir="false" afterPath="$PROJECT_DIR$/LianApp/src/Components/CommonComp/RefreshListView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LianApp/src/Components/LoginView/KeyStoreLogin.js" beforeDir="false" afterPath="$PROJECT_DIR$/LianApp/src/Components/LoginView/KeyStoreLogin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LianApp/src/Components/Mine/AccountInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/LianApp/src/Components/Mine/AccountInfo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LianApp/src/Components/Mine/TransferAccounts.js" beforeDir="false" afterPath="$PROJECT_DIR$/LianApp/src/Components/Mine/TransferAccounts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LianApp/src/Components/LoginView/LocalLogin.js" beforeDir="false" afterPath="$PROJECT_DIR$/LianApp/src/Components/LoginView/LocalLogin.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,11 +21,54 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="en.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="en.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/LianApp/i18n/en.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1105">
-              <caret line="152" column="33" selection-start-line="152" selection-start-column="33" selection-end-line="152" selection-end-column="33" />
+            <state relative-caret-position="221">
+              <caret line="103" column="4" selection-start-line="103" selection-start-column="4" selection-end-line="103" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="zh.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LianApp/i18n/zh.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="259">
+              <caret line="33" column="28" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LianApp/android/app/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="484">
+              <caret line="126" column="5" selection-start-line="126" selection-start-column="5" selection-end-line="126" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="app-release.apk" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/LianApp/android/app/build/outputs/apk/release/app-release.apk">
+          <provider selected="true" editor-type-id="apk-viewer">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LocalLogin.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LianApp/src/Components/LoginView/LocalLogin.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="384">
+              <caret line="231" column="3" selection-start-line="231" selection-start-column="3" selection-end-line="231" selection-end-column="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gradle.properties" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LianApp/android/gradle.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -63,29 +100,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RefreshListView.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/LianApp/src/Components/CommonComp/RefreshListView.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="16" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="KeyStoreLogin.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/LianApp/src/Components/LoginView/KeyStoreLogin.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="133" column="19" selection-start-line="133" selection-start-column="19" selection-end-line="133" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CommonMethod.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/LianApp/src/CommonMethod.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-779">
-              <caret line="281" column="21" selection-start-line="281" selection-start-column="21" selection-end-line="281" selection-end-column="21" />
+            <state relative-caret-position="177">
+              <caret line="237" column="30" selection-start-line="237" selection-start-column="24" selection-end-line="237" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -94,10 +113,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>keyStore_backup</find>
-      <find>keystore</find>
-      <find>login</find>
-      <find>返回</find>
       <find>Theme.set</find>
       <find>footerRefreshingText \:i18n\.t\(\'INFO\.footerRefreshingText\'\)\,\n    footerFailureText \:i18n\.t\(\'INFO\.footerFailureText\'\)\,\n    footerNoMoreDataText \:i18n\.t\(\'INFO\.footerNoMoreDataText\'\)\,\n    footerEmptyDataText \:i18n\.t\(\'INFO\.footerEmptyDataText\'\)</find>
       <find>i18n.t('INFO.footerEmptyDataText')</find>
@@ -123,7 +138,11 @@
       <find>react-native-a</find>
       <find>input_coin_transfer</find>
       <find>20</find>
+      <find>defaultConfi</find>
+      <find>moac</find>
       <find>other</find>
+      <find>versionCode</find>
+      <find>button</find>
     </findStrings>
     <replaceStrings>
       <replace>input_moac_exchange</replace>
@@ -142,6 +161,12 @@
       <dir>C:\Users\Weiqi\Desktop\moodada\LianApp\src</dir>
       <dir>C:\Users\Weiqi\Desktop\MOAC\moodada</dir>
     </dirStrings>
+  </component>
+  <component name="GenerateSignedApkSettings">
+    <option name="KEY_STORE_PATH" value="C:\Users\Weiqi\Desktop\MOAC\moodada\LianApp\android\app\my-release-key.keystore" />
+    <option name="KEY_ALIAS" value="my-key-alias" />
+    <option name="REMEMBER_PASSWORDS" value="true" />
+    <option name="BUILD_TARGET_KEY" value="apk" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -162,16 +187,13 @@
         <option value="$PROJECT_DIR$/LianApp/src/Components/Mine/Recharge.js" />
         <option value="$PROJECT_DIR$/LianApp/src/Components/LoginView/ChangeAccountLogin.js" />
         <option value="$PROJECT_DIR$/LianApp/src/Components/LoginView/RegisterLogin.js" />
-        <option value="$PROJECT_DIR$/LianApp/src/Components/LoginView/LocalLogin.js" />
         <option value="$PROJECT_DIR$/LianApp/node_modules/teaset/docs/cn/Theme.md" />
         <option value="$PROJECT_DIR$/LianApp/App.js" />
         <option value="$PROJECT_DIR$/LianApp/src/Components/LianWenHome/LianWenSettlement.js" />
         <option value="$PROJECT_DIR$/LianApp/src/Components/LianWenHome/LianWenHomeYouLike.js" />
-        <option value="$PROJECT_DIR$/LianApp/i18n/zh.js" />
         <option value="$PROJECT_DIR$/LianApp/src/Components/Mine/AccountHistory.js" />
         <option value="$PROJECT_DIR$/LianApp/node_modules/chain3/lib/utils/account.js" />
         <option value="$PROJECT_DIR$/LianApp/src/Components/LoginView/KeyStoreLogin.js" />
-        <option value="$PROJECT_DIR$/LianApp/android/app/build.gradle" />
         <option value="$PROJECT_DIR$/LianApp/android/gradle.properties" />
         <option value="$PROJECT_DIR$/LianApp/node_modules/react-native-admob/android/build.gradle" />
         <option value="$PROJECT_DIR$/LianApp/node_modules/react-native-scrypt/android/build.gradle" />
@@ -182,10 +204,13 @@
         <option value="$PROJECT_DIR$/LianApp/src/Components/Mine/TransferAccounts.js" />
         <option value="$PROJECT_DIR$/LianApp/i18n/en.js" />
         <option value="$PROJECT_DIR$/LianApp/i18n/i18n.js" />
+        <option value="$PROJECT_DIR$/LianApp/i18n/zh.js" />
+        <option value="$PROJECT_DIR$/LianApp/src/Components/LoginView/LocalLogin.js" />
+        <option value="$PROJECT_DIR$/LianApp/android/app/build.gradle" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="115" />
     <option name="y" value="20" />
     <option name="width" value="1304" />
@@ -216,6 +241,36 @@
               <item name="moodada" type="b2602c69:ProjectViewProjectNode" />
               <item name="moodada" type="462c0819:PsiDirectoryNode" />
               <item name="LianApp" type="462c0819:PsiDirectoryNode" />
+              <item name="android" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="moodada" type="b2602c69:ProjectViewProjectNode" />
+              <item name="moodada" type="462c0819:PsiDirectoryNode" />
+              <item name="LianApp" type="462c0819:PsiDirectoryNode" />
+              <item name="android" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="moodada" type="b2602c69:ProjectViewProjectNode" />
+              <item name="moodada" type="462c0819:PsiDirectoryNode" />
+              <item name="LianApp" type="462c0819:PsiDirectoryNode" />
+              <item name="android" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="build" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="moodada" type="b2602c69:ProjectViewProjectNode" />
+              <item name="moodada" type="462c0819:PsiDirectoryNode" />
+              <item name="LianApp" type="462c0819:PsiDirectoryNode" />
+              <item name="android" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="build" type="462c0819:PsiDirectoryNode" />
+              <item name="outputs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="moodada" type="b2602c69:ProjectViewProjectNode" />
+              <item name="moodada" type="462c0819:PsiDirectoryNode" />
+              <item name="LianApp" type="462c0819:PsiDirectoryNode" />
               <item name="i18n" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -237,6 +292,14 @@
               <item name="LianApp" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="Components" type="462c0819:PsiDirectoryNode" />
+              <item name="LoginView" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="moodada" type="b2602c69:ProjectViewProjectNode" />
+              <item name="moodada" type="462c0819:PsiDirectoryNode" />
+              <item name="LianApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Components" type="462c0819:PsiDirectoryNode" />
               <item name="Mine" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -248,10 +311,14 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="AnalyzeApkAction.lastApkPath" value="$PROJECT_DIR$/LianApp/android/app/build/outputs/apk/release/app-release.apk" />
+    <property name="AndroidRunProguardForReleaseBuild" value="false" />
+    <property name="ExportedApkPath" value="C:\Users\Weiqi\Desktop\MOAC\moodada\moodada.apk" />
+    <property name="ExportedModule" value="moodada" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/LianApp/android/app/build/outputs/apk/release/app-release.apk" />
     <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
@@ -328,11 +395,12 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="TODO" order="9" />
+      <window_info anchor="bottom" id="Messages" weight="0.32943678" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
       <window_info id="Image Layers" order="4" />
       <window_info id="Build Variants" order="2" side_tool="true" />
@@ -340,12 +408,12 @@
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Run" order="5" />
       <window_info anchor="bottom" id="Version Control" order="2" weight="0.32931727" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="0" visible="true" weight="0.38044634" />
+      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.38044634" />
       <window_info anchor="bottom" id="Logcat" order="10" />
       <window_info id="Captures" order="6" weight="0.25" />
       <window_info id="Capture Tool" order="1" />
       <window_info id="Designer" order="0" />
-      <window_info content_ui="combo" id="Project" order="3" visible="true" weight="0.27291667" />
+      <window_info active="true" content_ui="combo" id="Project" order="3" visible="true" weight="0.27291667" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info id="Structure" order="5" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
@@ -393,16 +461,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/LianApp/src/Components/LianWenHome/LianWenHomeTopListView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LianApp/src/Components/CommonComp/List.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/LianApp/src/Components/CommonComp/LoadingView.js">
       <provider selected="true" editor-type-id="text-editor">
         <state />
@@ -506,13 +564,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/LianApp/src/Components/LoginView/LocalLogin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="222" lean-forward="true" selection-start-line="222" selection-end-line="222" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/LianApp/node_modules/teaset/docs/cn/Theme.md" />
     <entry file="file://$PROJECT_DIR$/LianApp/src/styles/image/splash.jpg">
       <provider selected="true" editor-type-id="images">
@@ -549,13 +600,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LianApp/i18n/zh.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="23" column="19" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -629,20 +673,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/LianApp/android/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="122" column="38" selection-start-line="122" selection-start-column="38" selection-end-line="122" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LianApp/android/gradle.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/LianApp/node_modules/react-native-scrypt/android/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -678,13 +708,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/LianApp/src/Components/LoginView/KeyStoreLogin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="133" column="19" selection-start-line="133" selection-start-column="19" selection-end-line="133" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/LianApp/src/Components/CommonComp/RefreshListView.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -715,9 +738,54 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/LianApp/i18n/en.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1105">
-          <caret line="152" column="33" selection-start-line="152" selection-start-column="33" selection-end-line="152" selection-end-column="33" />
+        <state relative-caret-position="221">
+          <caret line="103" column="4" selection-start-line="103" selection-start-column="4" selection-end-line="103" selection-end-column="38" />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LianApp/i18n/zh.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="33" column="28" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LianApp/android/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LianApp/android/gradle.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LianApp/src/Components/LoginView/KeyStoreLogin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="237" column="30" selection-start-line="237" selection-start-column="24" selection-end-line="237" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LianApp/src/Components/LoginView/LocalLogin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="231" column="3" selection-start-line="231" selection-start-column="3" selection-end-line="231" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LianApp/android/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="126" column="5" selection-start-line="126" selection-start-column="5" selection-end-line="126" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LianApp/android/app/build/outputs/apk/release/app-release.apk">
+      <provider selected="true" editor-type-id="apk-viewer">
+        <state />
       </provider>
     </entry>
   </component>

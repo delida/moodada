@@ -101,7 +101,7 @@ android {
         applicationId "com.lianapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
+        versionCode 9
         versionName "1.0.3"
         ndk {
             abiFilters "armeabi-v7a", "x86"

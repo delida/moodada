@@ -125,7 +125,7 @@ export default class KeyStoreLogin extends NavigationPage {
       isload=false;
     }
 
-    if (kong(this.state.userName)) {
+     if (kong(this.state.userName)) {
       Toast.fail(i18n.t('FAIL.wrong_account_addr'));
       isload=false;
     }
@@ -133,7 +133,7 @@ export default class KeyStoreLogin extends NavigationPage {
       Toast.fail(i18n.t('FAIL.incorrect_password'));
       isload=false;
     }
-    if (kong(this.state.keyStore)) {
+     if (kong(this.state.keyStore)) {
       Toast.fail(i18n.t('FAIL.empty_keyStore'));
       isload=false;
     }

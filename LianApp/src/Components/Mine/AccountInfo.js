@@ -30,8 +30,8 @@ export default class AccountInfo extends NavigationPage {
       coin: NaN,
       BoardList: this.props.BoardList,
       showLoading: false,
-      rechargemoac: '0',
-      rechargecoin: '0'
+      rechargemoac: '',
+      rechargecoin: ''
     }
   }
 

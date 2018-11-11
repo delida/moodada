@@ -102,6 +102,7 @@ PLACEHOLDER: {
     input_coin_exchange:'请输入参与兑换的coin币值',
     input_coin_award:'请输入悬赏coin值',
     input_dist_address:'请输入要转入的账户地址',
+    input_moac_transfer:'请输入转账的moac币值',
     input_coin_transfer:'请输入转账的coin币值',
     input_username:'请输入用户名',
     input_password:'请输入密码',

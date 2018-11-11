@@ -32,8 +32,8 @@ export default class TransferAccounts extends NavigationPage {
             coin:0,
             BoardList : this.props.BoardList,
             showLoading:false,
-            rechargemoac:'0',
-            rechargecoin:'0'
+            rechargemoac:'',
+            rechargecoin:''
         }
     }
 
@@ -246,7 +246,7 @@ export default class TransferAccounts extends NavigationPage {
             onChangeText={(text) => {
               this.setState({rechargemoac: text})
             }}
-            placeholder={i18n.t('PLACEHOLDER.input_moac_exchange')}
+            placeholder={i18n.t('PLACEHOLDER.input_moac_transfer')}
             value={this.state.rechargemoac}
              keyboardType='numeric'
           />

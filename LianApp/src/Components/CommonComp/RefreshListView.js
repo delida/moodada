@@ -1,6 +1,7 @@
 /**
  * 下拉刷新/上拉加载更多 组件(RefreshListView)
  */
+ /*{footerEmptyDataText} line 143*/
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import i18n from '../../../i18n/i18n';
@@ -140,7 +141,7 @@ export default class RefreshListView extends PureComponent {
           >
             {footerEmptyDataComponent ? footerEmptyDataComponent : (
               <View style={styles.footerContainer}>
-                <Text style={styles.footerText}>/*{footerEmptyDataText}*/</Text>
+                <Text style={styles.footerText}></Text>
               </View>
             )}
           </TouchableOpacity>

@@ -50,7 +50,7 @@ SUCCESS: {
     login_success:'Login successful',
     recover_success:'Recover successful',
     register_success:'Register successful，please backup account address and keyStore',
-    question_success:'Success,please refresh after 20S',
+    question_success:'Success,please refresh after 20s',
     block_success:'Block successful',
     comment_success:'Comment successful'
 },
@@ -91,17 +91,18 @@ FAIL: {
 REMINDER:{
     reminder:'Reminder',
     reminder_text1:'Coins in specific Microchain section are not available in other sections. Your have to exchange new coin with MOAC in Motherchain',
-    reminder_text2:'1:Question will be listed when microchain height refreshed',
+    reminder_text2:'1:Question will be listed when microchain# refreshed',
     reminder_text3:'2:When a question expired, only questioner can access it',
     after_register:"After sign up，please take care of you account address, keyStore and password. Get several copies and keep secret from others。Your account only accessible by yourself. It cannot be retrieved if lost"
 },
 
 PLACEHOLDER: {
-    input_moac_exchange:'moac amount',
-    input_coin_exchange:'coin amount',
+    input_moac_exchange:'Input moac convert to coin',
+    input_coin_exchange:'Input coin convert to moac',
     input_coin_award:'Coins',
     input_dist_address:'Input address of target account',
-    input_coin_transfer:'Coin to transfer',
+    input_moac_transfer:'moac amount',
+    input_coin_transfer:'coin amount',
     input_username:'Username',
     input_password:'Password',
     input_keyStore:'keyStore',
@@ -143,7 +144,7 @@ Profile:{
     },
     changeAccount:{
         switch_account:'Switch Account',
-        new_account_login:'login with other account'
+        new_account_login:'Login with other account'
     },
     mainChain:{
         mainChain_info:'Motherchain Info'

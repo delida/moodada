@@ -98,7 +98,10 @@ export default class LianWenSettlement extends NavigationPage {
         
                     {/*右边*/}
                     <View style={[styles.rightViewStyle]}>
-                      <Text style={{ color: 'gray', lineHeight: 20, marginRight: 70 }} >{this.props.data.desc}</Text>
+                                  <ScrollView style={{ height: 150, marginRight: 70 }}>
+                                      <Text style={{ color: 'gray', lineHeight: 20, marginRight: 70 }} >{this.props.data.desc}</Text>
+                                  </ScrollView>
+                    {/*   <Text style={{ color: 'gray', lineHeight: 20, marginRight: 70 }} >{this.props.data.desc}</Text> */}
                       <View style={styles.rightBottomViewStyle}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                           <Image source={require('../../styles/png/time.png')} style={{ width: 20, height: 20 }} />

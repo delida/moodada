@@ -58,7 +58,7 @@ export default class QuestionDetailAddComment extends NavigationPage {
 
 _saveComment(e){
   var begin=new Date();
-    if(this.state.text==''||this.state.text.length>200||this.state.text.length<=0){
+    if(this.state.text==''||this.state.text.trim()==''||this.state.text.length>145||this.state.text.length<=0){
         Toast.fail('输入内容有误');
         return;
     }

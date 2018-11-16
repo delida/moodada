@@ -186,11 +186,12 @@ export default class LocalLogin extends NavigationPage {
                     }}
                     placeholder='请输入用户名'
                     value={this.state.userName}
-                    keyboardType='numeric'
+                  
                   />
                 </View>
               }
                 style={styles.contentListRow}
+                bottomSeparator='none'
               />
                <ListRow detail={
                 <View style={[styles.contentImput,{borderColor: '#00A29A', borderWidth: 1,borderRadius: 3,marginLeft:20,marginRight:20,height:50}]} >
@@ -204,17 +205,20 @@ export default class LocalLogin extends NavigationPage {
                     multiline={true}
                     placeholder='请输入密码'
                     value={this.state.userPW}
-                    keyboardType='numeric'
+                   
                   />
                 </View>
               }
                 style={styles.contentListRow}
+                bottomSeparator='none'
               />
                 <ListRow detail={
                 <View style={styles.contentImput}>
                        <Button title='登    陆' type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._login(e)} />
                 </View>
-                } style={{ backgroundColor: 'rgba(178,178,178,0.0)' }} />
+                } style={{ backgroundColor: 'rgba(178,178,178,0.0)' }} 
+                bottomSeparator='none'
+                />
 
             </View>
           

@@ -140,8 +140,8 @@ export default class QuestionDetailItem extends Component {
         
         return (
             <View style={styles.listViewStyle}>
-                <View style={[styles.rightViewStyle, { width: width - 35 }]}>
-                    <Text style={{ color: 'gray' }}>{this.state.desc}</Text>
+                <View style={styles.rightViewStyle}>
+                    <Text style={{ color: 'gray',marginRight:10 }}>{this.state.desc}</Text>
                     <TouchableHighlight onPress={() => this._clickthumbup()} style={styles.footerLink} underlayColor='#f2f2f2'>
                         <View style={styles.rightBottomViewStyle}>
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
           marginRight: 10,
           paddingBottom: 15 */
         flex: 1,
-        marginTop: 5
+        //marginTop: 5
     },
 
 
@@ -217,10 +217,10 @@ const styles = StyleSheet.create({
     },
 
     rightViewStyle: {
-        paddingRight: 2,
+        //paddingRight: 2,
         marginLeft: 2,
-        //width:220,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginRight:80
     },
 
     rightTopViewStyle: {

@@ -34,7 +34,7 @@ export default class About extends NavigationPage {
             <Image style={styles.imgUserTitle} source={require('../../styles/menu/wen.png')}/>
           </View>
           <Text style={styles.txtName}>LIANWEN</Text>
-          <Text style={styles.txtGF}>版本号：0.1.0</Text>
+          <Text style={styles.txtGF}>版本号：1.0.0</Text>
         </View>
          {/*  <View style={{height: 40}} />
     

@@ -12,13 +12,14 @@ import {
   Dimensions,
   Clipboard,
   ImageBackground,
+  TouchableOpacity,
   Image,
   TextInput
 } from 'react-native';
 
 
 
-import { NavigationPage, Input, ListRow, Label, Button,Toast, Theme } from 'teaset';
+import { NavigationPage, Input, ListRow, Label, Button, Toast, Theme, Checkbox } from 'teaset';
 const BG_IMAGE = require('../../styles/image/bg_screen1.jpg');
 const masaike = require('../../styles/image/masaike.jpg');
 
@@ -27,8 +28,8 @@ const { width, height } = Dimensions.get('window');
 import LoginLogic from '../../logic/LoginLogic';
 import Lmain from '../Lmain';
 import LoadingView from '../CommonComp/LoadingView';
+import Chengming from './CheckShengMing';
 
-import Madoka from '../../UI/Madoka';
 
 export default class RegisterLogin extends NavigationPage {
 
@@ -49,8 +50,9 @@ export default class RegisterLogin extends NavigationPage {
       height: 30,
       keyboardHeight: 0,
       reVisiable: false,
-      showLoading:false,
-      BoardList:this.props.BoardList
+      showLoading: false,
+      checkedEmpty: false,
+      BoardList: this.props.BoardList
     };
 
   }
@@ -65,89 +67,87 @@ export default class RegisterLogin extends NavigationPage {
 
   _register(e) {
 
-   if(this.state.userPW==''|| this.state.userRPW=='')
-   {
-       Toast.fail('密码不能输入空值');
-   }
-   else
-   {
-    var check = LoginLogic.checkPwd(this.state.userPW, this.state.userRPW);
-    if (check) {
-      var pwdlength = LoginLogic.pwdlength(this.state.userPW, 1);
-      if (pwdlength) {
-        this.setState({showLoading:true});
-        var isdoing = false;
-        this.timer = setInterval(()=>{
-          if(!isdoing){
-            isdoing = true;
-            LoginLogic.registerUser(this.state.userPW).then((user)=>{
-              this.setState({showLoading:false});
-              if (user != null) {
-              
-                this.setState({
-                  userName: user.userAddr,
-                  keyStore: JSON.stringify(user.keystore),
-                  reVisiable: true
-                });
-                Toast.success('注册成功，请备份好账户地址和keyStore');
-              }
+    if (this.state.userPW == '' || this.state.userRPW == '') {
+      Toast.fail('密码不能输入空值');
+    }
+    else {
+      var check = LoginLogic.checkPwd(this.state.userPW, this.state.userRPW);
+      if (check) {
+        var pwdlength = LoginLogic.pwdlength(this.state.userPW, 1);
+        if (pwdlength) {
+          this.setState({ showLoading: true });
+          var isdoing = false;
+          this.timer = setInterval(() => {
+            if (!isdoing) {
+              isdoing = true;
+              LoginLogic.registerUser(this.state.userPW).then((user) => {
+                this.setState({ showLoading: false });
+                if (user != null) {
+
+                  this.setState({
+                    userName: user.userAddr,
+                    keyStore: JSON.stringify(user.keystore),
+                    reVisiable: true
+                  });
+                  Toast.success('注册成功，请备份好账户地址和keyStore');
+                }
                 //停止掉
                 clearInterval(this.timer);
                 this.timer = undefined;
-             })
-          }
-        },1000);
+              })
+            }
+          }, 1000);
 
 
-      
+
+        }
+        else {
+          Toast.fail('输入的密码长度不少于12位');
+        }
       }
       else {
-        Toast.fail('输入的密码长度不少于12位');
+        Toast.fail('两次输入密码不一致');
       }
     }
-    else {
-      Toast.fail('两次输入密码不一致');
-    }
-   }
-  
+
   }
 
   _login(e) {
-    this.setState({showLoading:true});
+    this.setState({ showLoading: true });
     var isdoing = false;
-    this.timer = setInterval(()=>{
-      if(!isdoing){
+    this.timer = setInterval(() => {
+      if (!isdoing) {
         isdoing = true;
         var testkeyStore = JSON.parse(this.state.keyStore)
-        LoginLogic.registerLogin(this.state.userName, this.state.userPW, testkeyStore).then((result)=>{
+        LoginLogic.registerLogin(this.state.userName, this.state.userPW, testkeyStore).then((result) => {
           if (result == 1) {
-            this.setState({showLoading:false});
-            LoginLogic.setNonce(this.state.BoardList.subChainAddress,this.state.userName,this.state.BoardList.rpcIp);
-            this.navigator.push({view:<Lmain onlogin={true} BoardList={this.state.BoardList}/>});
-         }
-         else if (result == 0) {
-          this.setState({showLoading:false});
-           Toast.fail('登录失败');
-         }
-         else {
-          this.setState({showLoading:false});
-           Toast.fail('密码错误');
-         }
+            this.setState({ showLoading: false });
+            LoginLogic.setNonce(this.state.BoardList.subChainAddress, this.state.userName, this.state.BoardList.rpcIp);
+            this.navigator.push({ view: <Lmain onlogin={true} BoardList={this.state.BoardList} /> });
+          }
+          else if (result == 0) {
+            this.setState({ showLoading: false });
+            Toast.fail('登录失败');
+          }
+          else {
+            this.setState({ showLoading: false });
+            Toast.fail('密码错误');
+          }
           //停止掉
           clearInterval(this.timer);
           this.timer = undefined;
         });
       }
-    },1000)
+    }, 1000)
   }
 
   //复制数据到剪切板
   _importData(e) {
-    var jsonData = {
+  /*   var jsonData = {
       userAddr: this.state.userName,
       keystore: JSON.parse(this.state.keyStore)
-    }
-    Clipboard.setString(JSON.stringify(jsonData));
+    } */
+    Clipboard.setString(this.state.keyStore);
     Toast.success('已复制到剪切板，请将剪切板中的内容粘贴到您要备份的位置');
   }
 
@@ -158,35 +158,35 @@ export default class RegisterLogin extends NavigationPage {
         this.state.userName
       }
         titlePlace='top'
-        style={{backgroundColor:'rgba(178,178,178,0.1)'}} titleStyle={{color:'white'}}
-        detailStyle={{color:'white'}}
+        style={{ backgroundColor: 'rgba(178,178,178,0.1)' }} titleStyle={{ color: 'white' }}
+        detailStyle={{ color: 'white' }}
       />
       <ListRow title="keyStore" detail={
         this.state.keyStore
       }
         titlePlace='top'
-        style={{backgroundColor:'rgba(178,178,178,0.1)'}} titleStyle={{color:'white'}}
-        detailStyle={{color:'white'}}
+        style={{ backgroundColor: 'rgba(178,178,178,0.1)' }} titleStyle={{ color: 'white' }}
+        detailStyle={{ color: 'white' }}
       />
-       <ListRow detail={
-                <View style={styles.contentImput}>
-                       <Button title='备份keyStore' type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={() => this._importData()} />
-                </View>
-                } style={{ backgroundColor: 'rgba(178,178,178,0.1)' }} />
-                   <ListRow detail={
-                <View style={styles.contentImput}>
-                       <Button title='登    陆' type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._login(e)} />
-                </View>
-                } style={{ backgroundColor: 'rgba(178,178,178,0.1)' }} />
+      <ListRow detail={
+        <View style={styles.contentImput}>
+          <Button title='备份keyStore' type='primary' style={{ margin: 2, width: 180, height: 50, backgroundColor: '#16424F', borderColor: '#16424F' }} size='lg' onPress={() => this._importData()} />
+        </View>
+      } style={{ backgroundColor: 'rgba(178,178,178,0.1)' }} />
+      <ListRow detail={
+        <View style={styles.contentImput}>
+          <Button title='登    陆' type='primary' style={{ margin: 2, width: 180, height: 50, backgroundColor: '#16424F', borderColor: '#16424F' }} size='lg' onPress={(e) => this._login(e)} />
+        </View>
+      } style={{ backgroundColor: 'rgba(178,178,178,0.1)' }} />
 
-    {/*   <ListRow detail={<Button title='备份keyStore' type='primary' style={{ margin: 2, width: width - 20 ,height:50}} size='lg' onPress={(e) => this._importData()} />} style={{backgroundColor:'rgba(178,178,178,0.1)'}}/> */}
-    {/*   <ListRow detail={<Button title='登            陆' type='primary' style={{ margin: 2, width: width - 20 ,height:50}} size='lg' onPress={(e) => this._login(e)} />} style={{backgroundColor:'rgba(178,178,178,0.1)'}}/> */}
-      <View style={{height:30}} />
+      {/*   <ListRow detail={<Button title='备份keyStore' type='primary' style={{ margin: 2, width: width - 20 ,height:50}} size='lg' onPress={(e) => this._importData()} />} style={{backgroundColor:'rgba(178,178,178,0.1)'}}/> */}
+      {/*   <ListRow detail={<Button title='登            陆' type='primary' style={{ margin: 2, width: width - 20 ,height:50}} size='lg' onPress={(e) => this._login(e)} />} style={{backgroundColor:'rgba(178,178,178,0.1)'}}/> */}
+      <View style={{ height: 30 }} />
     </View>) : null;
     return (
-      <ScrollView  style={[styles.container,{ paddingBottom:150 }]} >
-       
-       <View style={styles.bgImage}>
+      <ScrollView style={[styles.container, { paddingBottom: 150 }]} >
+
+        <View style={styles.bgImage}>
           <ImageBackground
             source={masaike}
             style={styles.bgImage}
@@ -202,7 +202,7 @@ export default class RegisterLogin extends NavigationPage {
                 style={styles.contentListRow}
               />
               <ListRow detail={
-                <View style={[styles.contentImput,{borderColor: '#00A29A', borderWidth: 1,borderRadius: 3,marginLeft:20,marginRight:20,height:50}]} >
+                <View style={[styles.contentImput, { borderColor: '#00A29A', borderWidth: 1, borderRadius: 3, marginLeft: 20, marginRight: 20, height: 50 }]} >
                   <Image source={require('../../styles/png/pwd.png')} style={{ width: 20, height: 20 }} />
                   <TextInput
                     style={{ marginLeft: 5, marginRight: 5, height: 45, flex: 1 }}
@@ -212,14 +212,15 @@ export default class RegisterLogin extends NavigationPage {
                     placeholder='请输入新密码'
                     secureTextEntry={true}
                     value={this.state.userPW}
-                    keyboardType='numeric'
+
                   />
                 </View>
               }
                 style={styles.contentListRow}
+                bottomSeparator='none'
               />
-               <ListRow detail={
-                <View style={[styles.contentImput,{borderColor: '#00A29A', borderWidth: 1,borderRadius: 3,marginLeft:20,marginRight:20,height:50}]} >
+              <ListRow detail={
+                <View style={[styles.contentImput, { borderColor: '#00A29A', borderWidth: 1, borderRadius: 3, marginLeft: 20, marginRight: 20, height: 50 }]} >
                   <Image source={require('../../styles/png/pwd.png')} style={{ width: 20, height: 20 }} />
                   <TextInput
                     style={{ marginLeft: 5, marginRight: 5, height: 45, flex: 1 }}
@@ -230,25 +231,44 @@ export default class RegisterLogin extends NavigationPage {
                     multiline={true}
                     placeholder='请重复新密码'
                     value={this.state.userRPW}
-                    keyboardType='numeric'
+
                   />
                 </View>
               }
                 style={styles.contentListRow}
+                bottomSeparator='none'
               />
-                <ListRow detail={
-                <View style={styles.contentImput}>
-                       <Button title='注    册' type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._register(e)} />
+              <ListRow title='' detail={
+                <View style={{ flexDirection: "row", marginRight: 19 }}>
+                  <Checkbox
+                    checkedIcon={<Image style={{width: 15, height: 15, tintColor: '#00A29A'}} source={require('../../styles/mine/checked.png')} />}
+                    uncheckedIcon={<Image style={{width: 15, height: 15, tintColor: '#2c2c2c'}} source={require('../../styles/mine/unchecked.png')} />}
+                    checked={this.state.checkedEmpty}
+                    onChange={value => this.setState({ checkedEmpty: value })}
+                  />
+                  <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => this.navigator.push({ view: <Chengming /> })}>
+                    <Text style={{ color: '#00A29A' }}>同意链问条款</Text>
+                  </TouchableOpacity>
                 </View>
-                } style={{ backgroundColor: 'rgba(178,178,178,0.0)' }} />
+
+              } bottomSeparator='none'
+                style={{ backgroundColor: 'rgba(178,178,178,0.0)' }}
+              />
+              <ListRow detail={
+                <View style={styles.contentImput}>
+                  <Button title='注    册' type='primary' disabled={!this.state.checkedEmpty} style={{ margin: 2, width: 180, height: 50, backgroundColor: '#16424F', borderColor: '#16424F' }} size='lg' onPress={(e) => this._register(e)} />
+                </View>
+              } style={{ backgroundColor: 'rgba(178,178,178,0.0)' }}
+                bottomSeparator='none'
+              />
 
             </View>
-          
+
           </ImageBackground>
         </View>
 
 
-       {/*  <View style={[styles.card2, { backgroundColor: '#a9ceca' }]}>
+        {/*  <View style={[styles.card2, { backgroundColor: '#a9ceca' }]}>
           <Text style={styles.title}>LianWen</Text>
           <Fumi
             label={'新密码'}
@@ -274,14 +294,14 @@ export default class RegisterLogin extends NavigationPage {
             onChangeText={(txt) => { this.setState({ userRPW: txt })}}
           />
         </View> */}
-   
-      {/*   <ListRow detail={<Button title='注            册' type='primary' style={{ margin: 2, width: width - 20 ,height:50}} size='lg' onPress={(e) => this._register(e)} />}  style={{backgroundColor:'rgba(178,178,178,0.1)'}}/> */}
+
+        {/*   <ListRow detail={<Button title='注            册' type='primary' style={{ margin: 2, width: width - 20 ,height:50}} size='lg' onPress={(e) => this._register(e)} />}  style={{backgroundColor:'rgba(178,178,178,0.1)'}}/> */}
         <View style={{ height: 5 }} />
-        <ListRow detail={"注册成功后，请保存好自己的账户地址和keyStore值以及密码，请务必多备份几份，请勿告诉其他人。本登录账号为个人保管无后台操作，丢失后无法找回"} titlePlace='top' style={{backgroundColor:'rgba(178,178,178,0.1)'}} detailStyle={{color:'white'}} />
+        <ListRow detail={"注册成功后，请保存好自己的账户地址和keyStore值以及密码，请务必多备份几份，请勿告诉其他人。本登录账号为个人保管无后台操作，丢失后无法找回"} titlePlace='top' style={{ backgroundColor: 'rgba(178,178,178,0.1)' }} detailStyle={{ color: 'white' }} />
 
         {vAccountShow}
-        <LoadingView showLoading={ this.state.showLoading } loadingViewClick={()=>{this.setState({showLoading:false})}}/>
-     
+        <LoadingView showLoading={this.state.showLoading} loadingViewClick={() => { this.setState({ showLoading: false }) }} />
+
       </ScrollView>
     );
   }
@@ -338,7 +358,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: width,
-    height: 350,
+    height: 380,
     /*  justifyContent: 'center',
      alignItems: 'center' */
   },
@@ -351,7 +371,7 @@ const styles = StyleSheet.create({
   },
   contentListRow: {
     backgroundColor: 'rgba(178,178,178,0.1)',
-    borderWidth:0
+    borderWidth: 0
   }
 
 })

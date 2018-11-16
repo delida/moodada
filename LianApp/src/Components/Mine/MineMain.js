@@ -277,7 +277,7 @@ Toast.success('已复制到剪切板，请将剪切板中的内容粘贴到您�
           <View style={{height: 2}} />
           <ListRow title='区块链信息'  onPress={() => this._mainchaininfo() } />
           <View style={{height: 2}} />
-          <ListRow title='关于链问' detail='版本号 0.1.0' topSeparator='full' onPress={() =>this.navigator.push({view: <About />})} />
+          <ListRow title='关于链问' detail='版本号 1.0.0' topSeparator='full' onPress={() =>this.navigator.push({view: <About />})} />
          
         </ScrollView>
       );
@@ -297,7 +297,7 @@ Toast.success('已复制到剪切板，请将剪切板中的内容粘贴到您�
         <View style={{height: 2}} />
         <ListRow title='区块链信息'  onPress={() => this._mainchaininfo() } />
         <View style={{height: 2}} />
-        <ListRow title='关于链问'  detail='版本号 0.1.0'  onPress={() =>this.navigator.push({view: <About />})} />
+        <ListRow title='关于链问'  detail='版本号 1.0.0'  onPress={() =>this.navigator.push({view: <About />})} />
       </ScrollView>
         );
       }

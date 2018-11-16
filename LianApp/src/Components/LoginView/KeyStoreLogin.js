@@ -21,7 +21,7 @@ import {
 
 
 
-import { NavigationPage, Input, ListRow, Toast, Button } from 'teaset';
+import { NavigationPage, Input, ListRow, Toast, Button,Checkbox } from 'teaset';
 
 const BG_IMAGE = require('../../styles/image/loginback.jpg');
 const masaike = require('../../styles/image/masaike.jpg');
@@ -39,7 +39,7 @@ import Lmain from '../Lmain';
 import MenuMain from '../MenuMain';
 
 import LoadingView from '../CommonComp/LoadingView';
-import Madoka from '../../UI/Madoka';
+import Chengming from './CheckShengMing';
 
 export default class KeyStoreLogin extends NavigationPage {
 
@@ -60,6 +60,7 @@ export default class KeyStoreLogin extends NavigationPage {
       height: 30,
       keyboardHeight: 0,
       showLoading: false,
+      checkedEmpty:false,
       BoardList: this.props.BoardList
     };
 
@@ -114,10 +115,18 @@ export default class KeyStoreLogin extends NavigationPage {
       Toast.fail('keyStore输入有误');
       isload=false;
     }
+    if (kong(this.state.userPW)) {
+      Toast.fail("密码输入有误");
+      isload=false;
+    }
     try {
       let user = JSON.parse(this.state.keystoreinput);
-      this.state.userName = user.userAddr;
-      this.state.keyStore = user.keystore;
+      this.state.userName = user.address;
+      if(this.state.userName.substring(0,2)!='0x'||this.state.userName.substring(0,2)!='0X')
+      {
+        this.state.userName = '0x'+user.address;
+      }
+      this.state.keyStore = user;
      // console.log('user', user);
     }
     catch (error) {
@@ -129,10 +138,7 @@ export default class KeyStoreLogin extends NavigationPage {
       Toast.fail('账户地址输入有误');
       isload=false;
     }
-    if (kong(this.state.userPW)) {
-      Toast.fail("密码输入有误");
-      isload=false;
-    }
+   
     if (kong(this.state.keyStore)) {
       Toast.fail("keystore不允许为空值");
       isload=false;
@@ -197,6 +203,7 @@ export default class KeyStoreLogin extends NavigationPage {
                 </View>
               }
                 style={styles.contentListRow}
+                bottomSeparator='none'
               />
               <ListRow detail={
                 <View style={[styles.contentImput,{borderColor: '#00A29A', borderWidth: 1,borderRadius: 3,marginLeft:20,marginRight:20,height:50}]} >
@@ -208,12 +215,13 @@ export default class KeyStoreLogin extends NavigationPage {
                     }}
                     placeholder='请输入密码'
                     value={this.state.userPW}
-                    keyboardType='numeric'
+                   
                     secureTextEntry={true}
                   />
                 </View>
               }
                 style={styles.contentListRow}
+                bottomSeparator='none'
               />
                <ListRow detail={
                 <View style={[styles.contentImput,{borderColor: '#00A29A', borderWidth: 1,borderRadius: 3,marginLeft:20,marginRight:20,height:50}]} >
@@ -227,17 +235,36 @@ export default class KeyStoreLogin extends NavigationPage {
                     multiline={true}
                     placeholder='请输入keyStore'
                     value={this.state.keystoreinput}
-                    keyboardType='numeric'
+                   
                   />
                 </View>
               }
                 style={styles.contentListRow}
               />
+               <ListRow title='' detail={
+            <View style={{flexDirection:"row",marginRight:19}}>
+            <Checkbox
+            checkedIcon={<Image style={{width: 15, height: 15, tintColor: '#00A29A'}} source={require('../../styles/mine/checked.png')} />}
+            uncheckedIcon={<Image style={{width: 15, height: 15, tintColor: '#2c2c2c'}} source={require('../../styles/mine/unchecked.png')} />}
+            checked={this.state.checkedEmpty}
+            onChange={value => this.setState({checkedEmpty: value})}
+            />
+            <TouchableOpacity style={{marginLeft:10}}  onPress={()=>this.navigator.push({view:<Chengming /> })}>
+            <Text style={{color:'#00A29A'}}>同意链问条款</Text>
+            </TouchableOpacity>
+            </View>
+           
+          }  
+          bottomSeparator='none' 
+          style={{ backgroundColor: 'rgba(178,178,178,0.0)' }}
+          />
                 <ListRow detail={
                 <View style={styles.contentImput}>
-                       <Button title='登    陆' type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._login(e)} />
+                       <Button title='登    陆' type='primary' disabled={!this.state.checkedEmpty}  style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._login(e)} />
                 </View>
-                } style={{ backgroundColor: 'rgba(178,178,178,0.0)' }} />
+                } style={{ backgroundColor: 'rgba(178,178,178,0.0)' }} 
+                bottomSeparator='none'
+                />
 
             </View>
           
@@ -304,7 +331,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: width,
-    height: 350,
+    height: 380,
     /*  justifyContent: 'center',
      alignItems: 'center' */
   },

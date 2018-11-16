@@ -62,6 +62,12 @@ export default class LianWenHome extends NavigationPage {
       isOwner: 0
     }
 
+    this.pagination = {
+      rows: 10,
+      page: 0,
+      total: 0
+  }
+
   }
 
 
@@ -76,42 +82,69 @@ export default class LianWenHome extends NavigationPage {
     this.onHeaderRefresh()
   }
 
+  _getdata(isReload) {
+    return new Promise((resolve, reject) => {
+      if (isReload) {
+        this.pagination.page = 0,
+          this.pagination.total = 0
+      }
+      var newList = [];
+      var cpage = this.pagination.page;
+        LoginLogic.getCurrentUser().then(user => {
+          var useraddr = '';
+          if (user != null && typeof (user) != "undefined" && user.online) {
+            useraddr = user.userAddr;
+          }
+      
+          MainLogic.getTopicList(cpage, 0, this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp, this.state.BoardList.deployLwSolAdmin, useraddr).then((datas) => {
+             if(datas.topicArr!=null&&datas.topicArr.length>0){
+              newList = datas.topicArr;
+              this.pagination.page = this.pagination.page + 1;
+             }
+             this.setState({
+              userAddr: useraddr,
+              user:user,
+              isOwner: datas.isOwner,
+             /*   isOwner: 1,  */
+            })
+            resolve(newList);
+          })
+        })
+      
+    })
+  }
 
   onHeaderRefresh = () => {
     this.setState({ refreshState: RefreshState.HeaderRefreshing })
 
-    LoginLogic.getCurrentUser().then(user => {
-     
-      var useraddr = '';
-      if (user != null && typeof (user) != "undefined" && user.online) {
-        useraddr = user.userAddr;
-      }
-     
-      MainLogic.getTopicList(0, 0, this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp, this.state.BoardList.deployLwSolAdmin, useraddr).then((datas) => {
-        let dataList = datas.topicArr;
-        //console.log('获取到结果',datas);
-        this.setState({
-          dataList: dataList,
-          userAddr: useraddr,
-          user:user,
-           isOwner: datas.isOwner, 
-          /* isOwner: 1, */
-          refreshState: dataList.length < 1 || typeof (dataList) == "undefined" ? RefreshState.EmptyData : RefreshState.Idle,
-        })
-        this._renderJieSuan();
+    this._getdata(true).then(dataList=>{
+      this.setState({
+        dataList: dataList,
+        refreshState: dataList.length < 1 || typeof (dataList) == "undefined" ? RefreshState.EmptyData : RefreshState.Idle,
       })
+      this._renderJieSuan();
     })
   }
 
   onFooterRefresh = () => {
     this.setState({ refreshState: RefreshState.FooterRefreshing })
+
+    this._getdata(false).then(datas=>{
+      let dataList = [...this.state.dataList, ...datas];
+      this.setState({
+        dataList: dataList,
+        refreshState: datas.length < 1 ? RefreshState.NoMoreData : RefreshState.Idle,
+      })
+      this._renderJieSuan();
+    })
+/* 
     MainLogic.getTopicList(0, 0, this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp).then((datas) => {
       let dataList = [...this.state.dataList, ...datas];
       this.setState({
         dataList: dataList,
-        refreshState: dataList.length < 1 ? RefreshState.EmptyData : RefreshState.Idle,
+        refreshState: dataList.length < 1 ? RefreshState.NoMoreData : RefreshState.Idle,
       })
-    })
+    }) */
   }
 
   keyExtractor = (item, index) => {
@@ -164,10 +197,27 @@ export default class LianWenHome extends NavigationPage {
 
   }
 
+  _renderBottom(){
+    if(this.state.refreshState!=RefreshState.NoMoreData){
+
+      return(
+      <TouchableOpacity style={{ marginTop: 15, justifyContent: 'center', alignItems: 'center' }} onPress={() => this.onFooterRefresh()}>
+
+      <Text>
+      点击加载更多...
+       </Text>
+      
+
+      </TouchableOpacity>
+      );
+    
+    }
+}
+
   renderPage() {
     return (
       <View style={styles.container}>
-        <ListRow title='' icon={require('../../styles/menu/wen.png')} titleStyle={{ color: '#00A29A', fontSize: 18 }} />
+        <ListRow title={this.state.isOwner==1?'管理员':''} icon={require('../../styles/menu/wen.png')} titleStyle={{ color: '#00A29A', fontSize: 18 }} />
         <RefreshListView
           data={this.state.dataList}
           keyExtractor={this.keyExtractor}
@@ -177,11 +227,14 @@ export default class LianWenHome extends NavigationPage {
           //onFooterRefresh={this.onFooterRefresh}
 
           // 可选
-          footerRefreshingText='玩命加载中 >.<'
-          footerFailureText='我擦嘞，居然失败了 =.=!'
+          footerRefreshingText='正在加载中 >.<'
+          footerFailureText='加载失败了 =.=!'
           footerNoMoreDataText='-我是有底线的-'
-          footerEmptyDataText='-好像什么东西都没有-'
+          footerEmptyDataText='-请尝试下拉刷新-'
         />
+
+     {/*this._renderBottom() */} 
+
       </View>
     );
 

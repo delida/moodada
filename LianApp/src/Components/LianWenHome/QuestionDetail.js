@@ -149,7 +149,10 @@ export default class QuestionDetail extends NavigationPage {
 
                                         {/*右边*/}
                                         <View style={[styles.rightViewStyle]}>
-                                            <Text style={{ color: 'gray', lineHeight: 20, marginRight: 70 }} >{this.props.data.desc}</Text>
+                                        <ScrollView style={{height:150,marginRight: 70}}>
+                                        <Text style={{ color: 'gray', lineHeight: 20, marginRight: 70 }} >{this.props.data.desc}</Text>
+                                        </ScrollView>
+                                            
                                             <View style={styles.rightBottomViewStyle}>
                                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                     <Image source={require('../../styles/png/time.png')} style={{ width: 20, height: 20 }} />
@@ -568,7 +571,7 @@ const styles = StyleSheet.create({
 
     rightTopViewStyle: {
         flexDirection: 'row',
-        marginBottom: 7,
+        marginBottom: 7
         /*  borderBottomColor:'#E6E6E6',
          borderBottomWidth:1 */
 

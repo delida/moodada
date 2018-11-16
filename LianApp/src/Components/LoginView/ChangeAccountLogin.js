@@ -199,11 +199,11 @@ export default class ChangeAccountLogin extends NavigationPage {
                     }}
                     placeholder='请输入用户名'
                     value={this.state.userName}
-                    keyboardType='numeric'
                   />
                 </View>
               }
                 style={styles.contentListRow}
+                bottomSeparator='none'
               />
                <ListRow detail={
                 <View style={[styles.contentImput,{borderColor: '#00A29A', borderWidth: 1,borderRadius: 3,marginLeft:20,marginRight:20,height:50}]} >
@@ -217,11 +217,11 @@ export default class ChangeAccountLogin extends NavigationPage {
                     multiline={true}
                     placeholder='请输入密码'
                     value={this.state.userPW}
-                    keyboardType='numeric'
                   />
                 </View>
               }
                 style={styles.contentListRow}
+                bottomSeparator='none'
               />
                 <ListRow detail={
                 <View style={styles.contentImput}>

@@ -51,7 +51,7 @@ export default class QuestionDetailItemForMy extends Component {
         return (
 
             <View style={styles.listViewStyle}>
-                <View style={[styles.rightViewStyle, { width: width - 35 }]}>
+                <View style={styles.rightViewStyle}>
                     <Text style={{ color: 'gray' }}>{this.state.desc}</Text>
 
                     <View style={styles.rightBottomViewStyle}>
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     listViewStyle: {
+        flex:1,
       /*   backgroundColor: 'white',
         flexDirection: 'column',
         // 全体边框宽度
@@ -128,6 +129,7 @@ const styles = StyleSheet.create({
         paddingBottom: 15 */
         //flex:1,
        // marginTop:5
+       //marginRight:100
     },
 
 
@@ -137,10 +139,10 @@ const styles = StyleSheet.create({
     },
 
     rightViewStyle: {
-        paddingRight: 2,
+        //paddingRight: 2,
         marginLeft: 2,
-        //width:220,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginRight:80
     },
 
     rightTopViewStyle: {

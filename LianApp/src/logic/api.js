@@ -246,13 +246,6 @@ export default class API extends Component{
      */
      static buyMintToken(userAddr,value,marketableTokenAddr, pwd, keystore,subChainAddr,exchangeRate){
         var testkeystore = JSON.stringify(keystore);
-console.log('充值addr',userAddr);
-console.log('充值value',value);
-console.log('充值marketableTokenAddr',marketableTokenAddr);
-console.log('充值pwd','moac');
-console.log('充值keystore',keystore);
-console.log('充值subChainAddr',subChainAddr);
-console.log('充值exchangeRate',exchangeRate);
 return new Promise((resolve,reject)=>{
     var begin=new Date();
     chargeToken(userAddr,value,marketableTokenAddr,pwd,testkeystore,subChainAddr,exchangeRate).then(data=>{

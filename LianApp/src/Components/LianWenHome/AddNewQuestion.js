@@ -46,6 +46,16 @@ export default class AddNewQuestion extends NavigationPage {
 
     
     componentDidMount(){
+      this.setState({showLoading:true})
+      MainLogic.getMaxTimeAndPerTime(this.state.BoardList.subChainAddress,this.state.BoardList.deployLwSolAdmin).then(data=>{
+        this.setState({
+          showLoading:false,
+        pertime:data.perTime,
+        maxtime:data.maxTime,
+        peiinfo:'请输入'+data.perTime+'的倍数'
+        })
+
+      })
       this.timer = setInterval(()=>{
         MainLogic.getBlockInfo(this.state.BoardList.subChainAddress,this.state.BoardList.rpcIp).then(data=>{
           //console.log('区块信息高度',data);
@@ -56,17 +66,7 @@ export default class AddNewQuestion extends NavigationPage {
         })
       },10000);
 
-      this.setState({showLoading:true})
-      MainLogic.getMaxTimeAndPerTime(this.state.BoardList.subChainAddress,this.state.BoardList.deployLwSolAdmin).then(data=>{
-		console.log('*********perTime***********',data.perTime,'*********maxTime***********',data.maxTime);  
-        this.setState({
-          showLoading:false,
-        pertime:data.perTime,
-        maxtime:data.maxTime,
-        peiinfo:'请输入'+data.perTime+'的倍数'
-        })
-
-      })
+     
 
     }
        
@@ -163,7 +163,7 @@ _addNewTopic(e){
       return;
     }
     
-    if(this.state.text==''||this.state.text.length>200||this.state.text.length<=0)
+    if(this.state.text==''||this.state.text.trim()==''||this.state.text.length>145||this.state.text.length<=0)
     {
       
       Toast.fail('输入的问题有误');
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingVertical: 0, 
-    padding: 3, 
+    paddingBottom: 30, 
     fontSize: 16,
     maxHeight: 200
   },

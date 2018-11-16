@@ -62,11 +62,11 @@ export default class AccountInfo extends NavigationPage {
 
     LoginLogic.getUserByUserAddr(this.props.userAddr).then((user) => {
       //console.log('账户信息界面获取用户信息',user);
-      var jsonData = {
+ /*      var jsonData = {
         userAddr: user.userAddr,
         keystore: user.keystore
-      }
-      Clipboard.setString(JSON.stringify(jsonData));
+      } */
+      Clipboard.setString(JSON.stringify(user.keystore));
       Toast.success('已复制到剪切板，请将剪切板中的内容粘贴到您要备份的位置');
     })
 

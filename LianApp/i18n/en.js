@@ -7,6 +7,32 @@ moac_balance:'moac balance',
 coin_balance:'coin balance',
 block_Info:'MotherChain#/MicroChain#/Refresh',
 
+DECLARATION : {
+    declare: 'SnapQ&A DECLARATION',
+    content1:'Welcome to SnapQ&A。\r\nPlease read following terms carefully. You can choose leave this page if you disagree to the terms of this license. It means you accept all terms list below when you are registered.\r\n',
+    shiyongguize:'Rules',
+    shiyongguizecontent:'1.	Registered user will receive a wallet address, password and exportable keystore, which keep by individual; The user will take legal liability for all activities of it’s address.\r\n2.	User can transfer some MOAC to it’s address. MOAC in account can only exchange SnapQ&A coin. Please do not use SnapQ&A account as well as wallet.\r\n3.	Visit SnapQ&A and use SnapQ&A server or data via various ways (RSS, inbound API reference, etc) will be treated as unconditional acceptance of this license；If user holds objections, please stop all service provided by SnapQ&A.\r\n4.	The information on SnapQ&A is public. Any third-party can visit user’s publication through SnapQ&A. User consent legal liability to all information published by individual. \r\n5.	You agree that you will not defame, abuse, harass, threaten or otherwise violate the legal right。\r\n6.	You agree you will not upload, post, email, transmit or otherwise make available any other content, message, or communication prohibited by applicable law, the terms or any applicable product policies or guidelines \r\n7 SnapQ&A is authorized to supervise user behavior. For those who disobey the rules, SnapQ&A will try best to reduce the harmful effect',
+    zhishichanquan:'Intelligent Property',
+    zhishichanquancontent1:' SnapQ&A owns, or is the licensee to. All right, title and interest in and to this Application, including all rights under patent, copyright, trademark, or unfair competition law, and any and all other proprietary right. Including all applications, renewal, extensions and restorations thereof. Other company, product, or service names mentioned in this Application may be trademarks of their respective companies.\r\n',
+    zhishichanquancontent2:'8. User agree that SnapQ&A to freeze or remove infringement information.\r\n',
+    gerenyinsi:'Personal Privacy',
+    gerenyinsicontent:'SnapQ&A will keep respect to user’s privacy and provide sufficient technical and internal manging to protect user’s privacy. SnapQ&A will not uncover user’s information unless authorized by user or required by government that with enough privileges. At same time, SnapQ&A might collect or submit impersonal information to third-party for better service. \r\n',
+    lianwenbi:'SnapQ&A Coin',
+    lianwenbicontent1:'1. SnapQ&A coin is virtual coin on our platform that can only consume on SnapQ&A app. Not allowed for any other purpose。\r\n',
+    lianwenbicontent2:'2. SnapQ&A is not response for any damage caused by inappropriate operation by user. For those accounts of violation. SnapQ&A holds right to freeze balance, pause or terminate top up service. If the account  is proved to be disobedience, SnapQ&A is authorized to refuse all coins from that account\r\n',
+    lianwenbicontent3:'3. The exchange rate on top up page will be determine as final rate between SnapQ&A coin and legal tender. SnapQ&A is authorized to update exchange rate and open on top up page\r\n',
+    lianwenbicontent4:'4. SnapQ&A coin is not suppose to convert to cash。\r\n',
+    mianzeshengming:'Disclaimer',
+    mianzeshengmingcontent1:'1.	SnapQ&A not ensure the correction of comment by it’s users。\r\n',
+    mianzeshengmingcontent2:'2.	You agree you are soley response for content you are published. Which include all cause by publications. SnapQ&A will not take any response for it\r\n',
+    mianzeshengmingcontent3:'3.	SnaqQ&A not ensure unpredictable network status, which include the timeliness, veracity and insecurity. \r\n',
+    mianzeshengmingcontent4:'4.	SnapQ&A is not responsible for those losses cause by unpredictable or uncontrollable reason. But we will spare not effort to lower the influent to our users \r\n',
+    xieyixiugai:'License Revision',
+    xieyixiugaicontent1:'1.  According to relative law or update of document or further development. SnapQ&A is authorized to revise current terms. SnapQ&A will publish new license on our website as announcement. Also, SnapQ&A are allowed to remind user this revision by e-mail or message',
+    xieyixiugaicontent2:'2.	User should discontiue to use SnapQ&A is disagree with revisions made by SnapQ&A. On converse, user will be treated like confirm the revision of terms’
+ },
+ 
+
 ACTION: {
     recharge:'Recharge ',
     withdraw:'Withdraw ',

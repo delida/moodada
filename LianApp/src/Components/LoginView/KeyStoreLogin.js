@@ -40,6 +40,7 @@ import MenuMain from '../MenuMain';
 
 import LoadingView from '../CommonComp/LoadingView';
 import Madoka from '../../UI/Madoka';
+import Chengming from './CheckShengMing';
 import i18n from '../../../i18n/i18n';
 export default class KeyStoreLogin extends NavigationPage {
 

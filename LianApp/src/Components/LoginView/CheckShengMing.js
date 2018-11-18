@@ -39,8 +39,8 @@ export default class CheckShengMing extends NavigationPage{
                  <Text style={styles.content1}>{i18n.t('DECLARATION.gerenyinsicontent')}</Text>
                  <Text style={styles.header}>{i18n.t('DECLARATION.lianwenbi')}</Text>
                  <Text style={styles.content1}>{i18n.t('DECLARATION.lianwenbicontent1')}+{i18n.t('DECLARATION.lianwenbicontent2')}+{i18n.t('DECLARATION.lianwenbicontent3')}+{i18n.t('DECLARATION.lianwenbicontent4')}</Text>
-                 <Text style={styles.header}>{i18n.t('DECLARATION.mianzeDECLARATION)}</Text>
-                 <Text style={styles.content1}>{i18n.t('DECLARATION.mianzeDECLARATIONcontent1')}+{i18n.t('DECLARATION.mianzeDECLARATIONcontent2')}+{i18n.t('DECLARATION.mianzeDECLARATIONcontent3')}+{i18n.t('DECLARATION.mianzeDECLARATIONcontent4')}</Text>
+                 <Text style={styles.header}>{i18n.t('DECLARATION.mianzeshengming')}</Text>
+                 <Text style={styles.content1}>{i18n.t('DECLARATION.mianzeshengmingcontent1')}+{i18n.t('DECLARATION.mianzeshengmingcontent2')}+{i18n.t('DECLARATION.mianzeshengmingcontent3')}+{i18n.t('DECLARATION.mianzeshengmingcontent4')}</Text>
                  <Text style={styles.header}>{i18n.t('DECLARATION.xieyixiugai')}</Text>
                  <Text style={styles.content1}>{i18n.t('DECLARATION.xieyixiugaicontent1')}+{i18n.t('DECLARATION.xieyixiugaicontent2')}</Text>
                  </View>

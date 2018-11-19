@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/moodada.iml" filepath="$PROJECT_DIR$/.idea/moodada.iml" />
+      <module fileurl="file://$PROJECT_DIR$/moodada.iml" filepath="$PROJECT_DIR$/moodada.iml" />
     </modules>
   </component>
 </project>

@@ -245,7 +245,7 @@ export default class RegisterLogin extends NavigationPage {
                 <View style={{ flexDirection: "row", marginRight: 19 }}>
                   <Checkbox
                     checkedIcon={<Image style={{width: 15, height: 15, tintColor: '#00A29A'}} source={require('../../styles/mine/checked.png')} />}
-                    uncheckedIcon={<Image style={{width: 15, height: 15, tintColor: '#2c2c2c'}} source={require('../../styles/mine/unchecked.png')} />}
+                    uncheckedIcon={<Image style={{width: 15, height: 15, tintColor: '#2c2c2c'}} source={require('../../styles/mine/checkbox.jpg')} />}
                     checked={this.state.checkedEmpty}
                     onChange={value => this.setState({ checkedEmpty: value })}
                   />

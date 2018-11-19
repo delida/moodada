@@ -201,7 +201,7 @@ Profile:{
         registerLogin:{
                     account_addr:'Account Address',
                     keyStore_backup:'BKUP keyStore',
-					agreement:'同意链问条款'
+					agreement:'Accept'
         }
     },
 

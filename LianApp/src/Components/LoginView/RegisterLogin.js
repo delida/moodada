@@ -12,13 +12,14 @@ import {
   Dimensions,
   Clipboard,
   ImageBackground,
+  TouchableOpacity,
   Image,
   TextInput
 } from 'react-native';
 
 
 
-import { NavigationPage, Input, ListRow, Label, Button,Toast, Theme } from 'teaset';
+import { NavigationPage, Input, ListRow, Label, Button,Toast, Theme, Checkbox } from 'teaset';
 const BG_IMAGE = require('../../styles/image/bg_screen1.jpg');
 const masaike = require('../../styles/image/masaike.jpg');
 
@@ -27,6 +28,7 @@ const { width, height } = Dimensions.get('window');
 import LoginLogic from '../../logic/LoginLogic';
 import Lmain from '../Lmain';
 import LoadingView from '../CommonComp/LoadingView';
+import Chengming from './CheckShengMing';
 import Madoka from '../../UI/Madoka';
 import i18n from '../../../i18n/i18n';
 
@@ -50,6 +52,7 @@ export default class RegisterLogin extends NavigationPage {
       keyboardHeight: 0,
       reVisiable: false,
       showLoading:false,
+	  checkedEmpty: false,
       BoardList:this.props.BoardList
     };
 
@@ -147,7 +150,7 @@ export default class RegisterLogin extends NavigationPage {
       userAddr: this.state.userName,
       keystore: JSON.parse(this.state.keyStore)
     }
-    Clipboard.setString(JSON.stringify(jsonData));
+    Clipboard.setString(this.state.keyStore);
     Toast.success(i18n.t('SUCCESS.userInfo_clip'));
   }
 
@@ -217,6 +220,7 @@ export default class RegisterLogin extends NavigationPage {
                 </View>
               }
                 style={styles.contentListRow}
+				bottomSeparator='none'
               />
                <ListRow detail={
                 <View style={[styles.contentImput,{borderColor: '#00A29A', borderWidth: 1,borderRadius: 3,marginLeft:20,marginRight:20,height:50}]} >
@@ -235,12 +239,31 @@ export default class RegisterLogin extends NavigationPage {
                 </View>
               }
                 style={styles.contentListRow}
+				bottomSeparator='none'
+              />
+			  <ListRow title='' detail={
+                <View style={{ flexDirection: "row", marginRight: 19 }}>
+                  <Checkbox
+                    checkedIcon={<Image style={{width: 15, height: 15, tintColor: '#00A29A'}} source={require('../../styles/mine/checked.png')} />}
+                    uncheckedIcon={<Image style={{width: 15, height: 15, tintColor: '#2c2c2c'}} source={require('../../styles/mine/unchecked.png')} />}
+                    checked={this.state.checkedEmpty}
+                    onChange={value => this.setState({ checkedEmpty: value })}
+                  />
+                  <TouchableOpacity style={{ marginLeft: 10 }} onPress={() => this.navigator.push({ view: <Chengming /> })}>
+                    <Text style={{ color: '#00A29A' }}>{i18n.t('LoginView.registerLogin.agreement')}</Text>
+                  </TouchableOpacity>
+                </View>
+
+              } bottomSeparator='none'
+                style={{ backgroundColor: 'rgba(178,178,178,0.0)' }}
               />
                 <ListRow detail={
                 <View style={styles.contentImput}>
-                       <Button title={i18n.t('ACTION.sign_up')} type='primary' style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._register(e)} />
+                       <Button title={i18n.t('ACTION.sign_up')} type='primary' disabled={!this.state.checkedEmpty} style={{ margin: 2, width: 180, height: 50,backgroundColor:'#16424F',borderColor:'#16424F' }} size='lg' onPress={(e) => this._register(e)} />
                 </View>
-                } style={{ backgroundColor: 'rgba(178,178,178,0.0)' }} />
+                } style={{ backgroundColor: 'rgba(178,178,178,0.0)' }} 
+				bottomSeparator='none'
+				/>
 
             </View>
           
@@ -338,7 +361,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: width,
-    height: 350,
+    height: 380,
     /*  justifyContent: 'center',
      alignItems: 'center' */
   },

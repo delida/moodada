@@ -5,7 +5,7 @@ accountAddr:'Account address',
 amount:'Amount',
 moac_balance:'moac balance',
 coin_balance:'coin balance',
-block_Info:'MotherChain#/MicroChain#/Refresh',
+block_Info:'Block Height: M#/m#/Flush#',
 
 DECLARATION : {
     declare: 'SnapQ&A DECLARATION',
@@ -29,7 +29,7 @@ DECLARATION : {
     mianzeshengmingcontent4:'4.	SnapQ&A is not responsible for those losses cause by unpredictable or uncontrollable reason. But we will spare not effort to lower the influent to our users \r\n',
     xieyixiugai:'License Revision',
     xieyixiugaicontent1:'1.  According to relative law or update of document or further development. SnapQ&A is authorized to revise current terms. SnapQ&A will publish new license on our website as announcement. Also, SnapQ&A are allowed to remind user this revision by e-mail or message',
-    xieyixiugaicontent2:'2.	User should discontiue to use SnapQ&A is disagree with revisions made by SnapQ&A. On converse, user will be treated like confirm the revision of terms’
+    xieyixiugaicontent2:'2.	User should discontiue to use SnapQ&A is disagree with revisions made by SnapQ&A. On converse, user will be treated like confirm the revision of terms'
  },
  
 
@@ -200,7 +200,8 @@ Profile:{
         },
         registerLogin:{
                     account_addr:'Account Address',
-                    keyStore_backup:'BKUP keyStore'
+                    keyStore_backup:'BKUP keyStore',
+					agreement:'同意链问条款'
         }
     },
 

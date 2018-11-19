@@ -67,7 +67,7 @@ export default class AccountInfo extends NavigationPage {
         userAddr: user.userAddr,
         keystore: user.keystore
       }
-      Clipboard.setString(JSON.stringify(jsonData));
+      Clipboard.setString(JSON.stringify(user.keystore));
       Toast.success(i18n.t('SUCCESS.userInfo_clip'));
     })
   }

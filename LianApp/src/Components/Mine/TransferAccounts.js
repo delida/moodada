@@ -3,7 +3,7 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {View, ScrollView,Clipboard,TextInput,Dimensions,Alert,Text} from 'react-native';
+import {View, ScrollView,Clipboard,TextInput,Dimensions,Alert,Text,TouchableWithoutFeedback} from 'react-native';
 
 import {Toast, TeaNavigator, NavigationPage, BasePage, ListRow, Button, Label} from 'teaset';
 
@@ -14,6 +14,7 @@ var {height, width} = Dimensions.get('window');
 import { kong } from '../../CommonMethod';
 import MainLogic from '../../logic/MainLogic';
 import i18n from '../../../i18n/i18n';
+const dismissKeyboard = require('dismissKeyboard')
 
 export default class TransferAccounts extends NavigationPage {
 
@@ -221,12 +222,19 @@ export default class TransferAccounts extends NavigationPage {
          
        
       return (
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <ScrollView style={{flex: 1,backgroundColor: '#F5FCFF'}}>
           <View style={{height: 5}} />
           <ListRow title={i18n.t('accountAddr')} icon={require('../../styles/mine/accountinfo.png')} detail={this.state.account} titlePlace='top' detailStyle={{fontSize:12}} />
           <View style={{height: 5}} />
-          <ListRow title={i18n.t('moac_balance')} detail={<Label text={this.state.moac} type='title' />} />
-          <ListRow title={i18n.t('coin_balance')}detail={<Label text={this.state.coin} type='title' />} />
+          <ListRow title={i18n.t('moac_balance')} detail={<Label text={this.state.moac} type='title' />} 
+             accessory='none' 
+             onPress={dismissKeyboard}
+          />
+          <ListRow title={i18n.t('coin_balance')}detail={<Label text={this.state.coin} type='title' />} 
+             accessory='none' 
+             onPress={dismissKeyboard}
+          />
           <ListRow title={i18n.t('Profile.transferAccounts.dist_address')} detail={
             <TextInput
             style={{marginLeft:5,marginRight:5,height: 35, flex:1,borderColor: 'gray', borderWidth: 1}}
@@ -237,7 +245,10 @@ export default class TransferAccounts extends NavigationPage {
             value={this.state.rechargeAccount}
              keyboardType='numeric'
           />
-          }/>
+          }
+          accessory='none' 
+          onPress={dismissKeyboard}
+          />
           <ListRow title={i18n.t('Profile.transferAccounts.transfer_amount')} detail={
 
 <View style={{flex:1,flexDirection:'row'}}>
@@ -254,7 +265,10 @@ export default class TransferAccounts extends NavigationPage {
 </View>
 
            
-          }/>
+          }
+          accessory='none' 
+          onPress={dismissKeyboard}
+          />
           
           <View style={{height: 5}} />
           <ListRow title={i18n.t('Profile.transferAccounts.transfer_amount')} detail={
@@ -271,7 +285,10 @@ export default class TransferAccounts extends NavigationPage {
           <Button title= {i18n.t('Profile.transferAccounts.coin_transfer')} type='primary' style={{flex:3,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._showsell(e)} />
               </View>
             
-          }/>
+          }
+          accessory='none' 
+          onPress={dismissKeyboard}
+          />
         {/*   <ListRow  detail={<Button title='coin转账' type='primary' style={{padding:6,width:width-20}} onPress={(e)=>this._showsell(e)} />} /> */}
 
           <View style={{ height: 5 }} />
@@ -286,6 +303,7 @@ export default class TransferAccounts extends NavigationPage {
           <View style={{height: 5}} />
           <LoadingView showLoading={ this.state.showLoading } loadingViewClick={()=>{this.setState({showLoading:false})}}/>
         </ScrollView>
+        </TouchableWithoutFeedback>
       );
     }
   

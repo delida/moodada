@@ -3,7 +3,7 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {KeyboardAvoidingView ,TouchableOpacity,View, TextInput,ScrollView,StyleSheet,Dimensions} from 'react-native';
+import {KeyboardAvoidingView ,TouchableOpacity,View, TextInput,ScrollView,StyleSheet,Dimensions,TouchableWithoutFeedback} from 'react-native';
 
 import {NavigationPage, Input, ListRow, Label,Toast,Button} from 'teaset';
 var {height, width} = Dimensions.get('window');
@@ -13,6 +13,7 @@ import CoinLogic from '../../logic/CoinLogic';
 import LoadingView from '../CommonComp/LoadingView';
 import MainLogic from '../../logic/MainLogic';
 import i18n from '../../../i18n/i18n';
+const dismissKeyboard = require('dismissKeyboard')
 
 export default class AddNewQuestion extends NavigationPage {
 
@@ -253,6 +254,7 @@ _addNewTopic(e){
       
 
       return (
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
         <KeyboardAvoidingView
         style={styles.container}
         behavior="padding"
@@ -289,7 +291,10 @@ _addNewTopic(e){
             //为了方便测试时输入字母，属性（keyboardType）不设置，实际使用时加上
              keyboardType='numeric'
           />
-          }/>
+          }
+          accessory='none' 
+          onPress={dismissKeyboard}
+          />
            <View style={{height: 2}} />
           <ListRow title={i18n.t('LianWenHome.addNewQuestion.duration_time')} detail={
             <TextInput
@@ -303,7 +308,10 @@ _addNewTopic(e){
              keyboardType='numeric'
           />
          
-          }/>
+          }
+          accessory='none' 
+          onPress={dismissKeyboard}
+          />
            <ListRow title={i18n.t('coin_balance')} detail={<Label text={this.state.coin} type='title' />} />
           <ListRow  detail={<Button title={i18n.t('ACTION.submit')} type='primary' style={{margin:2,width:width-20,backgroundColor:'#00A29A',borderColor:'#00A29A'}} onPress={(e)=>this._addNewTopic(e)} />} />
           <View style={{ height: 5 }} />
@@ -319,6 +327,7 @@ _addNewTopic(e){
           <ListRow title={i18n.t('block_Info')} detail={<Label text={this.state.boackinfo} type='title'  />}  />
           <LoadingView showLoading={ this.state.showLoading } loadingViewClick={()=>{this.setState({showLoading:false})}}/>
           </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
       );
     }
 

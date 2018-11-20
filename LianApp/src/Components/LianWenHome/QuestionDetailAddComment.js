@@ -3,7 +3,7 @@
 'use strict';
 
 import React, {Component} from 'react';
-import {KeyboardAvoidingView ,TouchableOpacity,TextInput,View,StyleSheet,Dimensions} from 'react-native';
+import {KeyboardAvoidingView ,TouchableOpacity,TextInput,View,StyleSheet,Dimensions,TouchableWithoutFeedback} from 'react-native';
 
 import {NavigationPage, Toast, ListRow, Label,Theme,Button} from 'teaset';
 var {height, width} = Dimensions.get('window');
@@ -11,6 +11,7 @@ import MainLogic from '../../logic/MainLogic';
 import LoginLogic from '../../logic/LoginLogic';
 import LoadingView from '../CommonComp/LoadingView';
 import i18n from '../../../i18n/i18n';
+const dismissKeyboard = require('dismissKeyboard')
 export default class QuestionDetailAddComment extends NavigationPage {
 
     static defaultProps = {
@@ -106,12 +107,16 @@ _saveComment(e){
      
      
         return (
+          <TouchableWithoutFeedback onPress={dismissKeyboard}>
           <KeyboardAvoidingView
           style={styles.container}
           behavior="padding"
         >
             <View style={{height: 20}} />
-            <ListRow  detail={<Label text={i18n.t('LianWenHome.questionDetailAddComment.typed')+this.state.text.length+i18n.t('LianWenHome.questionDetailAddComment.words')}   type='title' />} />
+            <ListRow  detail={<Label text={i18n.t('LianWenHome.questionDetailAddComment.typed')+this.state.text.length+i18n.t('LianWenHome.questionDetailAddComment.words')}   type='title' />} 
+             accessory='none' 
+             onPress={dismissKeyboard}
+            />
             <ListRow  detail={
             <View style={styles.item}>
             <TouchableOpacity activeOpacity={1} style={styles.inputContainer} onPress={() => this.TextInput.focus()}>
@@ -137,6 +142,7 @@ _saveComment(e){
             <View style={{ height: 60 }} />
             <LoadingView showLoading={ this.state.showLoading } loadingViewClick={()=>{this.setState({showLoading:false})}}/>
             </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
         );
       
 

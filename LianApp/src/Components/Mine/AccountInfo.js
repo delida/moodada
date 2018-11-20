@@ -3,7 +3,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { View, ScrollView, Clipboard, TextInput, Dimensions, Alert,Text } from 'react-native';
+import { View, ScrollView, Clipboard, TextInput, Dimensions, Alert,Text,TouchableWithoutFeedback } from 'react-native';
 
 import { Toast, TeaNavigator, NavigationPage, BasePage, ListRow, Button, Label } from 'teaset';
 
@@ -13,7 +13,7 @@ import LoadingView from '../CommonComp/LoadingView';
 var { height, width } = Dimensions.get('window');
 import { kong } from '../../CommonMethod';
 import i18n from '../../../i18n/i18n';
-
+const dismissKeyboard = require('dismissKeyboard')
 export default class AccountInfo extends NavigationPage {
 
   static defaultProps = {
@@ -224,13 +224,23 @@ export default class AccountInfo extends NavigationPage {
     
 
     return (
+      <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <ScrollView style={{ flex: 1,backgroundColor: '#F5FCFF' }}>
         <View style={{ height: 10 }} />
         <ListRow title={i18n.t('accountAddr')} icon={require('../../styles/mine/accountinfo.png')} detail={this.state.account} titlePlace='top' detailStyle={{fontSize:12}} />
         <View style={{ height: 10 }} />
-        <ListRow title={i18n.t('moac_balance')} detail={<Label text={this.state.moac} type='title' />} />
-        <ListRow title={i18n.t('coin_balance')} detail={<Label text={this.state.coin} type='title' />} />
-        <ListRow title={i18n.t('Profile.accountInfo.exchange_rate')} detail={<Label text={this.state.BoardList.exchangeRate.toString()} type='title' />} />
+        <ListRow title={i18n.t('moac_balance')} detail={<Label text={this.state.moac} type='title' />} 
+          accessory='none' 
+          onPress={dismissKeyboard}
+        />
+        <ListRow title={i18n.t('coin_balance')} detail={<Label text={this.state.coin} type='title' />} 
+          accessory='none' 
+          onPress={dismissKeyboard}
+        />
+        <ListRow title={i18n.t('Profile.accountInfo.exchange_rate')} detail={<Label text={this.state.BoardList.exchangeRate.toString()} type='title' />} 
+          accessory='none' 
+          onPress={dismissKeyboard}
+        />
         <View style={{ height: 10 }} />
 
         <ListRow title={i18n.t('amount')} detail={
@@ -282,6 +292,7 @@ export default class AccountInfo extends NavigationPage {
         <LoadingView showLoading={this.state.showLoading} loadingViewClick={() => { this.setState({ showLoading: false }) }} />
      
       </ScrollView>
+      </TouchableWithoutFeedback>
     );
   }
 

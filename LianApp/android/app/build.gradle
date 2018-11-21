@@ -135,8 +135,14 @@ android {
 		
 		applicationVariants.all { variant ->
 			variant.outputs.all{ output ->
-				def fileName = "app_debug_${defaultConfig.versionName}.apk"
-				outputFileName = new File("../release/", fileName)
+				def fileName
+				if (variant.buildType.name == "release") {
+					fileName = "test_release_${defaultConfig.versionName}.apk"
+					outputFileName = new File("../release/", fileName)
+				}else{
+					fileName = "test_debug_${defaultConfig.versionName}.apk"
+					outputFileName = new File("../debug/", fileName)
+				}
 			}
 		}
     }

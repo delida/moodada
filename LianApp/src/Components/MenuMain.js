@@ -168,7 +168,7 @@ export default class MyLianWenList extends NavigationPage {
  componentDidMount() {
      this.setState({showLoading:true});
    MainLogic.loadMenuClassify().then((res=>{
-     //console.log('分类界面返回值',res)
+		console.log('分类界面返回值',res)
          this.setState({
            menus:res,
            showLoading:false,

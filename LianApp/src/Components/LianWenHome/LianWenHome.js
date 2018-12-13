@@ -21,6 +21,7 @@ import QuestionDetail from './QuestionDetail';
 import i18n from '../../../i18n/i18n';
 import MainLogic from '../../logic/MainLogic';
 import LoginLogic from '../../logic/LoginLogic';
+import SubRole from './LianWenRole';
 
 var { width, height } = Dimensions.get('window')
 
@@ -167,7 +168,14 @@ export default class LianWenHome extends NavigationPage {
   renderPage() {
     return (
       <View style={styles.container}>
-        <ListRow title='' icon={require('../../styles/menu/wen.png')} titleStyle={{ color: '#00A29A', fontSize: 18 }} />
+        <ListRow title='' icon={require('../../styles/menu/wen.png')} titleStyle={{ color: '#00A29A', fontSize: 18 }}  
+			detail={
+				 <View style={styles.listViewStyle}>
+					 <TouchableOpacity style={{marginLeft:10}}  onPress={()=>this.navigator.push({view:<SubRole /> })}>
+						<Text style={{color:'#00A29A'}}>{i18n.t('DECLARATION.roleinfo')} +++ {this.state.BoardList.picPath}</Text>
+					</TouchableOpacity>
+				</View>}
+		/>
         <RefreshListView
           data={this.state.dataList}
           keyExtractor={this.keyExtractor}

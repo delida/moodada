@@ -87,9 +87,19 @@ export default class MyLianWenList extends NavigationPage {
 
  _itemPress(item){
    this.setState({showLoading:true});
-          MainLogic.commonSetRpcAndVnode(item.subChainAddress,item.rpcIp).then(data=>{
+   // picPath几种情况：1. u0000\u0000\u0000\u0000\u0000   2. type1\u0000\u0000\u0000\u0000\u0000   3. type2\u0000\u0000\u0000\u0000\u0000 
+          if (item.picPath.indexOf("type") < 0) {
+            item.picPath = "type1";
+          } else {
+            item.picPath = item.picPath.substring(0, 5);
+          }
+          MainLogic.commonSetRpcAndVnode(item.subChainAddress,item.rpcIp, item.picPath, item.deployLwSolAdmin).then(data=>{
+            console.log(data);
            this.setState({showLoading:false});
-            if(data.isSuccess==0){
+           if(data.isSuccess == -1){
+            Toast.fail(i18n.t('MainMenu.version_tooOld'));
+          }
+            else if(data.isSuccess==0){
               Toast.fail(i18n.t('MainMenu.section_Unavailable'));
             }
             else if(data.isSuccess==2){

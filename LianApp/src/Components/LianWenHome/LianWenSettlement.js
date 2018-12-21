@@ -264,7 +264,6 @@ export default class LianWenSettlement extends NavigationPage {
         if (favorite) {
             favoritedStyle = { color: 'red' }
         }
-
         var slength = rowData.subTopicHash.length;
         /*  var resultStr = rowData.subTopicHash.substr(0, 4) + '..............' + rowData.subTopicHash.substr(slength - 4, 4); */
         var resultStr = rowData.subTopicHash;

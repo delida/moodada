@@ -209,8 +209,6 @@ export default class QuestionDetail extends NavigationPage {
               footerFailureText ={i18n.t('INFO.footerFailureText')}
               footerNoMoreDataText ={i18n.t('INFO.footerNoMoreDataText')}
               footerEmptyDataText ={i18n.t('INFO.footerEmptyDataText')}
-
-
                 />
             </View>
         );
@@ -319,6 +317,11 @@ export default class QuestionDetail extends NavigationPage {
             favoritedStyle = { color: 'red' }
         }
 
+        //if (rowData.Status = 101) {
+        let subTopicBackColor = "";
+        if (rowData.status == 101) {
+            subTopicBackColor = "#EAEAEA";
+        }
 
         var slength = rowData.subTopicHash.length;
         /*  var resultStr = rowData.subTopicHash.substr(0, 4) + '..............' + rowData.subTopicHash.substr(slength - 4, 4);
@@ -330,7 +333,8 @@ export default class QuestionDetail extends NavigationPage {
         var allcount = this.state.dataList.length;
 
 
-        if (this.state.isOwner == 1){
+        if (this.state.isOwner == 1){  // 版主
+            
             if(allcount>0&&item.index==allcount-1)
             {
                 return(
@@ -340,13 +344,13 @@ export default class QuestionDetail extends NavigationPage {
                     <Text selectable={true} style={{ marginRight: 5, fontSize: 9,color: '#999899', height: 15 }}  >{resultStr}</Text>
                   </View>
                 } detail={
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 1, flexDirection: 'row', backgroundColor: subTopicBackColor }}>
                         <View style={{ margin: 4, }}>
                             <Image source={img} style={{ width: 60, height: 60 }} />
                         </View>
     
                         <View style={{ marginRight: 20}}>
-                            <QuestionDetailItem data={{ titleAddr: resultStr, desc: desc, favoritedStyle: favoritedStyle, voteCount: voteCount, topicHash: this.props.data.topicHash, subTopicHash: resultStr, owner: rowData.owner }} BoardList={this.state.BoardList}
+                            <QuestionDetailItem data={{ titleAddr: resultStr, desc: desc, favoritedStyle: favoritedStyle, voteCount: voteCount, subtopicStatus: rowData.status,topicHash: this.props.data.topicHash, subTopicHash: resultStr, owner: rowData.owner }} BoardList={this.state.BoardList}
                                 chongfudianzan={() =>
                                     this._chongfudianzan()} />
                         </View>
@@ -388,13 +392,13 @@ export default class QuestionDetail extends NavigationPage {
                     {/*  <Text>{rowData.topRightInfo}</Text> */}
                   </View>
                 } detail={
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 1, flexDirection: 'row' ,backgroundColor: subTopicBackColor}}>
                         <View style={{ margin: 4, }}>
                             <Image source={img} style={{ width: 60, height: 60 }} />
                         </View>
     
                         <View style={{ marginRight: 2 }}>
-                            <QuestionDetailItem data={{ titleAddr: resultStr, desc: desc, favoritedStyle: favoritedStyle, voteCount: voteCount, topicHash: this.props.data.topicHash, subTopicHash: resultStr, owner: rowData.owner }} BoardList={this.state.BoardList}
+                            <QuestionDetailItem data={{ titleAddr: resultStr, desc: desc, favoritedStyle: favoritedStyle, voteCount: voteCount, subtopicStatus: rowData.status,topicHash: this.props.data.topicHash, subTopicHash: resultStr, owner: rowData.owner }} BoardList={this.state.BoardList}
                                 chongfudianzan={() =>
                                     this._chongfudianzan()} />
                         </View>
@@ -417,6 +421,7 @@ export default class QuestionDetail extends NavigationPage {
             );
         }
         else{
+            // 普通用户
             if(allcount>0&&item.index==allcount-1)
             {
                 return(
@@ -426,13 +431,13 @@ export default class QuestionDetail extends NavigationPage {
                     <Text selectable={true} style={{ marginRight: 5, fontSize: 9,color: '#999899', height: 15 }}  >{resultStr}</Text>
                   </View>
                 } detail={
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 1, flexDirection: 'row', backgroundColor: subTopicBackColor  }}>
                         <View style={{ margin: 4, }}>
                             <Image source={img} style={{ width: 60, height: 60 }} />
                         </View>
     
-                        <View style={{ marginRight: 2 }}>
-                            <QuestionDetailItem data={{ titleAddr: resultStr, desc: desc, favoritedStyle: favoritedStyle, voteCount: voteCount, topicHash: this.props.data.topicHash, subTopicHash: resultStr, owner: rowData.owner }} BoardList={this.state.BoardList}
+                        <View style={{ marginRight: 2}}>
+                            <QuestionDetailItem data={{ titleAddr: resultStr, desc: desc, favoritedStyle: favoritedStyle, voteCount: voteCount, subtopicStatus: rowData.status, topicHash: this.props.data.topicHash, subTopicHash: resultStr, owner: rowData.owner }} BoardList={this.state.BoardList}
                                 chongfudianzan={() =>
                                     this._chongfudianzan()} />
                         </View>
@@ -468,13 +473,13 @@ export default class QuestionDetail extends NavigationPage {
                     {/*  <Text>{rowData.topRightInfo}</Text> */}
                   </View>
                 } detail={
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 1, flexDirection: 'row' , backgroundColor: subTopicBackColor }}>
                         <View style={{ margin: 4, }}>
                             <Image source={img} style={{ width: 60, height: 60 }} />
                         </View>
     
                         <View style={{ marginRight: 2 }}>
-                            <QuestionDetailItem data={{ titleAddr: resultStr, desc: desc, favoritedStyle: favoritedStyle, voteCount: voteCount, topicHash: this.props.data.topicHash, subTopicHash: resultStr, owner: rowData.owner }} BoardList={this.state.BoardList}
+                            <QuestionDetailItem data={{ titleAddr: resultStr, desc: desc, favoritedStyle: favoritedStyle, voteCount: voteCount, subtopicStatus: rowData.status, topicHash: this.props.data.topicHash, subTopicHash: resultStr, owner: rowData.owner }} BoardList={this.state.BoardList}
                                 chongfudianzan={() =>
                                     this._chongfudianzan()} />
                         </View>

@@ -20,6 +20,7 @@ import {getMicroChainBalance} from '../../api/bussApi';
 import {getTopicList} from '../../api/bussApi';
 import {approveSubTopic} from '../../api/bussApi';
 import {getSubTopicList} from '../../api/bussApi';
+import {getBoardRule} from '../../api/bussApi';
 import {buyToken} from '../../api/accountApi';
 import {getBoardList} from '../../api/bussApi';
 import {myTopicList} from '../../api/bussApi';
@@ -181,8 +182,8 @@ export default class API extends Component{
       * @param {*} subChainAddr 
       * @param {*} rpcIp 
       */
-    static commonSetRpcAndVnode(subChainAddr,rpcIp){
-         return commonSetRpcAndVnode(subChainAddr,rpcIp);
+    static commonSetRpcAndVnode(subChainAddr,rpcIp, type, deployLwSolAdmin){
+         return commonSetRpcAndVnode(subChainAddr,rpcIp, type, deployLwSolAdmin);
      }
 
 
@@ -393,9 +394,9 @@ return new Promise((resolve,reject)=>{
     static getSubTopicList(topicHash, pageNum, pageSize,subChainAddr, rpcIp,type,deployLwSolAdmin,userAddr){
         console.log('回答列表页topicHash',topicHash);
         console.log('回答列表页pageNum',pageNum);
-        console.log('回答列表也pageSize',pageSize);
-        console.log('回答列表也subChainAddr',subChainAddr);
-        console.log('回答列表也rpcIp',rpcIp);
+        console.log('回答列表页pageSize',pageSize);
+        console.log('回答列表页subChainAddr',subChainAddr);
+        console.log('回答列表页rpcIp',rpcIp);
         return getSubTopicList(topicHash,pageNum,pageSize,subChainAddr, rpcIp,type,deployLwSolAdmin,userAddr);
        
     }
@@ -608,6 +609,15 @@ console.log('回答问题rpcIp',rpcIp);
      */
     static getMaxTimeAndPerTime(subChainAddr,deployLwSolAdmin){
         return getMaxTimeAndPerTime(subChainAddr,deployLwSolAdmin);
+    }
+
+    /**
+     * 获取当前版块规则
+     * @param {} callType 
+     */
+    static getBoardRule(callType){
+        console.log("-----------" + callType);
+        return getBoardRule(callType);
     }
 
 }

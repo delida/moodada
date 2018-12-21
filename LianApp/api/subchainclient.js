@@ -4,6 +4,13 @@ import Chain3 from 'chain3';
 import {getVia} from './accountApi';
 import {vnodeAddress} from './accountApi';
 import {getChain3} from './accountApi';
+import {getAbi} from './accountApi';
+import {getBoardType} from './accountApi';
+import {getVoteBond} from './accountApi';
+import {getContinueCount} from './accountApi';
+import {getEverRoundRewardRate} from './accountApi';
+import {commonAnyCall} from './bussApi';
+
 
 var chain3 = getChain3();
 
@@ -13,6 +20,7 @@ export function sendshardingflagtx(userAddr,pwd,subchainaddr,amount,code, n, pri
 	return new Promise(function(resolve, reject){
 		
 		chain3.version.getNetwork(function (err, version) {
+			//version = 106;
 			var rawTx = {
 				nonce: chain3.intToHex(n),
 				from: userAddr,
@@ -53,7 +61,7 @@ export function createTopicSol(userAddr, pwd, amount, expblk, desc, subchainaddr
 
 export function getInstance(subChainAddr) {
 	chain3 = getChain3();
-	var deChatABI = config.lwAbi;
+	var deChatABI = getAbi();
 	var deChatAddr='0x0000000000000000000000000000000000000020'
 	var deChatContract=chain3.mc.contract(JSON.parse(deChatABI));
 	return deChatContract.at(deChatAddr);
@@ -70,7 +78,12 @@ export function createSubTopicSol(userAddr, pwd, desc, subchainaddr,topHash, non
 export function voteOnTopic(vote, pwd, subchainaddr,subHash, nonce, privatekey)
 {
 	var data=getInstance(subchainaddr).voteOnTopic.getData(subHash)
-	sendshardingflagtx(vote,pwd,subchainaddr,'0',data,nonce, privatekey)
+	var amount = "0";
+	if (getBoardType() == "type2") {
+		// 小说接龙
+        amount = getVoteBond() + "";
+	}
+	sendshardingflagtx(vote, pwd, subchainaddr, amount, data, nonce, privatekey)
 }
 export function autoCheckSol(userAddr, pwd, subchainaddr, nonce, privatekey)
 {

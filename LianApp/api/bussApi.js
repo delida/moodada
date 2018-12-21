@@ -14,9 +14,13 @@ import {getInstance} from "./scAccount.js";
 import { promises } from 'fs';
 import {vnodeAddress} from './accountApi';
 import {getChain3} from './accountApi';
+import {getAbi} from './accountApi';
 import {getRpcIp} from './accountApi';
 import {commonSetVnode} from './accountApi';
 import {getCurrentTime} from './accountApi';
+import {getVoteBond} from './accountApi';
+import {getContinueCount} from './accountApi';
+import {getEverRoundRewardRate} from './accountApi';
 
 
 var topicIndex = config.topicIndex;
@@ -62,8 +66,13 @@ export var getContractInfo = function(rpcIp, methodName, postParam) {
         _post(rpcIp, data).then((datas) => {
           dataVal += datas; 
             var rpcResult;
+            
             if (datas.result == undefined) {
                 if (datas.error != undefined && datas.error.code == -32000) {
+                  console.log(rpcIp);
+                  console.log(methodName);
+                  console.log(postParam);
+                  console.log(datas);
                   rpcResult = "pending";
                 } else {
                   rpcResult == "have exception";
@@ -145,7 +154,7 @@ export var getTopicList = function (pageNum, pageSize, subChainAddr, rpcIp, depl
     var postParam1 = {
       "SubChainAddr": subChainAddr,
       "Sender": deployLwSolAdmin,
-      "Data": config.lwAbi
+      "Data": getAbi()
     };
     try {
       getContractInfo(rpcIp, "ScsRPCMethod.SetDappAbi", postParam1).then(function(result){
@@ -161,7 +170,6 @@ export var getTopicList = function (pageNum, pageSize, subChainAddr, rpcIp, depl
           };
           getContractInfo(rpcIp,"ScsRPCMethod.GetBlockNumber", postParam4).then(function(currentBlockNum){
             getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam1).then(function(topicList){
-  
               getBoardOwner(rpcIp, subChainAddr, deployLwSolAdmin).then((ownerAddr) => {
                 if (userAddr == ownerAddr) {
                   // 当前登录人是版主
@@ -290,7 +298,7 @@ export var getSubTopicList = function (topicHash, pageNum, pageSize, subChainAdd
           var postParam1 = {
             "SubChainAddr": subChainAddr,
             "Sender": deployLwSolAdmin,
-            "Data": config.lwAbi
+            "Data": getAbi()
           };
           getContractInfo(rpcIp, "ScsRPCMethod.SetDappAbi", postParam1).then(function(result){
             if (result == "success") {
@@ -301,6 +309,7 @@ export var getSubTopicList = function (topicHash, pageNum, pageSize, subChainAdd
                 "Params": ["getSubTopicList", topicHash, config.pageNum, config.pageSize]
               };
               getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam2).then(function(subTopicList){
+                console.log(subTopicList);
                 getBoardOwner(rpcIp, subChainAddr, deployLwSolAdmin).then((ownerAddr) => {
                   if (userAddr == ownerAddr) {
                     isOwner = 1;
@@ -433,7 +442,7 @@ export var myTopicList = function (userAddr, subChainAddr, pwd,keystore, rpcIp, 
     var postParam3 = {
       "SubChainAddr": subChainAddr,
       "Sender": deployLwSolAdmin,
-      "Data": config.lwAbi
+      "Data": getAbi()
     };
     getContractInfo(rpcIp, "ScsRPCMethod.SetDappAbi", postParam3).then(function(result){
       if (result == "success") {
@@ -517,7 +526,7 @@ export var getCnNames = function (names) {
 export var getBoardList = function () {
   
   return new Promise ((resolve) => {
-    commonSetVnode().then((data) => {
+    commonSetVnode("type1", null, null, null).then((data) => {
       chain3 = getChain3();
       var dechatmanagementaddr = config.manageSolAddress;
       var dechatmanagementAbi= config.dechatmanagementAbi;
@@ -688,6 +697,49 @@ export var getBoardOwner = async function (rpcIp, subChainAddr, deployLwSolAdmin
 
 }
 
+// 先setAbi, 后调用anyCall（1. 先执行setAbi, 再调用anyCall  2. 直接调用anyCall）
+export var commonAnyCall = function (postParam1, postParam2, callType, rpcIp) {
+  return new Promise((resolve) => {
+    if (callType == 1) {
+      getContractInfo(rpcIp, "ScsRPCMethod.SetDappAbi", postParam1).then(function(result){
+        getContractInfo(rpcIp, "ScsRPCMethod.AnyCall", postParam2).then(function(data){
+          resolve(data);
+          
+        });
+      });
+    } else if (callType == 2) {
+      getContractInfo(rpcIp, "ScsRPCMethod.AnyCall", postParam2).then(function(data){
+        resolve(data);
+        
+      });
+    }
+  });
+    
+    
+}
+
+// 获取当前版块玩法规则
+export var getBoardRule = function (callType) {
+  callType = callType.substring(0,5);  // 32位会有u000
+  return new Promise ((resolve) => {
+      if (callType == "type1") {
+        // 链问
+        
+        resolve(config.lwRule);
+      } else if (callType == "type2") {
+          // 小说接龙
+          var voteBond = getVoteBond();
+          var continueCount = getContinueCount();
+          var everRoundRewardRate = getEverRoundRewardRate();
+          // 组装动态版块规则
+          var novelRule = config.novelRule;
+          var finalContent = novelRule.replace(/{N}/, voteBond).replace(/{V}/g, continueCount).replace(/{P}/, everRoundRewardRate);
+          resolve(finalContent);
+      }
+  });
+    
+}
+
 // 获取最大时间，每个区块打包需要时间
 export var getMaxTimeAndPerTime = async function (subChainAddr, deployLwSolAdmin) {
   var rpcIp = getRpcIp();
@@ -702,7 +754,7 @@ export var getMaxTimeAndPerTime = async function (subChainAddr, deployLwSolAdmin
     var postParam1 = {
       "SubChainAddr": subChainAddr,
       "Sender": deployLwSolAdmin,
-      "Data": config.lwAbi
+      "Data": getAbi()
     };
     getContractInfo(rpcIp, "ScsRPCMethod.SetDappAbi", postParam1).then(function(result){
 
@@ -773,84 +825,6 @@ var readUTF = function (arr) {
 // 校验当前问题是否过期
 function checkTime (subChainAddr, topicHash,rpcIp,userAddr) {
   return new Promise((resolve) => {
-
-
-    // 历史方法
-    // var postParam3 = {
-    //   "SubChainAddr": subChainAddr,
-    //   "Request": [
-    //     {
-    //       "Reqtype": 2,
-    //       "Storagekey": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5],
-    //       "Position": Hexstring2btye(topicHash.substring(2)),
-    //       "Structformat": [49,49,51,49,49,49,49,49,49,49,49,49]
-          
-    //     }
-    //   ]
-    // };
-    // getContractInfo(rpcIp,"ScsRPCMethod.GetContractInfo", postParam3).then(function(topicResult){
-      
-    //     // 当前区块高度
-    //     var postParam4 = {
-    //       "SubChainAddr": subChainAddr
-    //     };
-    //     getContractInfo(rpcIp,"ScsRPCMethod.GetBlockNumber", postParam4).then(function(currentBlockNum){
-  
-    //     var topic = {};
-    //     var str = chain3.sha3(topicHash.substring(2) + topicIndex, {"encoding": "hex"}).substring(2);
-    //     var prefixStr = str.substring(0, str.length - 3);
-    //     var suffixStr = str.substring(str.length - 3, str.length);
-    //     var suffixInt = parseInt(suffixStr, 16);
-        
-    //     var startBlock = topicResult[prefixStr + converHex(suffixInt + 4)];
-    //     var startBlockNum = chain3.toDecimal('0x' + startBlock.substring(2));
-    //     var duration = parseInt(topicResult[prefixStr + converHex(suffixInt + 5)], 16) * packPerBlockTime
-  
-    //       var pastTime = (currentBlockNum - startBlockNum) * packPerBlockTime;
-    //       if (duration - pastTime <= 10 ) {
-    //         resolve(0);
-    //       } else {
-    //         resolve(1);
-    //       }
-    //   });
-    // })
-
-
-    // 包含setDappAbi的
-    // var postParam1 = {
-    //   "SubChainAddr": subChainAddr,
-    //   "Sender": deployLwSolAdmin,
-    //   "Data": config.lwAbi
-    // };
-    // var postParam4 = {
-    //   "SubChainAddr": subChainAddr
-    // };
-    // getContractInfo(rpcIp,"ScsRPCMethod.GetBlockNumber", postParam4).then(function(currentBlockNum){
-
-    //   getContractInfo(rpcIp, "ScsRPCMethod.SetDappAbi", postParam1).then(function(result){
-    //     if (result == "success") {
-    //       var postParam2 = {
-    //         "SubChainAddr": subChainAddr,
-    //         "Sender": deployLwSolAdmin,
-    //         "Params": ["getTopicByHash", topicHash]
-    //       };
-    //       getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam2).then(function(topicInfo){
-    //         var topic = JSON.parse(topicInfo)[0];
-    //         var surplusBlk = topic.Expblk - (currentBlockNum - topic.Startblk);
-    //         if (surplusBlk > 1) {
-    //           resolve(1);
-    //         } else {
-    //           resolve(0);
-    //         }
-    //       });
-    //     } else {
-    //       resolve(0);
-    //     }
-  
-  
-    //   });
-    // });
-    
     var postParam4 = {
       "SubChainAddr": subChainAddr
     };

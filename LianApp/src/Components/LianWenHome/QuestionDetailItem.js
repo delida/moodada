@@ -30,6 +30,7 @@ export default class QuestionDetailItem extends Component {
             desc: this.props.data.desc,
             favoritedStyle: this.props.data.favoritedStyle,
             voteCount: this.props.data.voteCount,
+            subtopicStatus: this.props.data.subtopicStatus,
             topicHash: this.props.data.topicHash,
             subTopicHash: this.props.data.subTopicHash,
             commentHash: this.props.data.owner,
@@ -43,77 +44,80 @@ export default class QuestionDetailItem extends Component {
         this.props.chongfudianzan();
     }
 
-    _clickthumbup = () => {
-        if (!this.state.isdianzan) {
-            this.setState({ showLoading: true });
-            var isdoing = false;
-            if (!this.timer) {
-                this.setState({
-                    voteCount: this.state.voteCount + 1,
-                    isdianzan: true,
-                    favoritedStyle: { color: 'red' }
-                })
-
-                this.timer = setInterval(() => {
-                    if (!isdoing) {
-                        isdoing = true;
-                        LoginLogic.getCurrentUser().then((user) => {
-
-                            let userAddr = user.userAddr;
-                            if (user != null && typeof (user) != "undefined" && user.online) {
-                                LoginLogic.getUserByUserAddr(userAddr).then((userInfo) => {
-
-                                    MainLogic.approveSubTopic(userAddr, this.state.subTopicHash, userInfo.userPwd, userInfo.keystore, this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp).then((resdata) => {
-                                        this.setState({ showLoading: false });
-                                        //console.log('点赞应答',resdata);
-                                        if (resdata.isSuccess == 1) {
-                                            //console.log('点赞执行成功');
-                                            /*   this.setState({
-                                                  voteCount: this.state.voteCount + 1,
-                                                  favoritedStyle: { color: 'red' }
-                                              }) */
-
-                                            //保存到本地
-                                            /*  MainLogic.saveThumbsupList(this.state.topicHash, this.state.subTopicHash).then((saveres) => {    
-                                             }) */
-
-
-                                        }
-                                        else {
-                                            this.setState({
-                                                voteCount: this.state.voteCount - 1,
-                                                favoritedStyle: { color: 'red' }
-                                            })
-                                        }
-
-                                        //停止掉
-                                        clearInterval(this.timer);
-                                        this.timer = undefined;
-
+    _clickthumbup = (status) => {
+        if (status != 101) {
+            if (!this.state.isdianzan) {
+                this.setState({ showLoading: true });
+                var isdoing = false;
+                if (!this.timer) {
+                    this.setState({
+                        voteCount: this.state.voteCount + 1,
+                        isdianzan: true,
+                        favoritedStyle: { color: 'red' }
+                    })
+    
+                    this.timer = setInterval(() => {
+                        if (!isdoing) {
+                            isdoing = true;
+                            LoginLogic.getCurrentUser().then((user) => {
+    
+                                let userAddr = user.userAddr;
+                                if (user != null && typeof (user) != "undefined" && user.online) {
+                                    LoginLogic.getUserByUserAddr(userAddr).then((userInfo) => {
+    
+                                        MainLogic.approveSubTopic(userAddr, this.state.subTopicHash, userInfo.userPwd, userInfo.keystore, this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp).then((resdata) => {
+                                            this.setState({ showLoading: false });
+                                            //console.log('点赞应答',resdata);
+                                            if (resdata.isSuccess == 1) {
+                                                //console.log('点赞执行成功');
+                                                /*   this.setState({
+                                                      voteCount: this.state.voteCount + 1,
+                                                      favoritedStyle: { color: 'red' }
+                                                  }) */
+    
+                                                //保存到本地
+                                                /*  MainLogic.saveThumbsupList(this.state.topicHash, this.state.subTopicHash).then((saveres) => {    
+                                                 }) */
+    
+    
+                                            }
+                                            else {
+                                                this.setState({
+                                                    voteCount: this.state.voteCount - 1,
+                                                    favoritedStyle: { color: 'red' }
+                                                })
+                                            }
+    
+                                            //停止掉
+                                            clearInterval(this.timer);
+                                            this.timer = undefined;
+    
+                                        })
+    
+                                        //校准是否已经评论
+                                        /*  MainLogic.checkThumbsup(this.state.topicHash, this.state.subTopicHash).then((ischeck) => {
+                                             console.log('点赞ischeck', ischeck);
+                                            
+                                         }) */
                                     })
-
-                                    //校准是否已经评论
-                                    /*  MainLogic.checkThumbsup(this.state.topicHash, this.state.subTopicHash).then((ischeck) => {
-                                         console.log('点赞ischeck', ischeck);
-                                        
-                                     }) */
-                                })
-                            }
-                            else {
-                                this.navigator.push({ view: <LocalLogin BoardList={this.state.BoardList} /> });
-                            }
-                        })
-                    }
-                }, 1000);
+                                }
+                                else {
+                                    this.navigator.push({ view: <LocalLogin BoardList={this.state.BoardList} /> });
+                                }
+                            })
+                        }
+                    }, 1000);
+                }
+                else {
+                    //this._chongfudianzan();
+                    // console.log('正在执行点赞 ');
+                }
             }
             else {
-                //this._chongfudianzan();
-                // console.log('正在执行点赞 ');
+                this.props.chongfudianzan();
             }
         }
-        else {
-            this.props.chongfudianzan();
-        }
+        
 
 
 
@@ -142,7 +146,7 @@ export default class QuestionDetailItem extends Component {
             <View style={styles.listViewStyle}>
                 <View style={[styles.rightViewStyle, { width: width - 35 }]}>
                     <Text style={{ color: 'gray' }}>{this.state.desc}</Text>
-                    <TouchableHighlight onPress={() => this._clickthumbup()} style={styles.footerLink} underlayColor='#f2f2f2'>
+                    <TouchableHighlight onPress={() => this._clickthumbup(this.state.subtopicStatus)} style={styles.footerLink} underlayColor='#f2f2f2'>
                         <View style={styles.rightBottomViewStyle}>
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <Image source={imgurl} style={{ width: 15, height: 15 }} />

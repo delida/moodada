@@ -30,8 +30,8 @@ DECLARATION : {
     xieyixiugai:'License Revision',
     xieyixiugaicontent1:'1.  According to relative law or update of document or further development. SnapQ&A is authorized to revise current terms. SnapQ&A will publish new license on our website as announcement. Also, SnapQ&A are allowed to remind user this revision by e-mail or message',
     xieyixiugaicontent2:'2.	User should discontiue to use SnapQ&A is disagree with revisions made by SnapQ&A. On converse, user will be treated like confirm the revision of terms',
-	roledetail:' role of this subchain.',
-	roleinfo:' role info',
+	ruledetail:'rule of this subchain.',
+	ruleinfo:'rule info',
  },
  
 
@@ -142,10 +142,11 @@ PLACEHOLDER: {
 
 MainMenu:{
      press_Exit:'Press again to exit application',
-     section_Unavailable: 'Section is currently not available, please try later',
+     section_Unavailable: 'Section is currently not available, please try later!',
+     version_tooOld: 'Your version does not support this board，please update to the latest one!',
      backup_node_connected: 'Backup node connect successful',
-     backup_remote_sever_connected:'Backup remote sever connect successful！',
-     Exception_obtainChainInfo:'Exception caught when obtain chain information！',
+     backup_remote_sever_connected:'Backup remote sever connect successful!',
+     Exception_obtainChainInfo:'Exception caught when obtain chain information!',
      what_is_interested:'What\'s your interest'
 },
 

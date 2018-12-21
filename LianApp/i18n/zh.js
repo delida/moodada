@@ -30,8 +30,8 @@ DECLARATION: {
     xieyixiugai:'协议修改',
     xieyixiugaicontent1:'1.	根据互联网的发展和有关法律、法规及规范性文件的变化，或者因业务发展需要，链问有权对本协议的条款作出修改或变更，一旦本协议的内容发生变动，链问将会直接在链问网站上公布修改之后的协议内容，该公布行为视为链问已经通知用户修改内容。链问也可采用电子邮件或私信的传送方式，提示用户协议条款的修改、服务变更、或其它重要事项。\r\n',
     xieyixiugaicontent2:'2.	如果不同意链问对本协议相关条款所做的修改，用户有权并应当停止使用链问。如果用户继续使用链问，则视为用户接受链问对本协议相关条款所做的修改。',
-	roledetail:' 对应的游戏规则.',
-	roleinfo:' 模块规则',
+	ruledetail:'对应的游戏规则.',
+	ruleinfo:'玩法规则',
 },
 
 ACTION: {
@@ -143,6 +143,7 @@ PLACEHOLDER: {
 MainMenu:{
     press_Exit:'再按一次退出应用',
     section_Unavailable: '当前版块暂不可用，请稍后重试！',
+    version_tooOld: '当前版本不支持此版块，请更新应用至最新版本！',
     backup_node_connected: '备用节点服务连接成功',
     backup_remote_sever_connected:'备用远程服务连接成功！',
     Exception_obtainChainInfo:'获取链信息异常！',

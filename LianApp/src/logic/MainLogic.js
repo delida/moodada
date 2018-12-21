@@ -213,8 +213,8 @@ return API.getBlockInfo(subChainAddr, rpcIp);
       * @param {*} subChainAddr 
       * @param {*} rpcIp 
       */
-   static  commonSetRpcAndVnode(subChainAddr,rpcIp){
-        return API.commonSetRpcAndVnode(subChainAddr,rpcIp);
+   static  commonSetRpcAndVnode(subChainAddr,rpcIp, type, deployLwSolAdmin){
+        return API.commonSetRpcAndVnode(subChainAddr,rpcIp, type, deployLwSolAdmin);
     }
 
         /**
@@ -239,6 +239,14 @@ return API.getBlockInfo(subChainAddr, rpcIp);
      */
     static getMaxTimeAndPerTime(subChainAddr,deployLwSolAdmin){
         return API.getMaxTimeAndPerTime(subChainAddr,deployLwSolAdmin);
+    }
+
+    /**
+     * 获取当前版块规则
+     * @param {} callType 
+     */
+    static getBoardRule(callType){
+        return API.getBoardRule(callType);
     }
 
 }

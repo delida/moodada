@@ -21,7 +21,7 @@ import QuestionDetail from './QuestionDetail';
 import i18n from '../../../i18n/i18n';
 import MainLogic from '../../logic/MainLogic';
 import LoginLogic from '../../logic/LoginLogic';
-import SubRole from './LianWenRole';
+import LianWenRule from './LianWenRule';
 
 var { width, height } = Dimensions.get('window')
 
@@ -80,7 +80,6 @@ export default class LianWenHome extends NavigationPage {
 
   onHeaderRefresh = () => {
     this.setState({ refreshState: RefreshState.HeaderRefreshing })
-
     LoginLogic.getCurrentUser().then(user => {
      
       var useraddr = '';
@@ -165,14 +164,25 @@ export default class LianWenHome extends NavigationPage {
 
   }
 
+  _rulePress(type){
+      this.setState({showLoading:true});
+      MainLogic.getBoardRule(type).then(data=>{
+        this.setState({showLoading:false});
+        this.navigator.push({view: <LianWenRule  ruleContent={data}/>});
+      })
+  }
+
+
   renderPage() {
     return (
       <View style={styles.container}>
         <ListRow title='' icon={require('../../styles/menu/wen.png')} titleStyle={{ color: '#00A29A', fontSize: 18 }}  
 			detail={
-				 <View style={styles.listViewStyle}>
-					 <TouchableOpacity style={{marginLeft:10}}  onPress={()=>this.navigator.push({view:<SubRole /> })}>
-						<Text style={{color:'#00A29A'}}>{i18n.t('DECLARATION.roleinfo')} +++ {this.state.BoardList.picPath}</Text>
+				 <View style={styles.listViewStyle}>   
+          
+					 {/* <TouchableOpacity style={{marginLeft:10}}  onPress={()=>this.navigator.push({view:<LianWenRule /> })}> */}
+					 <TouchableOpacity style={{marginLeft:10}}  onPress={this._rulePress.bind(this, this.state.BoardList.picPath)}>
+						<Text style={{color:'#00A29A'}}>{this.state.BoardList.boardName} {i18n.t('DECLARATION.ruleinfo')}</Text>
 					</TouchableOpacity>
 				</View>}
 		/>
@@ -214,8 +224,40 @@ export default class LianWenHome extends NavigationPage {
 
   _renderJieSuan(callback) {
 
+    // console.log('开始结算');
+    //       LoginLogic.getCurrentUser().then((user) => {
+    //         //  console.log('结算user', user);
+
+    //         if (user != null && typeof (user) != "undefined" && user.online) {
+    //           let userAddr = user.userAddr;
+    //           LoginLogic.getUserByUserAddr(userAddr).then((userInfo) => {
+    //             // console.log('结算usserInfo', userInfo);
+
+    //             MainLogic.autoCheck(userAddr, userInfo.userPwd, userInfo.keystore, this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp)
+    //               .then((resdata) => {
+    //                 //console.log('结算返回',resdata);
+    //                 if (resdata == 1) {
+    //                   global.checktime = new Date();
+    //                   // console.log('结算成功');
+
+    //                 }
+
+    //                 //停止掉
+    //                 clearInterval(this.timer);
+    //                 this.timer = undefined;
+
+    //               })
+    //           })
+    //         }
+    //         else {
+    //           this.setState({ showLoading: false });
+    //           Toast.fail(i18n.t('FAIL.not_logged_in'));
+    //         }
+    //       })
+    
     var isdoing = false;
     this.timer = setInterval(() => {
+      
       if (!isdoing) {
         isdoing = true;
 
@@ -228,7 +270,7 @@ export default class LianWenHome extends NavigationPage {
         else {
           var now = new Date();
           var timeInterval = this._getInervalMinute(global.checktime, now);
-          if (timeInterval > 5) {
+          if (timeInterval > 2) {
             canCheck = true;
           }
         }
@@ -270,9 +312,6 @@ export default class LianWenHome extends NavigationPage {
         }
       }
     }, 1000);
-
-
-
 
   }
 

@@ -13,16 +13,21 @@ import i18n from '../../../i18n/i18n';
 
 import { Theme, TeaNavigator, NavigationPage,Select, BasePage, ListRow, Toast, Label, PullPicker } from 'teaset';
 
-export default class LianWenRole extends NavigationPage{
+export default class LianWenRule extends NavigationPage{
     static defaultProps = {
         ...NavigationPage.defaultProps,
         scene: TeaNavigator.SceneConfigs.PushFromRight,
-        title: i18n.t('DECLARATION.roleinfo'),
+        title: i18n.t('DECLARATION.ruleinfo'),
         showBackButton: true,
+        
     };
 
     constructor(props) {
-        super(props);  
+        super(props); 
+        this.state = {
+            ruleContent: this.props.ruleContent
+          } 
+        
       }
 
       renderPage(){
@@ -30,7 +35,7 @@ export default class LianWenRole extends NavigationPage{
               <ScrollView>
               <ListRow detail={
                   <View>
-                  <Text style={styles.role}>{i18n.t('DECLARATION.roledetail')}</Text>
+                  <Text style={styles.role}>{this.state.ruleContent}</Text>
                  
                  </View>
               } titlePlace='top' bottomSeparator='none' />

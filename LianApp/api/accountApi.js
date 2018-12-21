@@ -12,6 +12,7 @@ import {getMicroChainBalance} from "./bussApi"
 import {AsyncStorage} from 'react-native';
 import {sendtx} from './scAccount'
 import {currentNonce} from './bussApi'
+import {commonAnyCall} from './bussApi'
 import crypto from 'crypto';
 import async from 'async';
 
@@ -21,6 +22,11 @@ import Chain3 from 'chain3';
 
 export var chain3 = null;//new Chain3(new Chain3.providers.HttpProvider(vnodeAddress));
 export var rpcIpCommon = "";
+export var dechatAbi = "";
+export var boardType = 1;
+var voteBond = null;
+var continueCount = null;
+var everRoundRewardRate = null;
 var packPerBlockTime = config.packPerBlockTime;   // 子链出块时间单位s
 var decimals = config.decimals;   // 子链token精度
 
@@ -42,7 +48,7 @@ const Hexstring2btye = (str)=> {
     if (len % 2 != 0) {
         return null;
     }
-    len /= 2;
+	len /= 2;
     let hexA = new Array();
     for (let i = 0; i < len; i++) {
         let s = str.substr(pos, 2);
@@ -54,8 +60,7 @@ const Hexstring2btye = (str)=> {
 }
 
 export var getContractInfo = function(rpcIp, methodName, postParam) {
-  
-    var data = {"jsonrpc": "2.0", "id": 0, "method": methodName, "params": postParam};
+	var data = {"jsonrpc": "2.0", "id": 0, "method": methodName, "params": postParam};
     return new Promise(function(resolve, reject){
         _post(rpcIp, data).then((datas) => {
 			var rpcResult;
@@ -126,7 +131,6 @@ export async function loginUser(addr, pwd, keystore) {
 // 查询主链的MOAC和erc20余额
 export var getBalance = function (userAddr, marketableTokenAddr) {
 	return new Promise(function(resolve, reject){
-
 		chain3.mc.getBlockNumber(function(err, res) {
 			if (err != null) {   // 当前vnode连接失败
 				commonSetVnode().then((data) => {
@@ -358,6 +362,7 @@ export var transferCoin = async function (from, to, amount, subChainAddr, pwd, k
 
 	var nonce = await currentNonce(subChainAddr, from, rpcIp);
 	chain3.version.getNetwork(function (err, version) {
+		//version = 106;
 		var rawTx = {
 			nonce: chain3.intToHex(nonce),
 			from: from,
@@ -609,68 +614,155 @@ function fetch_promise(url) {
 export var via = "";
 export var vnodeAddress = "";
 // 随机选择一个可连接的vnode，放入缓存(1 正常  2 超时或者undefined)
-export var commonSetVnode = function () {
+export var commonSetVnode = function (type, deployLwSolAdmin, subChainAddr, rpcIp) {
 	var ip = config.restfulUrl + "/VnodeAddr/" + config.protocalAddress;
 	return new Promise((resolve) => {
-		//_get(ip, null).then((datas) => {
-		_fetch(fetch_promise(ip), config.timeOut).then((datas) => {
-			// 不超时
-			if (datas != undefined && datas.VnodeList.length != 0) {
-				datas = randomChange(datas.VnodeList);  // 随机组合
-				var vnodeArr = [];
-				var vnodeInfo = {};
-				async.each(datas, function (item, callback) {
-					if (item.VnodeAddress != "" && item.VnodeAddress != null && 
-							item.via != "" && item.via != null) {
-						var c3 = new Chain3(new Chain3.providers.HttpProvider("http://" + item.VnodeAddress));
-						c3.mc.getBlockNumber(function (err, blockNum) {
-							if (vnodeArr.length == 0) {
-								if (!err && blockNum != undefined && blockNum > 0) {   // 可以正常连接
-									via = item.via;
-									vnodeAddress = item.VnodeAddress;
-									vnodeInfo.via = via;
-									vnodeInfo.vnodeAddress = vnodeAddress;
-									vnodeArr.push(vnodeInfo);
-									chain3 = c3;
-
+		boardType = type;
+		if (type == "type1") {
+			// 链问
+			dechatAbi = config.lwAbi;
+			_fetch(fetch_promise(ip), config.timeOut).then((datas) => {
+				// 不超时
+				if (datas != undefined && datas.VnodeList.length != 0) {
+					datas = randomChange(datas.VnodeList);  // 随机组合
+					var vnodeArr = [];
+					var vnodeInfo = {};
+					
+					async.each(datas, function (item, callback) {
+						if (item.VnodeAddress != "" && item.VnodeAddress != null && 
+								item.via != "" && item.via != null) {
+							var c3 = new Chain3(new Chain3.providers.HttpProvider("http://" + item.VnodeAddress));
+							c3.mc.getBlockNumber(function (err, blockNum) {
+								if (vnodeArr.length == 0) {
+									if (!err && blockNum != undefined && blockNum > 0) {   // 可以正常连接
+										via = item.via;
+										vnodeAddress = item.VnodeAddress;
+										vnodeInfo.via = via;
+										vnodeInfo.vnodeAddress = vnodeAddress;
+										vnodeArr.push(vnodeInfo);
+										chain3 = c3;
+	
+									}
+								
 								}
-							
-							}
+								callback(null);
+							});
+						} 
+						else {
 							callback(null);
-						});
-					} 
-					else {
-						callback(null);
-					}
-					
-					
-				}, function (err) {
-					resolve(1);
-				});
-			} else {
-				// restful接口调用失败，返回undefined, 则连接config中默认的vnode
+						}
+						
+						
+					}, function (err) {
+						resolve(1);
+					});
+				} else {
+					// restful接口调用失败，返回undefined, 则连接config中默认的vnode
+					via = config.via;
+					chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
+					resolve(2);
+				}
+				
+			  },(err) => {
+				// timeout，同样连接config中默认的vnode
 				via = config.via;
 				chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
 				resolve(2);
-			}
+			});
+		} else if (type == "type2") {
+			// 小说接龙
+			dechatAbi = config.novelAbi;
+			var postParam1 = {
+				"SubChainAddr": subChainAddr,
+				"Sender": deployLwSolAdmin,
+				"Data": dechatAbi
+			};
+
+			var postParam2 = {
+				"SubChainAddr": subChainAddr,
+				"Sender": deployLwSolAdmin,
+				"Params": ["getParams"]
+			  };
+			  
+			commonAnyCall(postParam1, postParam2, 1, rpcIp).then((novelBoardParams) => {
+				novelBoardParams = JSON.parse(novelBoardParams);
+				voteBond = novelBoardParams[0];
+				continueCount = novelBoardParams[1];
+				everRoundRewardRate = novelBoardParams[2];
+				
+				// resove(config.novelRule);
+				_fetch(fetch_promise(ip), config.timeOut).then((datas) => {
+					// 不超时
+					if (datas != undefined && datas.VnodeList.length != 0) {
+						datas = randomChange(datas.VnodeList);  // 随机组合
+						var vnodeArr = [];
+						var vnodeInfo = {};
+						
+						async.each(datas, function (item, callback) {
+							if (item.VnodeAddress != "" && item.VnodeAddress != null && 
+									item.via != "" && item.via != null) {
+								var c3 = new Chain3(new Chain3.providers.HttpProvider("http://" + item.VnodeAddress));
+								c3.mc.getBlockNumber(function (err, blockNum) {
+									if (vnodeArr.length == 0) {
+										if (!err && blockNum != undefined && blockNum > 0) {   // 可以正常连接
+											via = item.via;
+											vnodeAddress = item.VnodeAddress;
+											vnodeInfo.via = via;
+											vnodeInfo.vnodeAddress = vnodeAddress;
+											vnodeArr.push(vnodeInfo);
+											chain3 = c3;
+		
+										}
+									
+									}
+									callback(null);
+								});
+							} 
+							else {
+								callback(null);
+							}
+							
+							
+						}, function (err) {
+							resolve(1);
+						});
+					} else {
+						// restful接口调用失败，返回undefined, 则连接config中默认的vnode
+						via = config.via;
+						chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
+						resolve(2);
+					}
+					
+				  },(err) => {
+					// timeout，同样连接config中默认的vnode
+					via = config.via;
+					chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
+					resolve(2);
+				});
+			});
 			
-		  },(err) => {
-			// timeout，同样连接config中默认的vnode
-			via = config.via;
-			chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
-			resolve(2);
-		});
+
+		}
+		
 	});
 	 
 }
 
 // 进入版块，设置vnode和rpc(isSuccess:1 成功   2. vnode restful连接返回undefined，或者超时   3. monitor restful连接返回undefined, 空数组，或者超时)
-export var commonSetRpcAndVnode = function (subChainAddr, rpcIp) {
+export var commonSetRpcAndVnode = function (subChainAddr, rpcIp, type, deployLwSolAdmin) {
 	var start = new Date().getTime();
 	var ip = config.restfulUrl + "/MonitorAddr/" + subChainAddr;
 	var responseRes = {};
 	return new Promise((resolve) => {
-		commonSetVnode().then((data) => {
+		if (type == "type2" && config.novelAbi == undefined) {
+			// 老版本用户，提示更新为最新版
+
+
+			responseRes.isSuccess = -1; 
+			responseRes.rpcIp = "";
+			resolve(responseRes);
+		} else {
+		commonSetVnode(type, deployLwSolAdmin, subChainAddr, rpcIp).then((data) => {
 			if (data == 1 || data == 2) {
 				//_get(ip, null).then((datas) => {
 				_fetch(fetch_promise(ip), config.timeOut).then((datas) => {
@@ -739,7 +831,7 @@ export var commonSetRpcAndVnode = function (subChainAddr, rpcIp) {
 				});
 			} 
 		});
-
+	}
 	}); 
 }
 
@@ -754,6 +846,26 @@ export function getChain3() {
 
 export function getVia() {
 	return via;
+}
+
+export function getAbi() {
+	return dechatAbi;
+}
+
+export function getBoardType() {
+	return boardType;
+}
+
+export function getVoteBond() {
+	return voteBond;
+}
+
+export function getContinueCount() {
+	return continueCount;
+}
+
+export function getEverRoundRewardRate() {
+	return everRoundRewardRate;
 }
 
 export function getRpcIp() {

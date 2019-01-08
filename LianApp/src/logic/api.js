@@ -156,6 +156,7 @@ export default class API extends Component{
      static setNonce(subChainAddr, userAddr, rpcIp){
 
         return new Promise((resolve,reject)=>{
+            console.log("子链配置信息为------")
             console.log('subChainAddr',subChainAddr);
             console.log('userAddr',userAddr);
             console.log('rpcIp',rpcIp);
@@ -616,7 +617,6 @@ console.log('回答问题rpcIp',rpcIp);
      * @param {} callType 
      */
     static getBoardRule(callType){
-        console.log("-----------" + callType);
         return getBoardRule(callType);
     }
 

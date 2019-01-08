@@ -60,7 +60,10 @@ export default class LianWenHome extends NavigationPage {
       BoardList: this.props.BoardList,
       userAddr: '',
       user:{},
-      isOwner: 0
+      isOwner: 0,
+      autoCheckFlag: 0,   
+      autoCheckDuration: 1,   // 结算的时间间隔
+      checktime: undefined
     }
 
   }
@@ -221,28 +224,187 @@ export default class LianWenHome extends NavigationPage {
     return Math.floor(ms / 1000 / 60);
   }
 
+  // 每次手动刷新都会autoCheck
+  // _renderJieSuan(callback) {
+  //   console.log('开始结算');
+  //         LoginLogic.getCurrentUser().then((user) => {
+  //           //  console.log('结算user', user);
 
+  //           if (user != null && typeof (user) != "undefined" && user.online) {
+  //             let userAddr = user.userAddr;
+  //             LoginLogic.getUserByUserAddr(userAddr).then((userInfo) => {
+  //               // console.log('结算usserInfo', userInfo);
+
+  //               MainLogic.autoCheck(userAddr, userInfo.userPwd, userInfo.keystore, this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp)
+  //                 .then((resdata) => {
+  //                   //console.log('结算返回',resdata);
+  //                   if (resdata == 1) {
+  //                     global.checktime = new Date();
+  //                     // console.log('结算成功');
+
+  //                   }
+
+  //                   //停止掉
+  //                   clearInterval(this.timer);
+  //                   this.timer = undefined;
+
+  //                 })
+  //             })
+  //           }
+  //           else {
+  //             this.setState({ showLoading: false });
+  //             Toast.fail(i18n.t('FAIL.not_logged_in'));
+  //           }
+  //         })
+
+  // }
+
+
+
+  // 自动执行autoCheck，只开启一个定时任务，每到时间点自动执行autoCheck
+  // _renderJieSuan(callback) {
+  //   if (this.state.autoCheckFlag == 0) {
+  //     this.state.autoCheckFlag++;
+  //   } else {
+  //     return;
+  //   }
+  //   //var  flag = 0;
+    
+  //   //var isdoing = false;
+  //   this.timer = setInterval(() => {
+  //     // console.log(flag++);
+  //     // if (!isdoing) {
+  //     //   isdoing = true;
+
+
+  //       var canCheck = false;
+  //       if (typeof (global.checktime) == 'undefined') {
+  //         canCheck = true;
+  //       }
+  //       else {
+  //         var now = new Date();
+  //         var timeInterval = this._getInervalMinute(global.checktime, now);
+  //         if (timeInterval >= this.state.autoCheckDuration) {   // 设置时间间隔
+  //           canCheck = true;
+  //         }
+  //       }
+
+
+  //       if (canCheck) {
+  //         console.log('开始结算');
+  //         LoginLogic.getCurrentUser().then((user) => {
+
+  //           if (user != null && typeof (user) != "undefined" && user.online) {
+  //             let userAddr = user.userAddr;
+  //             LoginLogic.getUserByUserAddr(userAddr).then((userInfo) => {
+
+  //               MainLogic.autoCheck(userAddr, userInfo.userPwd, userInfo.keystore, this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp)
+  //                 .then((resdata) => {
+  //                   if (resdata == 1) {
+  //                     global.checktime = new Date();
+
+  //                   }
+
+  //                   //停止掉
+  //                   // clearInterval(this.timer);
+  //                   // this.timer = undefined;
+
+  //                 })
+  //             })
+  //           }
+  //           else {
+  //             this.setState({ showLoading: false });
+  //             Toast.fail(i18n.t('FAIL.not_logged_in'));
+  //           }
+  //         })
+
+
+  //       }
+  //    // }
+  //   }, 1000);
+
+  // }
+
+  // 用户手动刷新触发autoCheck，只开启一个定时任务，设置间隔时间（避免频繁执行autoCheck交易）
+  // 例如设置时间间隔为1分钟，每次超过1分钟后，什么时候用户刷新页面什么时候就触发autoCheck
   _renderJieSuan(callback) {
+    if (this.state.checktime != undefined) {
+      console.log(this._getInervalMinute(this.state.checktime, new Date()));
+    }
+    
+    // 第一次进来执行autoCheck, 之后每次手动刷新校验时间，大于autoCheckDuration就进行autoCheck
+    if (this.state.checktime == undefined || this._getInervalMinute(this.state.checktime, new Date()) >= this.state.autoCheckDuration){  
+      // if (this.state.autoCheckFlag == 0) {
+      //   this.state.autoCheckFlag++;
+      // }
+      console.log('开始结算');
+      LoginLogic.getCurrentUser().then((user) => {
 
-    // console.log('开始结算');
+        if (user != null && typeof (user) != "undefined" && user.online) {
+          let userAddr = user.userAddr;
+          LoginLogic.getUserByUserAddr(userAddr).then((userInfo) => {
+
+            MainLogic.autoCheck(userAddr, userInfo.userPwd, userInfo.keystore, this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp)
+              .then((resdata) => {
+                if (resdata == 1) {
+                  this.state.checktime = new Date();
+                }
+
+              })
+          })
+        }
+        else {
+          this.setState({ showLoading: false });
+          Toast.fail(i18n.t('FAIL.not_logged_in'));
+        }
+      })
+    }
+
+
+    // if (this.state.autoCheckFlag == 0) {
+    //   this.state.autoCheckFlag++;
+    // } else {
+    //   return;
+    // }
+    // var  flag = 0;
+    
+    // var isdoing = false;
+    // this.timer = setInterval(() => {
+    //   console.log(flag++);
+    //   if (!isdoing) {
+    //     isdoing = true;
+
+
+    //     var canCheck = false;
+    //     if (typeof (global.checktime) == 'undefined') {
+    //       console.log("undefined=========");
+    //       canCheck = true;
+    //     }
+    //     else {
+    //       var now = new Date();
+    //       var timeInterval = this._getInervalMinute(global.checktime, now);
+    //       console.log("timeInterval=========" + timeInterval);
+    //       if (timeInterval >= 1) {
+    //         canCheck = true;
+    //       }
+    //     }
+
+
+    //     if (canCheck) {
+    //       console.log('开始结算');
     //       LoginLogic.getCurrentUser().then((user) => {
-    //         //  console.log('结算user', user);
 
     //         if (user != null && typeof (user) != "undefined" && user.online) {
     //           let userAddr = user.userAddr;
     //           LoginLogic.getUserByUserAddr(userAddr).then((userInfo) => {
-    //             // console.log('结算usserInfo', userInfo);
 
     //             MainLogic.autoCheck(userAddr, userInfo.userPwd, userInfo.keystore, this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp)
     //               .then((resdata) => {
-    //                 //console.log('结算返回',resdata);
     //                 if (resdata == 1) {
     //                   global.checktime = new Date();
-    //                   // console.log('结算成功');
-
     //                 }
 
-    //                 //停止掉
+    //                 //停止掉定时任务
     //                 clearInterval(this.timer);
     //                 this.timer = undefined;
 
@@ -254,64 +416,11 @@ export default class LianWenHome extends NavigationPage {
     //           Toast.fail(i18n.t('FAIL.not_logged_in'));
     //         }
     //       })
-    
-    var isdoing = false;
-    this.timer = setInterval(() => {
-      
-      if (!isdoing) {
-        isdoing = true;
 
 
-        var canCheck = false;
-        if (typeof (global.checktime) == 'undefined') {
-          canCheck = true;
-
-        }
-        else {
-          var now = new Date();
-          var timeInterval = this._getInervalMinute(global.checktime, now);
-          if (timeInterval > 2) {
-            canCheck = true;
-          }
-        }
-
-
-        if (canCheck) {
-          console.log('开始结算');
-          LoginLogic.getCurrentUser().then((user) => {
-            //  console.log('结算user', user);
-
-            if (user != null && typeof (user) != "undefined" && user.online) {
-              let userAddr = user.userAddr;
-              LoginLogic.getUserByUserAddr(userAddr).then((userInfo) => {
-                // console.log('结算usserInfo', userInfo);
-
-                MainLogic.autoCheck(userAddr, userInfo.userPwd, userInfo.keystore, this.state.BoardList.subChainAddress, this.state.BoardList.rpcIp)
-                  .then((resdata) => {
-                    //console.log('结算返回',resdata);
-                    if (resdata == 1) {
-                      global.checktime = new Date();
-                      // console.log('结算成功');
-
-                    }
-
-                    //停止掉
-                    clearInterval(this.timer);
-                    this.timer = undefined;
-
-                  })
-              })
-            }
-            else {
-              this.setState({ showLoading: false });
-              Toast.fail(i18n.t('FAIL.not_logged_in'));
-            }
-          })
-
-
-        }
-      }
-    }, 1000);
+    //     }
+    //   }
+    // }, 1000);
 
   }
 

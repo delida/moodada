@@ -64,21 +64,15 @@ export var getContractInfo = function(rpcIp, methodName, postParam) {
     var dataVal = "";
     return new Promise(function(resolve, reject){
         _post(rpcIp, data).then((datas) => {
-          dataVal += datas; 
             var rpcResult;
-            
-            if (datas.result == undefined) {
+            if (datas == undefined) {
+              rpcResult = "connnect exception";   // rpc连接失败
+            } else if (datas.result == undefined) {
                 if (datas.error != undefined && datas.error.code == -32000) {
-                  console.log(rpcIp);
-                  console.log(methodName);
-                  console.log(postParam);
-                  console.log(datas);
                   rpcResult = "pending";
                 } else {
                   rpcResult == "have exception";
                 }
-                
-                
             }
             else if (datas.result.Storage == undefined) {
                 rpcResult = datas.result;
@@ -118,6 +112,7 @@ export function sleep(d){
 
 // 创建问题    yes
 export var createTopic = async function (award, desc, duration, userAddr, pwd, keystore, subChainAddr, rpcIp) {
+  console.log("----------开始调用createTopic");
   var privatekeyObj = await decrypt(keystore, pwd);
   var privatekey = privatekeyObj.privateKey + "";
   var result = {};
@@ -127,11 +122,13 @@ export var createTopic = async function (award, desc, duration, userAddr, pwd, k
       var descEncode = AsciiToUnicode(desc);  
       createTopicSol(userAddr, pwd, award, duration / config.packPerBlockTime, descEncode, subChainAddr, nonce, privatekey);
       console.log("创建问题成功-----");
+      console.log("----------结束调用createTopic");
       result.topicHash = "";
       result.isSuccess = 1;
       result.nonce = nonce;
     } catch (e) {
       console.log("创建问题时发生异常-----" + e);
+      console.log("----------结束调用createTopic");
       result.topicHash = "";
       result.isSuccess = 0;
       result.nonce = -1;
@@ -142,9 +139,9 @@ export var createTopic = async function (award, desc, duration, userAddr, pwd, k
 
 // 问题列表 
 export var getTopicList = function (pageNum, pageSize, subChainAddr, rpcIp, deployLwSolAdmin, userAddr) {
-
   return new Promise((resolve, reject) => {
-    var start = new Date().getTime();
+    console.log("----------开始调用getTopicList");
+    // var start = new Date().getTime();
     var chain3 =  getChain3();
     var rpcIp = getRpcIp();
     var topicArr = [];
@@ -206,11 +203,12 @@ export var getTopicList = function (pageNum, pageSize, subChainAddr, rpcIp, depl
                   }
                   
                 });
-                var end = new Date().getTime();
-                console.log("getTopicList接口调用耗时为：");
-                console.log((end-start)/1000);
+                // var end = new Date().getTime();
+                // console.log("getTopicList接口调用耗时为：");
+                // console.log((end-start)/1000);
                 responseRes.isOwner = isOwner;
                 responseRes.topicArr = topicArr.sort(compareByTime);
+                console.log("----------结束调用getTopicList");
                 resolve(responseRes);
               });
               
@@ -230,6 +228,7 @@ export var getTopicList = function (pageNum, pageSize, subChainAddr, rpcIp, depl
       topicInfo.duration = 60;
       topicArr.push(topicInfo);
       responseRes.topicArr = topicArr;
+      console.log("----------结束调用getTopicList");
       resolve(responseRes);
     }
     
@@ -240,7 +239,7 @@ export var getTopicList = function (pageNum, pageSize, subChainAddr, rpcIp, depl
 
 // 创建回答 
 export var createSubTopic = async function (topicHash, desc, userAddr, pwd, keystore, subChainAddr, rpcIp) {
-
+  console.log("----------开始调用createSubTopic");
   var rpcIp = getRpcIp();
 
   var result = {};
@@ -262,6 +261,7 @@ export var createSubTopic = async function (topicHash, desc, userAddr, pwd, keys
       result.subTopicHash = "";
       result.isSuccess = 1;
       result.nonce = nonce;
+      console.log("----------结束调用createSubTopic");
       return result;
 
     } catch (e) {
@@ -269,6 +269,7 @@ export var createSubTopic = async function (topicHash, desc, userAddr, pwd, keys
       result.subTopicHash = "";
       result.isSuccess = 0;
       result.nonce = -1;
+      console.log("----------结束调用createSubTopic");
       return result;
     }
   
@@ -281,6 +282,7 @@ export var createSubTopic = async function (topicHash, desc, userAddr, pwd, keys
 //1 根据topicHash，查找回答hash数组  2 遍历获取到下标，根据下标查找所有回答
 export var getSubTopicList = function (topicHash, pageNum, pageSize, subChainAddr, rpcIp, type, deployLwSolAdmin, userAddr) {
   // 校验问题是否过期
+  console.log("----------开始调用getSubTopicList");
   var chain3 =  getChain3();
   var rpcIp = getRpcIp();
   var isOwner = 0;
@@ -293,6 +295,7 @@ export var getSubTopicList = function (topicHash, pageNum, pageSize, subChainAdd
           responseRes.isEnable = 0;
           responseRes.isOwner = isOwner;
           responseRes.subTopicList = [];
+          console.log("----------结束调用getSubTopicList");
           resolve(responseRes);  // 问题已经过期
         } else {
           var postParam1 = {
@@ -309,7 +312,6 @@ export var getSubTopicList = function (topicHash, pageNum, pageSize, subChainAdd
                 "Params": ["getSubTopicList", topicHash, config.pageNum, config.pageSize]
               };
               getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam2).then(function(subTopicList){
-                console.log(subTopicList);
                 getBoardOwner(rpcIp, subChainAddr, deployLwSolAdmin).then((ownerAddr) => {
                   if (userAddr == ownerAddr) {
                     isOwner = 1;
@@ -318,6 +320,7 @@ export var getSubTopicList = function (topicHash, pageNum, pageSize, subChainAdd
                     responseRes.isEnable = 1;
                     responseRes.isOwner = isOwner;
                     responseRes.subTopicList = [];
+                    console.log("----------结束调用getSubTopicList");
                     resolve(responseRes);
                   }
                   //subTopicList = subTopicList.replace(/\n/g, "-456")
@@ -345,6 +348,7 @@ export var getSubTopicList = function (topicHash, pageNum, pageSize, subChainAdd
                   responseRes.isEnable = 1;
                   responseRes.isOwner = isOwner;
                    responseRes.subTopicList = subTopicArr.sort(compareByCount);  // 点赞数倒序
+                   console.log("----------结束调用getSubTopicList");
                    resolve(responseRes);
   
                 });
@@ -369,6 +373,7 @@ export var getSubTopicList = function (topicHash, pageNum, pageSize, subChainAdd
         subTopicArr.push(subTopicInfo);
   
         responseRes.subTopicList = subTopicArr;
+        console.log("----------结束调用getSubTopicList");
         resolve(responseRes);
     }
     
@@ -380,6 +385,7 @@ export var getSubTopicList = function (topicHash, pageNum, pageSize, subChainAdd
 
 // 查询子链token余额 
 export var getMicroChainBalance = function (userAddr, pwd, keystore, subChainAddr, rpcIp) {
+  console.log("----------开始调用getMicroChainBalance");
   var rpcIp = getRpcIp();
 
 	var postParam = {"SubChainAddr": subChainAddr,"Sender": userAddr};
@@ -388,12 +394,14 @@ export var getMicroChainBalance = function (userAddr, pwd, keystore, subChainAdd
     if (tokenBalance != undefined && tokenBalance != NaN) {
       balanceRes = tokenBalance / Math.pow(10, decimals);
     }
+    console.log("----------结束调用getMicroChainBalance");
 		return balanceRes;
 	})
 }
 
 // 点赞    yes
 export var approveSubTopic = async function (voter, subTopicHash, subChainAddr, pwd, keystore, rpcIp) {
+  console.log("----------开始调用approveSubTopic");
   var rpcIp = getRpcIp();
 
   var result = {};
@@ -410,19 +418,21 @@ export var approveSubTopic = async function (voter, subTopicHash, subChainAddr, 
     result.isSuccess = 0;
     result.nonce = -1;
   }
+  console.log("----------结束调用approveSubTopic");
   return result;
 
 }
 
 // autoCheck
 export var autoCheck = async function (userAddr, pwd, keystore, subChainAddr, rpcIp) {
-
+  console.log("----------开始调用autoCheck");
   var rpcIp = getRpcIp();
   var privatekeyObj = await decrypt(keystore, pwd);
   var privatekey = privatekeyObj.privateKey + "";
 
   var nonce = await currentNonce(subChainAddr, userAddr, rpcIp);
   autoCheckSol(userAddr, pwd, subChainAddr, nonce, privatekey);
+  console.log("----------结束调用autoCheck");
   return 1;
   
 }
@@ -430,7 +440,7 @@ export var autoCheck = async function (userAddr, pwd, keystore, subChainAddr, rp
 // 我的链问列表
 export var myTopicList = function (userAddr, subChainAddr, pwd,keystore, rpcIp, deployLwSolAdmin) {
 
-  
+  console.log("----------开始调用myTopicList");
   return new Promise ((resolve) => {
 
     var chain3 =  getChain3();
@@ -480,6 +490,7 @@ export var myTopicList = function (userAddr, subChainAddr, pwd,keystore, rpcIp, 
             
             finalArr.push(myTopic);
           }
+          console.log("---------结束调用myTopicList");
           resolve(finalArr);
             
           
@@ -497,6 +508,7 @@ export var myTopicList = function (userAddr, subChainAddr, pwd,keystore, rpcIp, 
       topicInfo.owner = "";
       topicInfo.duration = 60;
       finalArr.push(topicInfo);
+      console.log("---------结束调用myTopicList");
       resolve(finalArr);
     }
     
@@ -524,7 +536,7 @@ export var getCnNames = function (names) {
 }
 
 export var getBoardList = function () {
-  
+  console.log("---------开始调用getBoardList");
   return new Promise ((resolve) => {
     commonSetVnode("type1", null, null, null).then((data) => {
       chain3 = getChain3();
@@ -600,6 +612,7 @@ export var getBoardList = function () {
           board.exchangeRate = finalArr[6][i];
           boardList.push(board);
         }
+        console.log("---------结束调用getBoardList");
         resolve(boardList);
       });
     });
@@ -609,6 +622,7 @@ export var getBoardList = function () {
 
 // 获取主链，子链当前区块高度，下一轮flush剩余区块数
 export var getBlockInfo = function (subChainAddr, rpcIp) {
+  //console.log("---------开始调用getBlockInfo");
   return new Promise((resolve) => {
     var chain3 =  getChain3();
     var rpcIp = getRpcIp();
@@ -626,6 +640,7 @@ export var getBlockInfo = function (subChainAddr, rpcIp) {
 
         subchainInstance.getFlushInfo(function (err, flushNumber) {
           blockInfo.flushNumber = flushNumber;  // 下一轮flush剩余区块数
+         // console.log("---------结束调用getBlockInfo");
           resolve(blockInfo);
         });
       });
@@ -647,7 +662,7 @@ export var updateContentStatus = async function (userAddr, pwd, keystore, subCha
 
 // 更新问题状态
 export var updateTopicStatus = async function (userAddr, pwd, keystore, subChainAddr, rpcIp, topicHash, status) {
-
+  console.log("---------开始调用updateTopicStatus");
   var privatekeyObj = await decrypt(keystore, pwd);
   var privatekey = privatekeyObj.privateKey + "";
   var rpcIp = getRpcIp();
@@ -660,12 +675,13 @@ export var updateTopicStatus = async function (userAddr, pwd, keystore, subChain
       console.log("更新问题状态发生异常-----" + e);
       flag = 0;
     }
+    console.log("---------结束调用updateTopicStatus");
     return flag;
 }
 
 // 更新回答状态
 export var updateSubTopicStatus = async function (userAddr, pwd, keystore, subChainAddr, rpcIp, subTopicHash, status) {
-
+  console.log("---------开始调用updateSubTopicStatus");
   var privatekeyObj = await decrypt(keystore, pwd);
   var privatekey = privatekeyObj.privateKey + "";
   var rpcIp = getRpcIp();
@@ -678,6 +694,7 @@ export var updateSubTopicStatus = async function (userAddr, pwd, keystore, subCh
       console.log("更新回答状态发生异常-----" + e);
       flag = 0;
     }
+    console.log("---------结束调用updateSubTopicStatus");
     return flag;
 }
 
@@ -720,11 +737,12 @@ export var commonAnyCall = function (postParam1, postParam2, callType, rpcIp) {
 
 // 获取当前版块玩法规则
 export var getBoardRule = function (callType) {
+  console.log("---------开始调用getBoardRule");
   callType = callType.substring(0,5);  // 32位会有u000
   return new Promise ((resolve) => {
       if (callType == "type1") {
         // 链问
-        
+        console.log("---------结束调用getBoardRule");
         resolve(config.lwRule);
       } else if (callType == "type2") {
           // 小说接龙
@@ -734,6 +752,7 @@ export var getBoardRule = function (callType) {
           // 组装动态版块规则
           var novelRule = config.novelRule;
           var finalContent = novelRule.replace(/{N}/, voteBond).replace(/{V}/g, continueCount).replace(/{P}/, everRoundRewardRate);
+          console.log("---------结束调用getBoardRule");
           resolve(finalContent);
       }
   });
@@ -742,6 +761,7 @@ export var getBoardRule = function (callType) {
 
 // 获取最大时间，每个区块打包需要时间
 export var getMaxTimeAndPerTime = async function (subChainAddr, deployLwSolAdmin) {
+  console.log("---------开始调用getMaxTimeAndPerTime");
   var rpcIp = getRpcIp();
   return new Promise ((resolve) => {
     var timeInfo = {};
@@ -761,6 +781,7 @@ export var getMaxTimeAndPerTime = async function (subChainAddr, deployLwSolAdmin
       getContractInfo(rpcIp, "ScsRPCMethod.AnyCall", postParam3).then(function(maxBlk){
         timeInfo.perTime = config.packPerBlockTime;
         timeInfo.maxTime = JSON.parse(maxBlk)[0] * timeInfo.perTime;
+        console.log("---------结束调用getMaxTimeAndPerTime");
         resolve(timeInfo);
         
       });
@@ -855,7 +876,8 @@ var myNonce = 0;
 var blockNumber = 0;
 // 登录成功，设置全局nonce
 export var setNonce = function (subChainAddr, userAddr, rpcIp) {
-    var start = new Date().getTime();
+  console.log("---------开始调用setNonce");
+    //var start = new Date().getTime();
     chain3 = getChain3();
     //var rpcIp = getRpcIp();
     return new Promise ((resolve) => {
@@ -865,16 +887,17 @@ export var setNonce = function (subChainAddr, userAddr, rpcIp) {
           getContractInfo(rpcIp, "ScsRPCMethod.GetNonce", postParam).then(function(nonce){
             blockNumber = num;
             myNonce = nonce;
-            var end = new Date().getTime();
-            console.log("setNonce接口调用耗时为：");
-            console.log((end-start)/1000);
-                
+            // var end = new Date().getTime();
+            // console.log("setNonce接口调用耗时为：");
+            // console.log((end-start)/1000);
+            console.log("---------结束调用setNonce");  
             resolve(1);
           });
         });
         
       } catch (e) {
         console.log("-----------设置全局nonce失败" + e);
+        console.log("---------结束调用setNonce");  
         resolve(0);
       }
       

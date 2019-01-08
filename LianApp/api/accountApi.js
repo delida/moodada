@@ -60,6 +60,7 @@ const Hexstring2btye = (str)=> {
 }
 
 export var getContractInfo = function(rpcIp, methodName, postParam) {
+
 	var data = {"jsonrpc": "2.0", "id": 0, "method": methodName, "params": postParam};
     return new Promise(function(resolve, reject){
         _post(rpcIp, data).then((datas) => {
@@ -613,143 +614,206 @@ function fetch_promise(url) {
 
 export var via = "";
 export var vnodeAddress = "";
-// 随机选择一个可连接的vnode，放入缓存(1 正常  2 超时或者undefined)
-export var commonSetVnode = function (type, deployLwSolAdmin, subChainAddr, rpcIp) {
+// 随机选择一个可连接的vnode，放入缓存(1 正常  2 超时或者undefined)   (type1: 链问   type2: 接龙)
+export var commonSetVnode = function () {
 	var ip = config.restfulUrl + "/VnodeAddr/" + config.protocalAddress;
 	return new Promise((resolve) => {
-		boardType = type;
-		if (type == "type1") {
-			// 链问
-			dechatAbi = config.lwAbi;
-			_fetch(fetch_promise(ip), config.timeOut).then((datas) => {
-				// 不超时
-				if (datas != undefined && datas.VnodeList.length != 0) {
-					datas = randomChange(datas.VnodeList);  // 随机组合
-					var vnodeArr = [];
-					var vnodeInfo = {};
-					
-					async.each(datas, function (item, callback) {
-						if (item.VnodeAddress != "" && item.VnodeAddress != null && 
-								item.via != "" && item.via != null) {
-							var c3 = new Chain3(new Chain3.providers.HttpProvider("http://" + item.VnodeAddress));
-							c3.mc.getBlockNumber(function (err, blockNum) {
-								if (vnodeArr.length == 0) {
-									if (!err && blockNum != undefined && blockNum > 0) {   // 可以正常连接
-										via = item.via;
-										vnodeAddress = item.VnodeAddress;
-										vnodeInfo.via = via;
-										vnodeInfo.vnodeAddress = vnodeAddress;
-										vnodeArr.push(vnodeInfo);
-										chain3 = c3;
-	
-									}
-								
-								}
-								callback(null);
-							});
-						} 
-						else {
-							callback(null);
-						}
-						
-						
-					}, function (err) {
-						resolve(1);
-					});
-				} else {
-					// restful接口调用失败，返回undefined, 则连接config中默认的vnode
-					via = config.via;
-					chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
-					resolve(2);
-				}
+		_fetch(fetch_promise(ip), config.timeOut).then((datas) => {
+			// 不超时
+			if (datas != undefined && datas.VnodeList.length != 0) {
+				datas = randomChange(datas.VnodeList);  // 随机组合
+				var vnodeArr = [];
+				var vnodeInfo = {};
 				
-			  },(err) => {
-				// timeout，同样连接config中默认的vnode
+				async.each(datas, function (item, callback) {
+					if (item.VnodeAddress != "" && item.VnodeAddress != null && 
+							item.via != "" && item.via != null) {
+						var c3 = new Chain3(new Chain3.providers.HttpProvider("http://" + item.VnodeAddress));
+						c3.mc.getBlockNumber(function (err, blockNum) {
+							if (vnodeArr.length == 0) {
+								if (!err && blockNum != undefined && blockNum > 0) {   // 可以正常连接
+									via = item.via;
+									vnodeAddress = item.VnodeAddress;
+									vnodeInfo.via = via;
+									vnodeInfo.vnodeAddress = vnodeAddress;
+									vnodeArr.push(vnodeInfo);
+									chain3 = c3;
+
+								}
+							
+							}
+							callback(null);
+						});
+					} 
+					else {
+						callback(null);
+					}
+					
+					
+				}, function (err) {
+					resolve(1);
+				});
+			} else {
+				// restful接口调用失败，返回undefined, 则连接config中默认的vnode
 				via = config.via;
 				chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
 				resolve(2);
-			});
-		} else if (type == "type2") {
-			// 小说接龙
-			dechatAbi = config.novelAbi;
-			var postParam1 = {
-				"SubChainAddr": subChainAddr,
-				"Sender": deployLwSolAdmin,
-				"Data": dechatAbi
-			};
+			}
+			
+		  },(err) => {
+			// timeout，同样连接config中默认的vnode
+			via = config.via;
+			chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
+			resolve(2);
+		});
 
-			var postParam2 = {
-				"SubChainAddr": subChainAddr,
-				"Sender": deployLwSolAdmin,
-				"Params": ["getParams"]
-			  };
-			  
-			commonAnyCall(postParam1, postParam2, 1, rpcIp).then((novelBoardParams) => {
-				novelBoardParams = JSON.parse(novelBoardParams);
-				voteBond = novelBoardParams[0];
-				continueCount = novelBoardParams[1];
-				everRoundRewardRate = novelBoardParams[2];
-				
-				// resove(config.novelRule);
-				_fetch(fetch_promise(ip), config.timeOut).then((datas) => {
-					// 不超时
-					if (datas != undefined && datas.VnodeList.length != 0) {
-						datas = randomChange(datas.VnodeList);  // 随机组合
-						var vnodeArr = [];
-						var vnodeInfo = {};
-						
-						async.each(datas, function (item, callback) {
-							if (item.VnodeAddress != "" && item.VnodeAddress != null && 
-									item.via != "" && item.via != null) {
-								var c3 = new Chain3(new Chain3.providers.HttpProvider("http://" + item.VnodeAddress));
-								c3.mc.getBlockNumber(function (err, blockNum) {
-									if (vnodeArr.length == 0) {
-										if (!err && blockNum != undefined && blockNum > 0) {   // 可以正常连接
-											via = item.via;
-											vnodeAddress = item.VnodeAddress;
-											vnodeInfo.via = via;
-											vnodeInfo.vnodeAddress = vnodeAddress;
-											vnodeArr.push(vnodeInfo);
-											chain3 = c3;
-		
-										}
-									
-									}
-									callback(null);
-								});
-							} 
-							else {
-								callback(null);
-							}
-							
-							
-						}, function (err) {
-							resolve(1);
-						});
-					} else {
-						// restful接口调用失败，返回undefined, 则连接config中默认的vnode
-						via = config.via;
-						chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
-						resolve(2);
-					}
+	});
+}
+
+// export var commonSetVnode = function (type, deployLwSolAdmin, subChainAddr, rpcIp) {
+// 	var ip = config.restfulUrl + "/VnodeAddr/" + config.protocalAddress;
+// 	return new Promise((resolve) => {
+
+// 		boardType = type;
+// 		if (type == "type1") {
+// 			// 链问
+// 			dechatAbi = config.lwAbi;
+// 			_fetch(fetch_promise(ip), config.timeOut).then((datas) => {
+// 				// 不超时
+// 				if (datas != undefined && datas.VnodeList.length != 0) {
+// 					datas = randomChange(datas.VnodeList);  // 随机组合
+// 					var vnodeArr = [];
+// 					var vnodeInfo = {};
 					
-				  },(err) => {
-					// timeout，同样连接config中默认的vnode
-					via = config.via;
-					chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
-					resolve(2);
-				});
-			});
+// 					async.each(datas, function (item, callback) {
+// 						if (item.VnodeAddress != "" && item.VnodeAddress != null && 
+// 								item.via != "" && item.via != null) {
+// 							var c3 = new Chain3(new Chain3.providers.HttpProvider("http://" + item.VnodeAddress));
+// 							c3.mc.getBlockNumber(function (err, blockNum) {
+// 								if (vnodeArr.length == 0) {
+// 									if (!err && blockNum != undefined && blockNum > 0) {   // 可以正常连接
+// 										via = item.via;
+// 										vnodeAddress = item.VnodeAddress;
+// 										vnodeInfo.via = via;
+// 										vnodeInfo.vnodeAddress = vnodeAddress;
+// 										vnodeArr.push(vnodeInfo);
+// 										chain3 = c3;
+	
+// 									}
+								
+// 								}
+// 								callback(null);
+// 							});
+// 						} 
+// 						else {
+// 							callback(null);
+// 						}
+						
+						
+// 					}, function (err) {
+// 						resolve(1);
+// 					});
+// 				} else {
+// 					// restful接口调用失败，返回undefined, 则连接config中默认的vnode
+// 					via = config.via;
+// 					chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
+// 					resolve(2);
+// 				}
+				
+// 			  },(err) => {
+// 				// timeout，同样连接config中默认的vnode
+// 				via = config.via;
+// 				chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
+// 				resolve(2);
+// 			});
+// 		} else if (type == "type2") {
+// 			// 小说接龙
+// 			dechatAbi = config.novelAbi;
+// 			var postParam1 = {
+// 				"SubChainAddr": subChainAddr,
+// 				"Sender": deployLwSolAdmin,
+// 				"Data": dechatAbi
+// 			};
+
+// 			var postParam2 = {
+// 				"SubChainAddr": subChainAddr,
+// 				"Sender": deployLwSolAdmin,
+// 				"Params": ["getParams"]
+// 			  };
+			  
+// 			commonAnyCall(postParam1, postParam2, 1, rpcIp).then((novelBoardParams) => {
+// 				novelBoardParams = JSON.parse(novelBoardParams);
+// 				voteBond = novelBoardParams[0];
+// 				continueCount = novelBoardParams[1];
+// 				everRoundRewardRate = novelBoardParams[2];
+				
+// 				// resove(config.novelRule);
+// 				_fetch(fetch_promise(ip), config.timeOut).then((datas) => {
+// 					// 不超时
+// 					if (datas != undefined && datas.VnodeList.length != 0) {
+// 						datas = randomChange(datas.VnodeList);  // 随机组合
+// 						var vnodeArr = [];
+// 						var vnodeInfo = {};
+						
+// 						async.each(datas, function (item, callback) {
+// 							if (item.VnodeAddress != "" && item.VnodeAddress != null && 
+// 									item.via != "" && item.via != null) {
+// 								var c3 = new Chain3(new Chain3.providers.HttpProvider("http://" + item.VnodeAddress));
+// 								c3.mc.getBlockNumber(function (err, blockNum) {
+// 									if (vnodeArr.length == 0) {
+// 										if (!err && blockNum != undefined && blockNum > 0) {   // 可以正常连接
+// 											via = item.via;
+// 											vnodeAddress = item.VnodeAddress;
+// 											vnodeInfo.via = via;
+// 											vnodeInfo.vnodeAddress = vnodeAddress;
+// 											vnodeArr.push(vnodeInfo);
+// 											chain3 = c3;
+		
+// 										}
+									
+// 									}
+// 									callback(null);
+// 								});
+// 							} 
+// 							else {
+// 								callback(null);
+// 							}
+							
+							
+// 						}, function (err) {
+// 							resolve(1);
+// 						});
+// 					} else {
+// 						// restful接口调用失败，返回undefined, 则连接config中默认的vnode
+// 						via = config.via;
+// 						chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
+// 						resolve(2);
+// 					}
+					
+// 				  },(err) => {
+// 					// timeout，同样连接config中默认的vnode
+// 					via = config.via;
+// 					chain3 = new Chain3(new Chain3.providers.HttpProvider(config.vnodeIp));
+// 					resolve(2);
+// 				});
+// 			});
 			
 
-		}
+// 		}
 		
-	});
+// 	});
 	 
-}
+// }
 
 // 进入版块，设置vnode和rpc(isSuccess:1 成功   2. vnode restful连接返回undefined，或者超时   3. monitor restful连接返回undefined, 空数组，或者超时)
 export var commonSetRpcAndVnode = function (subChainAddr, rpcIp, type, deployLwSolAdmin) {
+	console.log("----------开始调用commonSetRpcAndVnode");
+	boardType = type;
+	if (type == "type1") {
+		dechatAbi = config.lwAbi;
+	} else if (type == "type2") {
+		dechatAbi = config.novelAbi;
+	}
 	var start = new Date().getTime();
 	var ip = config.restfulUrl + "/MonitorAddr/" + subChainAddr;
 	var responseRes = {};
@@ -757,28 +821,31 @@ export var commonSetRpcAndVnode = function (subChainAddr, rpcIp, type, deployLwS
 		if (type == "type2" && config.novelAbi == undefined) {
 			// 老版本用户，提示更新为最新版
 
-
 			responseRes.isSuccess = -1; 
 			responseRes.rpcIp = "";
 			resolve(responseRes);
 		} else {
-		commonSetVnode(type, deployLwSolAdmin, subChainAddr, rpcIp).then((data) => {
+		commonSetVnode().then((data) => {
 			if (data == 1 || data == 2) {
-				//_get(ip, null).then((datas) => {
 				_fetch(fetch_promise(ip), config.timeOut).then((datas) => {
 					if (datas != undefined && datas.MonitorList.length != 0) {
 						datas = randomChange(datas.MonitorList);  // 随机组合
+						//console.log("datas[0]--------" + datas[0].MonitorAddress);
 						var rpcArr = [];
 						var rpcInfo = {};
 						async.each(datas, function (item, callback) {
 							var rpcIpVal = "http://" + item.MonitorAddress + "/rpc";
+							//console.log("item.MonitorAddress--------" + item.MonitorAddress);
 							var postParam = {"SubChainAddr": subChainAddr};
 								getContractInfo(rpcIpVal, "ScsRPCMethod.GetBlockNumber", postParam).then(function(result){
+									//console.log("rpcIpVal--------" + rpcIpVal);
 									if (rpcArr.length == 0) {
 										if ("have exception" != result && "connnect exception" != result) {   // 可以正常连接
 											rpcIpCommon = rpcIpVal;
 											rpcInfo.rpcIp = rpcIpCommon;
 											rpcArr.push(rpcInfo);
+										} else {
+											console.log("monitor不能连接:" + rpcIpVal);
 										}
 									
 								}
@@ -793,7 +860,12 @@ export var commonSetRpcAndVnode = function (subChainAddr, rpcIp, type, deployLwS
 									
 								} else {
 									// 可以连接
+									if (type == "type2") {
+										commonSetNovelParams(deployLwSolAdmin, subChainAddr, rpcInfo.rpcIp)
+									}
+									
 									responseRes.rpcIp = rpcInfo.rpcIp;
+									//console.log("+++++++++++++" + rpcInfo.rpcIp);
 									if (data == 1) {
 										responseRes.isSuccess = 1;   // 正常情况
 									} else if (data == 2){
@@ -803,11 +875,15 @@ export var commonSetRpcAndVnode = function (subChainAddr, rpcIp, type, deployLwS
 								var end = new Date().getTime();
 								console.log("restful接口调用耗时为：");
 								console.log((end-start)/1000);
+								console.log("----------结束调用commonSetRpcAndVnode");
 								resolve(responseRes);
 								
 							});
 					} else {
 						// 远程连接报错，连接默认的
+						if (type == "type2") {
+							commonSetNovelParams(deployLwSolAdmin, subChainAddr, rpcIp)
+						}
 						rpcIpCommon = rpcIp;
 						responseRes.isSuccess = 3; // 备用远程服务连接成功
 						responseRes.rpcIp = rpcIp ;
@@ -815,11 +891,15 @@ export var commonSetRpcAndVnode = function (subChainAddr, rpcIp, type, deployLwS
 
 						console.log("restful接口调用耗时为：");
 						console.log((end-start)/1000);
+						console.log("----------结束调用commonSetRpcAndVnode");
 						resolve(responseRes);   
 					}
 				
 				}, (err) => {
 					// timeout，拿默认的
+					if (type == "type2") {
+						commonSetNovelParams(deployLwSolAdmin, subChainAddr, rpcIp)
+					}
 					rpcIpCommon = rpcIp;
 					responseRes.isSuccess = 3; // 备用远程服务连接成功
 					responseRes.rpcIp = rpcIp ;
@@ -827,12 +907,36 @@ export var commonSetRpcAndVnode = function (subChainAddr, rpcIp, type, deployLwS
 
 					console.log("restful接口调用耗时为：");
 					console.log((end-start)/1000);
+					console.log("----------结束调用commonSetRpcAndVnode");
 					resolve(responseRes);  
 				});
 			} 
 		});
 	}
 	}); 
+}
+
+// 如果是接龙，则设置接龙规则的三个参数
+function commonSetNovelParams(deployLwSolAdmin, subChainAddr, rpcIp) {
+	dechatAbi = config.novelAbi;
+	var postParam1 = {
+		"SubChainAddr": subChainAddr,
+		"Sender": deployLwSolAdmin,
+		"Data": dechatAbi
+	};
+
+	var postParam2 = {
+		"SubChainAddr": subChainAddr,
+		"Sender": deployLwSolAdmin,
+		"Params": ["getParams"]
+		};
+		
+	commonAnyCall(postParam1, postParam2, 1, rpcIp).then((novelBoardParams) => {
+		novelBoardParams = JSON.parse(novelBoardParams);
+		voteBond = novelBoardParams[0];
+		continueCount = novelBoardParams[1];
+		everRoundRewardRate = novelBoardParams[2];
+	});
 }
 
 // 获取一定范围内的随机整数

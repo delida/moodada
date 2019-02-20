@@ -21,6 +21,8 @@ import {getCurrentTime} from './accountApi';
 import {getVoteBond} from './accountApi';
 import {getContinueCount} from './accountApi';
 import {getEverRoundRewardRate} from './accountApi';
+import {getDappBaseAddr} from './accountApi';
+import {getDappAddr} from './accountApi';
 
 
 var topicIndex = config.topicIndex;
@@ -147,76 +149,67 @@ export var getTopicList = function (pageNum, pageSize, subChainAddr, rpcIp, depl
     var topicArr = [];
     var isOwner = 0;
     var responseRes = {};
-    // 先set abi
-    var postParam1 = {
-      "SubChainAddr": subChainAddr,
-      "Sender": deployLwSolAdmin,
-      "Data": getAbi()
-    };
     try {
-      getContractInfo(rpcIp, "ScsRPCMethod.SetDappAbi", postParam1).then(function(result){
-        if (result == "success") {
-          // 获取列表
-          var postParam1 = {
-            "SubChainAddr": subChainAddr,
-            "Sender": deployLwSolAdmin,
-            "Params": ["getTopicList", config.pageNum, config.pageSize]
-          };
-          var postParam4 = {
-            "SubChainAddr": subChainAddr
-          };
-          getContractInfo(rpcIp,"ScsRPCMethod.GetBlockNumber", postParam4).then(function(currentBlockNum){
-            getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam1).then(function(topicList){
-              getBoardOwner(rpcIp, subChainAddr, deployLwSolAdmin).then((ownerAddr) => {
-                if (userAddr == ownerAddr) {
-                  // 当前登录人是版主
-                  isOwner = 1;
+      // 获取列表
+      var postParam1 = {
+        "SubChainAddr": subChainAddr,
+        "Sender": deployLwSolAdmin,
+        "DappAddr": getDappAddr(),
+        "Params": ["getTopicList", config.pageNum, config.pageSize]
+      };
+      var postParam4 = {
+        "SubChainAddr": subChainAddr
+      };
+      getContractInfo(rpcIp,"ScsRPCMethod.GetBlockNumber", postParam4).then(function(currentBlockNum){
+        getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam1).then(function(topicList){
+          getBoardOwner(rpcIp, subChainAddr, deployLwSolAdmin).then((ownerAddr) => {
+            if (userAddr == ownerAddr) {
+              // 当前登录人是版主
+              isOwner = 1;
+            }
+            //topicList = topicList.replace(/\n/g, "-456");
+            if (topicList == "" || topicList == null || topicList == undefined){
+              responseRes.isOwner = isOwner;
+              responseRes.topicArr = topicArr;
+              resolve(responseRes);
+            }
+            var listObj = JSON.parse(topicList);
+            listObj.forEach(function (item, index) {
+              var surplusBlk = item.Expblk - (currentBlockNum - item.Startblk);
+              if (surplusBlk > 1 ) {
+                var topicInfo = {};
+                topicInfo.topicHash = "0x" + item.Hash;
+                //topicInfo.desc = item.Desc.replace(/-456/g, "\n");
+                var descValue = UnicodeToAscii(item.Desc);
+                if (descValue == "") {
+                  topicInfo.desc = item.Desc;//.replace(/-456/g, "\n");
+                } else {
+                  topicInfo.desc = descValue;
                 }
-                //topicList = topicList.replace(/\n/g, "-456");
-                if (topicList == "" || topicList == null || topicList == undefined){
-                  responseRes.isOwner = isOwner;
-                  responseRes.topicArr = topicArr;
-                  resolve(responseRes);
+                
+                topicInfo.award = chain3.fromSha(item.Award, "mc");
+                topicInfo.owner = "0x" + item.Owner;
+                topicInfo.status = item.Status;
+                if (topicInfo.status == 1) {
+                  topicInfo.desc = config.sensitiveInfo;
                 }
-                var listObj = JSON.parse(topicList);
-                listObj.forEach(function (item, index) {
-                  var surplusBlk = item.Expblk - (currentBlockNum - item.Startblk);
-                  if (surplusBlk > 1 ) {
-                    var topicInfo = {};
-                    topicInfo.topicHash = "0x" + item.Hash;
-                    //topicInfo.desc = item.Desc.replace(/-456/g, "\n");
-                    var descValue = UnicodeToAscii(item.Desc);
-                    if (descValue == "") {
-                      topicInfo.desc = item.Desc;//.replace(/-456/g, "\n");
-                    } else {
-                      topicInfo.desc = descValue;
-                    }
-                    
-                    topicInfo.award = chain3.fromSha(item.Award, "mc");
-                    topicInfo.owner = "0x" + item.Owner;
-                    topicInfo.status = item.Status;
-                    if (topicInfo.status == 1) {
-                      topicInfo.desc = config.sensitiveInfo;
-                    }
-                    topicInfo.duration = surplusBlk * config.packPerBlockTime;
-                    topicArr.push(topicInfo);
-                  }
-                  
-                });
-                // var end = new Date().getTime();
-                // console.log("getTopicList接口调用耗时为：");
-                // console.log((end-start)/1000);
-                responseRes.isOwner = isOwner;
-                responseRes.topicArr = topicArr.sort(compareByTime);
-                console.log("----------结束调用getTopicList");
-                resolve(responseRes);
-              });
+                topicInfo.duration = surplusBlk * config.packPerBlockTime;
+                topicArr.push(topicInfo);
+              }
               
             });
+            // var end = new Date().getTime();
+            // console.log("getTopicList接口调用耗时为：");
+            // console.log((end-start)/1000);
+            responseRes.isOwner = isOwner;
+            responseRes.topicArr = topicArr.sort(compareByTime);
+            console.log("----------结束调用getTopicList");
+            resolve(responseRes);
           });
           
-        }
+        });
       });
+      
     } catch (e) {
       responseRes.isOwner = 0;
       var topicInfo = {};
@@ -298,64 +291,56 @@ export var getSubTopicList = function (topicHash, pageNum, pageSize, subChainAdd
           console.log("----------结束调用getSubTopicList");
           resolve(responseRes);  // 问题已经过期
         } else {
-          var postParam1 = {
+          // 获取列表
+          var postParam2 = {
             "SubChainAddr": subChainAddr,
             "Sender": deployLwSolAdmin,
-            "Data": getAbi()
+            "DappAddr": getDappAddr(),
+            "Params": ["getSubTopicList", topicHash, config.pageNum, config.pageSize]
           };
-          getContractInfo(rpcIp, "ScsRPCMethod.SetDappAbi", postParam1).then(function(result){
-            if (result == "success") {
-              // 获取列表
-              var postParam2 = {
-                "SubChainAddr": subChainAddr,
-                "Sender": deployLwSolAdmin,
-                "Params": ["getSubTopicList", topicHash, config.pageNum, config.pageSize]
-              };
-              getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam2).then(function(subTopicList){
-                getBoardOwner(rpcIp, subChainAddr, deployLwSolAdmin).then((ownerAddr) => {
-                  if (userAddr == ownerAddr) {
-                    isOwner = 1;
+          getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam2).then(function(subTopicList){
+            getBoardOwner(rpcIp, subChainAddr, deployLwSolAdmin).then((ownerAddr) => {
+              if (userAddr == ownerAddr) {
+                isOwner = 1;
+              }
+              if (subTopicList == "" || subTopicList == null || subTopicList == undefined){
+                responseRes.isEnable = 1;
+                responseRes.isOwner = isOwner;
+                responseRes.subTopicList = [];
+                console.log("----------结束调用getSubTopicList");
+                resolve(responseRes);
+              }
+              //subTopicList = subTopicList.replace(/\n/g, "-456")
+              var listObj = JSON.parse(subTopicList);
+              listObj.forEach(function (item, index) {
+                  var subTopicInfo = {};
+                  subTopicInfo.subTopicHash = "0x" + item.Hash;
+                  //subTopicInfo.desc = item.Desc.replace(/-456/g, "\n");
+                  var descValue = UnicodeToAscii(item.Desc);
+                  if (descValue == "") {
+                    subTopicInfo.desc = item.Desc;//.replace(/-456/g, "\n");
+                  } else {
+                    subTopicInfo.desc = descValue;
                   }
-                  if (subTopicList == "" || subTopicList == null || subTopicList == undefined){
-                    responseRes.isEnable = 1;
-                    responseRes.isOwner = isOwner;
-                    responseRes.subTopicList = [];
-                    console.log("----------结束调用getSubTopicList");
-                    resolve(responseRes);
+                  subTopicInfo.owner = "0x" + item.Owner;
+                  subTopicInfo.reward = chain3.fromSha(item.Reward, "mc");
+                  subTopicInfo.voteCount = item.VoteCount;
+                  subTopicInfo.status = item.Status;
+                  if (subTopicInfo.status == 1) {
+                    subTopicInfo.desc = config.sensitiveInfo;
                   }
-                  //subTopicList = subTopicList.replace(/\n/g, "-456")
-                  var listObj = JSON.parse(subTopicList);
-                  listObj.forEach(function (item, index) {
-                      var subTopicInfo = {};
-                      subTopicInfo.subTopicHash = "0x" + item.Hash;
-                      //subTopicInfo.desc = item.Desc.replace(/-456/g, "\n");
-                      var descValue = UnicodeToAscii(item.Desc);
-                      if (descValue == "") {
-                        subTopicInfo.desc = item.Desc;//.replace(/-456/g, "\n");
-                      } else {
-                        subTopicInfo.desc = descValue;
-                      }
-                      subTopicInfo.owner = "0x" + item.Owner;
-                      subTopicInfo.reward = chain3.fromSha(item.Reward, "mc");
-                      subTopicInfo.voteCount = item.VoteCount;
-                      subTopicInfo.status = item.Status;
-                      if (subTopicInfo.status == 1) {
-                        subTopicInfo.desc = config.sensitiveInfo;
-                      }
-                      subTopicArr.push(subTopicInfo);
-                    
-                  });
-                  responseRes.isEnable = 1;
-                  responseRes.isOwner = isOwner;
-                   responseRes.subTopicList = subTopicArr.sort(compareByCount);  // 点赞数倒序
-                   console.log("----------结束调用getSubTopicList");
-                   resolve(responseRes);
-  
-                });
+                  subTopicArr.push(subTopicInfo);
                 
-      
               });
-            }
+              responseRes.isEnable = 1;
+              responseRes.isOwner = isOwner;
+               responseRes.subTopicList = subTopicArr.sort(compareByCount);  // 点赞数倒序
+               console.log("----------结束调用getSubTopicList");
+               resolve(responseRes);
+
+            });
+            
+  
           });
   
         }
@@ -448,55 +433,46 @@ export var myTopicList = function (userAddr, subChainAddr, pwd,keystore, rpcIp, 
     var finalArr = [];
 
     try {
-      // 先set abi
-    var postParam3 = {
-      "SubChainAddr": subChainAddr,
-      "Sender": deployLwSolAdmin,
-      "Data": getAbi()
-    };
-    getContractInfo(rpcIp, "ScsRPCMethod.SetDappAbi", postParam3).then(function(result){
-      if (result == "success") {
-        // 获取列表
-        var postParam3 = {
-          "SubChainAddr": subChainAddr,
-          "Sender": deployLwSolAdmin,
-          "Params": ["getMyTopic", userAddr]
-        };
-        getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam3).then(function(topicList){
-          //var topicList = topicList.replace(/\n/g, "-456");  // 换行符
-          var topicArr = JSON.parse(topicList);
+      // 获取列表
+      var postParam3 = {
+        "SubChainAddr": subChainAddr,
+        "Sender": deployLwSolAdmin,
+        "DappAddr": getDappAddr(),
+        "Params": ["getMyTopic", userAddr]
+      };
+      getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam3).then(function(topicList){
+        //var topicList = topicList.replace(/\n/g, "-456");  // 换行符
+        var topicArr = JSON.parse(topicList);
+        
+        for (key in topicArr) {
+          var myTopic = {};
+          myTopic.topicHash = "0x" + topicArr[key].Hash;
+          myTopic.owner = "0x" + topicArr[key].Owner;
+          myTopic.award = chain3.fromSha(topicArr[key].Award, 'mc');
+          myTopic.duration = topicArr[key].Expblk * config.packPerBlockTime;
           
-          for (key in topicArr) {
-            var myTopic = {};
-            myTopic.topicHash = "0x" + topicArr[key].Hash;
-            myTopic.owner = "0x" + topicArr[key].Owner;
-            myTopic.award = chain3.fromSha(topicArr[key].Award, 'mc');
-            myTopic.duration = topicArr[key].Expblk * config.packPerBlockTime;
+          if (topicArr[key].Status == 1) {  // 屏蔽，敏感词汇
+            myTopic.status = 1;
+            myTopic.desc = config.sensitiveInfo;
+          } else {
+            myTopic.status = 0;
             
-            if (topicArr[key].Status == 1) {  // 屏蔽，敏感词汇
-              myTopic.status = 1;
-              myTopic.desc = config.sensitiveInfo;
+            //myTopic.desc = topicArr[key].Desc.replace(/-456/g, "\n");
+            var descValue = UnicodeToAscii(topicArr[key].Desc);
+            if (descValue == "") {
+              myTopic.desc = topicArr[key].Desc;//.replace(/-456/g, "\n");
             } else {
-              myTopic.status = 0;
-              
-              //myTopic.desc = topicArr[key].Desc.replace(/-456/g, "\n");
-              var descValue = UnicodeToAscii(topicArr[key].Desc);
-              if (descValue == "") {
-                myTopic.desc = topicArr[key].Desc;//.replace(/-456/g, "\n");
-              } else {
-                myTopic.desc = descValue;
-              }
+              myTopic.desc = descValue;
             }
-            
-            finalArr.push(myTopic);
           }
-          console.log("---------结束调用myTopicList");
-          resolve(finalArr);
-            
           
-        });
-      }
-    });
+          finalArr.push(myTopic);
+        }
+        console.log("---------结束调用myTopicList");
+        resolve(finalArr);
+          
+        
+      });
     } catch (e) {
       console.log("获取我的链问列表失败-------");
 
@@ -704,6 +680,7 @@ export var getBoardOwner = async function (rpcIp, subChainAddr, deployLwSolAdmin
     var postParam3 = {
       "SubChainAddr": subChainAddr,
       "Sender": deployLwSolAdmin,
+      "DappAddr": getDappAddr(),
       "Params": ["getDechatInfo"]
     };
     getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam3).then(function(result){
@@ -718,11 +695,9 @@ export var getBoardOwner = async function (rpcIp, subChainAddr, deployLwSolAdmin
 export var commonAnyCall = function (postParam1, postParam2, callType, rpcIp) {
   return new Promise((resolve) => {
     if (callType == 1) {
-      getContractInfo(rpcIp, "ScsRPCMethod.SetDappAbi", postParam1).then(function(result){
-        getContractInfo(rpcIp, "ScsRPCMethod.AnyCall", postParam2).then(function(data){
-          resolve(data);
-          
-        });
+      getContractInfo(rpcIp, "ScsRPCMethod.AnyCall", postParam2).then(function(data){
+        resolve(data);
+        
       });
     } else if (callType == 2) {
       getContractInfo(rpcIp, "ScsRPCMethod.AnyCall", postParam2).then(function(data){
@@ -768,6 +743,7 @@ export var getMaxTimeAndPerTime = async function (subChainAddr, deployLwSolAdmin
     var postParam3 = {
       "SubChainAddr": subChainAddr,
       "Sender": deployLwSolAdmin,
+      "DappAddr": getDappAddr(),
       "Params": ["getExpBlk"]
     };
 
@@ -776,15 +752,12 @@ export var getMaxTimeAndPerTime = async function (subChainAddr, deployLwSolAdmin
       "Sender": deployLwSolAdmin,
       "Data": getAbi()
     };
-    getContractInfo(rpcIp, "ScsRPCMethod.SetDappAbi", postParam1).then(function(result){
-
-      getContractInfo(rpcIp, "ScsRPCMethod.AnyCall", postParam3).then(function(maxBlk){
-        timeInfo.perTime = config.packPerBlockTime;
-        timeInfo.maxTime = JSON.parse(maxBlk)[0] * timeInfo.perTime;
-        console.log("---------结束调用getMaxTimeAndPerTime");
-        resolve(timeInfo);
-        
-      });
+    getContractInfo(rpcIp, "ScsRPCMethod.AnyCall", postParam3).then(function(maxBlk){
+      timeInfo.perTime = config.packPerBlockTime;
+      timeInfo.maxTime = JSON.parse(maxBlk)[0] * timeInfo.perTime;
+      console.log("---------结束调用getMaxTimeAndPerTime");
+      resolve(timeInfo);
+      
     });
 
   }); 
@@ -850,10 +823,10 @@ function checkTime (subChainAddr, topicHash,rpcIp,userAddr) {
       "SubChainAddr": subChainAddr
     };
     getContractInfo(rpcIp,"ScsRPCMethod.GetBlockNumber", postParam4).then(function(currentBlockNum){
-
           var postParam2 = {
             "SubChainAddr": subChainAddr,
             "Sender": userAddr,
+            "DappAddr": getDappAddr(),
             "Params": ["getTopicByHash", topicHash]
           };
           getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam2).then(function(topicInfo){
@@ -1004,14 +977,6 @@ function UnicodeToAscii(content) {
 	return result;
 }
 
-// 批量点赞
-// export function approveSubTopics() {
-//   getSubTopics().then((data) => {
-//     var arr1 = arrInfo.arr1;
-//     var arr2 = arrInfo.arr2;
-//     for ()
-//   });
-// }
 
 // 批量创建问题
 export function createManyTopics () {
@@ -1073,114 +1038,3 @@ export function approveSubTopics() {
     });
   });
 }
-
-
-
-export function getSubTopics() {
-  // return new Promise ((resolve) => {
-  //   getTopicList(0,0, config.subChainAddr, "", "0x44c10f4cd26dbb33b0cc3bd8d9fb4e313498cfa0", config.userAddr2).then((data1) => {
-
-  //     var arr1 = [];
-  //     var arr2 = [];
-  //     var flag = 0;
-  //     var arrInfo = {};
-  //     data1.topicArr.forEach(function (item, index) {
-          
-  //         getSubTopicList(item.topicHash,
-  //          0,0, config.subChainAddr,"", 1, config.deployLwSolAdmin, config.userAddr2).then((data2) => {
-  //          console.log(data2);
-
-  //           flag ++;
-  //           if (data2.subTopicList.length > 0) {
-  //             arr1.push(data2.subTopicList[0].subTopicHash);
-  //           arr2.push(data2.subTopicList[1].subTopicHash);
-  //           if (flag == data1.topicArr.length) {
-  //             arrInfo.arr1 = arr1;
-  //             arrInfo.arr2 = arr2;
-  //             resolve (arrInfo);
-  //           }
-  //           }
-            
-
-
-  //         });
-          
-  //     });
-    
-  //   });
-  // });
-  
-}
-
-
-// user1投票第一个评论数组
-function vote1 (voteArr1) {
-  // commonSetRpcAndVnode(config.subChainAddr, config.rpcIp).then((data) => {
-  //   setNonce(config.subChainAddr, config.userAddr1, data.rpcIp).then((data) => {
-  //     return new Promise ((resolve) => {
-  //       var flag = 0;
-  //       voteArr1.forEach(function (item) {
-  //         approveSubTopic(config.userAddr1, item.subTopicHash, config.subChainAddr,
-  //           config.pwd, config.keystore_youTest, "").then((data) => {
-  //             flag ++;
-  //             if (flag == voteArr1.length) {
-  //               resolve(1);
-  //             }
-  //           });
-  //       });
-    
-  //     });
-
-  //   });
-  //   });
-  
-  
-}
-
-// user2投票第一个评论数组
-function vote2 (voteArr2) {
-  // commonSetRpcAndVnode(config.subChainAddr, config.rpcIp).then((data) => {
-  //   setNonce(config.subChainAddr, config.userAddr2, data.rpcIp).then((data) => {
-  //     return new Promise ((resolve) => {
-  //       var flag = 0;
-  //       voteArr2.forEach(function (item) {
-  //         approveSubTopic(config.userAddr2, item.subTopicHash, config.subChainAddr,
-  //           config.pwd, config.keystore_myTest, "").then((data) => {
-  //             flag ++;
-  //             if (flag == voteArr2.length) {
-  //               resolve(1);
-  //             }
-  //           });
-  //       });
-    
-  //     });
-  //   });
-  // });
-  
-  
-}
-
-// user3投票第二个评论数组
-function vote3 (voteArr3) {
-  // commonSetRpcAndVnode(config.subChainAddr, config.rpcIp).then((data) => {
-  //   setNonce(config.subChainAddr, config.userAddr4, data.rpcIp).then((data) => {
-  //     return new Promise ((resolve) => {
-  //       var flag = 0;
-  //       voteArr3.forEach(function (item) {
-  //         approveSubTopic(config.userAddr4, item.subTopicHash, config.subChainAddr,
-  //           config.pwd, config.keystore_ownerTest, "").then((data) => {
-  //             flag ++;
-  //             if (flag == voteArr3.length) {
-  //               resolve(1);
-  //             }
-  //           });
-  //       });
-    
-  //     });
-
-  //   });
-  // });
-  
-  
-}
- 

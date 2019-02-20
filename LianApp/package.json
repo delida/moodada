@@ -21,6 +21,7 @@
     "chain3": "^0.1.9",
     "console-browserify": "^1.1.0",
     "constants-browserify": "^1.0.0",
+    "crypto-browserify": "^3.12.0",
     "dns.js": "^1.0.1",
     "domain-browser": "^1.1.1",
     "eslint": "^5.6.0",

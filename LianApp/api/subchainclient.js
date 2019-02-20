@@ -10,6 +10,8 @@ import {getVoteBond} from './accountApi';
 import {getContinueCount} from './accountApi';
 import {getEverRoundRewardRate} from './accountApi';
 import {commonAnyCall} from './bussApi';
+import {getDappBaseAddr} from './accountApi';
+import {getDappAddr} from './accountApi';
 
 
 var chain3 = getChain3();
@@ -56,9 +58,8 @@ export function createTopicSol(userAddr, pwd, amount, expblk, desc, subchainaddr
 	
 	var award = amount * config.toSha;
 	var data=getInstance(subchainaddr).createTopic.getData(award, expblk, desc)
-	sendshardingflagtx(userAddr, pwd,subchainaddr,amount,data,nonce, privatekey);
+	sendshardingflagtx(userAddr, pwd,subchainaddr, amount,getDappAddr() + data.substring(2),nonce, privatekey);
 }
-
 export function getInstance(subChainAddr) {
 	chain3 = getChain3();
 	var deChatABI = getAbi();
@@ -71,8 +72,7 @@ export function getInstance(subChainAddr) {
 export function createSubTopicSol(userAddr, pwd, desc, subchainaddr,topHash, nonce, privatekey)
 {
 	var data=getInstance(subchainaddr).creatSubTopic.getData(topHash, desc)
-	
-	sendshardingflagtx(userAddr, pwd,subchainaddr, "0",data,nonce, privatekey)
+	sendshardingflagtx(userAddr, pwd,subchainaddr, "0",getDappAddr() + data.substring(2),nonce, privatekey)
 }
 
 export function voteOnTopic(vote, pwd, subchainaddr,subHash, nonce, privatekey)
@@ -83,20 +83,20 @@ export function voteOnTopic(vote, pwd, subchainaddr,subHash, nonce, privatekey)
 		// 小说接龙
         amount = getVoteBond() + "";
 	}
-	sendshardingflagtx(vote, pwd, subchainaddr, amount, data, nonce, privatekey)
+	sendshardingflagtx(vote, pwd, subchainaddr, amount, getDappAddr() + data.substring(2), nonce, privatekey)
 }
 export function autoCheckSol(userAddr, pwd, subchainaddr, nonce, privatekey)
 {
 	var data=getInstance(subchainaddr).autoCheck.getData()
 	
-	sendshardingflagtx(userAddr, pwd, subchainaddr,'0',data,nonce, privatekey)
+	sendshardingflagtx(userAddr, pwd, subchainaddr,'0',getDappAddr() + data.substring(2),nonce, privatekey)
 }
 
 export function setTopicStatusSol(userAddr, pwd, subchainaddr, nonce, privatekey, hash, status)
 {
 	var data=getInstance(subchainaddr).setTopicStatus.getData(hash, status)
 	
-	sendshardingflagtx(userAddr, pwd, subchainaddr,'0',data,nonce, privatekey)
+	sendshardingflagtx(userAddr, pwd, subchainaddr,'0',getDappAddr() + data.substring(2),nonce, privatekey)
 }
 
 
@@ -104,5 +104,5 @@ export function setSubTopicStatusSol(userAddr, pwd, subchainaddr, nonce, private
 {
 	var data=getInstance(subchainaddr).setSubTopicStatus.getData(hash, status)
 	
-	sendshardingflagtx(userAddr, pwd, subchainaddr,'0',data,nonce, privatekey)
+	sendshardingflagtx(userAddr, pwd, subchainaddr,'0',getDappAddr() + data.substring(2),nonce, privatekey)
 }

@@ -4,6 +4,9 @@ import BigNumber from 'bignumber.js';
 import {getVia} from './accountApi';
 import {vnodeAddress} from './accountApi';
 import {getChain3} from './accountApi';
+import {getDappBaseAddr} from './accountApi';
+import {getDappAddr} from './accountApi';
+import {sendshardingflagtx} from './subchainclient';
 
 var chain3 = getChain3();
 var userAddr = config.userAddr;
@@ -76,6 +79,10 @@ export	function testrequestEnterMicrochain(sender, passwd, amount, privateKey, s
 
 export function dappredeemFromMicroChain(sender, passwd, amount, nonce, privateKey, subChainAddr)
 {
+	// var via = getVia();
+	// chain3 = getChain3();
+	// sendshardingflagtx(sender, null, subChainAddr, amount, getDappBaseAddr() + '89739c5b', nonce, privateKey);
+
 	var via = getVia();
 	chain3 = getChain3();
 	return new Promise((resolve, reject) => {
@@ -89,7 +96,7 @@ export function dappredeemFromMicroChain(sender, passwd, amount, nonce, privateK
 				gasPrice: '0x0',//chain3.intToHex(0),
 				to: subChainAddr,
 				value: chain3.toHex(amount),
-				data: '0x89739c5b',
+				data: getDappBaseAddr() + '89739c5b',
 				shardingFlag: '0x1',
 				chainId: chain3.intToHex(version),
 				via: via

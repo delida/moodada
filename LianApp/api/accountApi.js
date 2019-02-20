@@ -29,6 +29,8 @@ var continueCount = null;
 var everRoundRewardRate = null;
 var packPerBlockTime = config.packPerBlockTime;   // 子链出块时间单位s
 var decimals = config.decimals;   // 子链token精度
+var dappBaseAddr = null;
+var dappAddr = null;
 
 const Bytes2HexString = (b)=> {
     let hexs = "";
@@ -393,80 +395,115 @@ export var transferCoin = async function (from, to, amount, subChainAddr, pwd, k
 
 // 充值提币历史（充值包括进行中，已完成，   提币包括进行中，已完成。   时间倒叙）
 export function myHistoryList(pageNum, pageSize, userAddr, subChainAddr, rpcIp) {
-	var postParam = {"SubChainAddr": subChainAddr, "Sender": userAddr};
+	var postParam = {"SubChainAddr": subChainAddr, "Sender": userAddr, "EnterRecordIndex":0, "EnterRecordSize": 100,
+		"RedeemRecordIndex":0, "RedeemRecordSize": 100,"EnteringRecordIndex":0, "EnteringRecordSize": 100,
+		"RedeemingRecordIndex":0, "RedeemingRecordSize": 100
+	};
 	return new Promise ((resolve) => {
 		var rpcIp = getRpcIp();
-		getContractInfo(rpcIp, "ScsRPCMethod.GetTransactionRecords", postParam).then(function(result){
+		getContractInfo(rpcIp, "ScsRPCMethod.GetExchangeByAddress", postParam).then(function(result){
 			var myHistory = {};
 			if (result != null && result != undefined) {
 				var enterList = [];
 				var redeemList = [];
-				var enteringAmt = result.EnteringAmt;
-				var enteringtime = result.Enteringtime;
-				var enterAmt = result.EnterAmt;
-				var entertime = result.Entertime;
-	
-				var redeemingAmt = result.RedeemingAmt;
-				var redeemingtime = result.Redeemingtime;
-				var redeemAmt = result.RedeemAmt;
-				var redeemtime = result.Redeemtime;
+
+				var enteringRecords = result.EnteringRecords;  // 充值进行中
+				var enterRecords = result.EnterRecords;  // 充值完成
+				
+				var redeemingRecords = result.RedeemingRecords;  // 提币进行中
+				var redeemRecords = result.RedeemRecords;  // 提币完成
+				
 	
 				// 充值记录
-				if (enteringAmt != null && enteringAmt != undefined) {   // 充值进行中
-					for (var i in enteringAmt) {
+				if (enteringRecords != null && enteringRecords != undefined) {   // 充值进行中
+					enteringRecords.forEach(function(item) {
 						var enterInfo1 = {}; 
 						enterInfo1.status = 2;
-						enterInfo1.amount = chain3.fromSha(enteringAmt[i], "mc")
-						if (enteringtime[i] != null && enteringtime[i] != undefined) {
-							enterInfo1.timeStr = timestampToTime(enteringtime[i]);
-							enterInfo1.timeValue = enteringtime[i];
-						}
+						enterInfo1.amount = chain3.fromSha(item.EnteringAmt, "mc")
+						enterInfo1.timeStr = timestampToTime(item.Enteringtime);
+						enterInfo1.timeValue = item.Enteringtime;
 						enterList.push(enterInfo1);
+					});
+					// for (var i in enteringAmt) {
+					// 	var enterInfo1 = {}; 
+					// 	enterInfo1.status = 2;
+					// 	enterInfo1.amount = chain3.fromSha(enteringAmt[i], "mc")
+					// 	if (enteringtime[i] != null && enteringtime[i] != undefined) {
+					// 		enterInfo1.timeStr = timestampToTime(enteringtime[i]);
+					// 		enterInfo1.timeValue = enteringtime[i];
+					// 	}
+					// 	enterList.push(enterInfo1);
 		
-					}
+					// }
 				}
 	
-				if (enterAmt != null && enterAmt != undefined) {   // 充值已完成
-					for (var i in enterAmt) {
+				if (enterRecords != null && enterRecords != undefined) {   // 充值已完成
+					enterRecords.forEach(function(item) {
 						var enterInfo2 = {}; 
 						enterInfo2.status = 1;
-						enterInfo2.amount = chain3.fromSha(enterAmt[i], "mc");
-						if (entertime[i] != null && entertime[i] != undefined) {
-							enterInfo2.timeStr = timestampToTime(entertime[i]);
-							enterInfo2.timeValue = entertime[i];
-						}
+						enterInfo2.amount = chain3.fromSha(item.EnterAmt, "mc")
+						enterInfo2.timeStr = timestampToTime(item.Entertime);
+						enterInfo2.timeValue = item.Entertime;
 						enterList.push(enterInfo2);
-					}
+					});
+					// for (var i in enterAmt) {
+					// 	var enterInfo2 = {}; 
+					// 	enterInfo2.status = 1;
+					// 	enterInfo2.amount = chain3.fromSha(enterAmt[i], "mc");
+					// 	if (entertime[i] != null && entertime[i] != undefined) {
+					// 		enterInfo2.timeStr = timestampToTime(entertime[i]);
+					// 		enterInfo2.timeValue = entertime[i];
+					// 	}
+					// 	enterList.push(enterInfo2);
+					// }
 				}
 				
 				
 	
 				// 提币记录
-				if (redeemingAmt != null && redeemingAmt != undefined) {   // 提币进行中
-					for (var i in redeemingAmt) {
+				if (redeemingRecords != null && redeemingRecords != undefined) {   // 提币进行中
+
+					redeemingRecords.forEach(function(item) {
 						var redeemInfo1 = {}; 
 						redeemInfo1.status = 2;
-						redeemInfo1.amount = chain3.fromSha(redeemingAmt[i], "mc");
-						if (redeemingtime[i] != null && redeemingtime[i] != undefined) {
-							redeemInfo1.timeStr = timestampToTime(redeemingtime[i]);
-							redeemInfo1.timeValue = redeemingtime[i];
-						}
+						redeemInfo1.amount = chain3.fromSha(item.RedeemingAmt, "mc");
+						redeemInfo1.timeStr = timestampToTime(item.Redeemingtime);
+						redeemInfo1.timeValue = item.Redeemingtime;
 						redeemList.push(redeemInfo1);
+					});
+
+					// for (var i in redeemingAmt) {
+					// 	var redeemInfo1 = {}; 
+					// 	redeemInfo1.status = 2;
+					// 	redeemInfo1.amount = chain3.fromSha(redeemingAmt[i], "mc");
+					// 	if (redeemingtime[i] != null && redeemingtime[i] != undefined) {
+					// 		redeemInfo1.timeStr = timestampToTime(redeemingtime[i]);
+					// 		redeemInfo1.timeValue = redeemingtime[i];
+					// 	}
+					// 	redeemList.push(redeemInfo1);
 		
-					}
+					// }
 				}
 	
-				if (redeemAmt != null && redeemAmt != undefined) {   // 提币已完成
-					for (var i in redeemAmt) {
+				if (redeemRecords != null && redeemRecords != undefined) {   // 提币已完成
+					redeemRecords.forEach(function(item) {
 						var redeemInfo2 = {}; 
 						redeemInfo2.status = 1;
-						redeemInfo2.amount = chain3.fromSha(redeemAmt[i], "mc");
-						if (redeemtime[i] != null && redeemtime[i] != undefined) {
-							redeemInfo2.timeStr = timestampToTime(redeemtime[i]);
-							redeemInfo2.timeValue = redeemtime[i];
-						}
+						redeemInfo2.amount = chain3.fromSha(item.RedeemAmt, "mc");
+						redeemInfo2.timeStr = timestampToTime(item.Redeemtime);
+						redeemInfo2.timeValue = item.Redeemtime;
 						redeemList.push(redeemInfo2);
-					}
+					});
+					// for (var i in redeemAmt) {
+					// 	var redeemInfo2 = {}; 
+					// 	redeemInfo2.status = 1;
+					// 	redeemInfo2.amount = chain3.fromSha(redeemAmt[i], "mc");
+					// 	if (redeemtime[i] != null && redeemtime[i] != undefined) {
+					// 		redeemInfo2.timeStr = timestampToTime(redeemtime[i]);
+					// 		redeemInfo2.timeValue = redeemtime[i];
+					// 	}
+					// 	redeemList.push(redeemInfo2);
+					// }
 				}
 	
 				// 时间倒叙
@@ -863,7 +900,8 @@ export var commonSetRpcAndVnode = function (subChainAddr, rpcIp, type, deployLwS
 									if (type == "type2") {
 										commonSetNovelParams(deployLwSolAdmin, subChainAddr, rpcInfo.rpcIp)
 									}
-									
+									setDappInfo(rpcInfo.rpcIp, subChainAddr); // 全局设置dappBaseAddr, dappAddr
+
 									responseRes.rpcIp = rpcInfo.rpcIp;
 									//console.log("+++++++++++++" + rpcInfo.rpcIp);
 									if (data == 1) {
@@ -884,6 +922,8 @@ export var commonSetRpcAndVnode = function (subChainAddr, rpcIp, type, deployLwS
 						if (type == "type2") {
 							commonSetNovelParams(deployLwSolAdmin, subChainAddr, rpcIp)
 						}
+						setDappInfo(rpcIp, subChainAddr); // 全局设置dappBaseAddr, dappAddr
+
 						rpcIpCommon = rpcIp;
 						responseRes.isSuccess = 3; // 备用远程服务连接成功
 						responseRes.rpcIp = rpcIp ;
@@ -900,6 +940,9 @@ export var commonSetRpcAndVnode = function (subChainAddr, rpcIp, type, deployLwS
 					if (type == "type2") {
 						commonSetNovelParams(deployLwSolAdmin, subChainAddr, rpcIp)
 					}
+
+					setDappInfo(rpcIp, subChainAddr); // 全局设置dappBaseAddr, dappAddr
+
 					rpcIpCommon = rpcIp;
 					responseRes.isSuccess = 3; // 备用远程服务连接成功
 					responseRes.rpcIp = rpcIp ;
@@ -922,12 +965,14 @@ function commonSetNovelParams(deployLwSolAdmin, subChainAddr, rpcIp) {
 	var postParam1 = {
 		"SubChainAddr": subChainAddr,
 		"Sender": deployLwSolAdmin,
+		"DappAddr": config.dappAddr,
 		"Data": dechatAbi
 	};
 
 	var postParam2 = {
 		"SubChainAddr": subChainAddr,
 		"Sender": deployLwSolAdmin,
+		"DappAddr": config.dappAddr,
 		"Params": ["getParams"]
 		};
 		
@@ -936,6 +981,17 @@ function commonSetNovelParams(deployLwSolAdmin, subChainAddr, rpcIp) {
 		voteBond = novelBoardParams[0];
 		continueCount = novelBoardParams[1];
 		everRoundRewardRate = novelBoardParams[2];
+	});
+}
+
+function setDappInfo(rpcIp, subChainAddr) {
+	var postParam = {
+		"SubChainAddr": subChainAddr
+	};
+	
+	getContractInfo(rpcIp, "ScsRPCMethod.GetDappAddrList", postParam).then(function(result){
+		dappBaseAddr = result[0];
+		dappAddr = result[result.length - 1];
 	});
 }
 
@@ -974,6 +1030,14 @@ export function getEverRoundRewardRate() {
 
 export function getRpcIp() {
 	return rpcIpCommon;
+}
+
+export function getDappBaseAddr() {
+	return dappBaseAddr;
+}
+
+export function getDappAddr() {
+	return dappAddr;
 }
 
 // 随机打乱数组顺序

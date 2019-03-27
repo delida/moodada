@@ -189,8 +189,6 @@ export var chargeToken = async function (userAddr, value, marketableTokenAddr, p
 		console.log("充值报错--------" + e);
 		return 0;
 	}
-
-
 }
 // export var chargeToken = async function (userAddr, value, marketableTokenAddr, pwd, keystore, subChainAddr, exchangeRate) {
 // 		var privatekeyObj = await decrypt(JSON.parse(keystore), pwd)
@@ -862,7 +860,11 @@ export var commonSetRpcAndVnode = function (subChainAddr, rpcIp, type, deployLwS
 			responseRes.rpcIp = "";
 			resolve(responseRes);
 		} else {
+		var start1 = new Date().getTime();
 		commonSetVnode().then((data) => {
+			var end1 = new Date().getTime();
+			console.log("commonSetVnode接口调用耗时为：");
+			console.log((end1-start1)/1000);
 			if (data == 1 || data == 2) {
 				_fetch(fetch_promise(ip), config.timeOut).then((datas) => {
 					if (datas != undefined && datas.MonitorList.length != 0) {
@@ -890,6 +892,9 @@ export var commonSetRpcAndVnode = function (subChainAddr, rpcIp, type, deployLwS
 								});
 							
 							}, function (err) {
+								var end2 = new Date().getTime();
+								console.log("本地接口调用耗时为：");
+								console.log((end2-end1)/1000);
 								if (rpcInfo.rpcIp == undefined) {
 									// 当前所有的rpcIp都不可连接
 									responseRes.rpcIp = "";

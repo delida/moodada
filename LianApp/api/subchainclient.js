@@ -55,10 +55,9 @@ export function sendshardingflagtx(userAddr,pwd,subchainaddr,amount,code, n, pri
 
 export function createTopicSol(userAddr, pwd, amount, expblk, desc, subchainaddr, nonce, privatekey)
 {
-	
 	var award = amount * config.toSha;
-	var data=getInstance(subchainaddr).createTopic.getData(award, expblk, desc)
-	sendshardingflagtx(userAddr, pwd,subchainaddr, amount,getDappAddr() + data.substring(2),nonce, privatekey);
+	var data = getInstance(subchainaddr).createTopic.getData(award, expblk, desc)
+	sendshardingflagtx(userAddr, pwd,subchainaddr, amount,   getDappAddr() + data.substring(2),    nonce, privatekey);
 }
 export function getInstance(subChainAddr) {
 	chain3 = getChain3();

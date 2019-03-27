@@ -70,8 +70,9 @@ export var getContractInfo = function(rpcIp, methodName, postParam) {
             if (datas == undefined) {
               rpcResult = "connnect exception";   // rpc连接失败
             } else if (datas.result == undefined) {
-                if (datas.error != undefined && datas.error.code == -32000) {
-                  rpcResult = "pending";
+                if (datas.error != undefined && datas.error != null) {
+                  console.log("!!------" + datas.error.message);
+                  rpcResult = "monitor rpc result:" + datas.error.message;
                 } else {
                   rpcResult == "have exception";
                 }
@@ -178,7 +179,7 @@ export var getTopicList = function (pageNum, pageSize, subChainAddr, rpcIp, depl
               var surplusBlk = item.Expblk - (currentBlockNum - item.Startblk);
               if (surplusBlk > 1 ) {
                 var topicInfo = {};
-                topicInfo.topicHash = "0x" + item.Hash;
+                topicInfo.topicHash = item.Hash;
                 //topicInfo.desc = item.Desc.replace(/-456/g, "\n");
                 var descValue = UnicodeToAscii(item.Desc);
                 if (descValue == "") {
@@ -188,7 +189,7 @@ export var getTopicList = function (pageNum, pageSize, subChainAddr, rpcIp, depl
                 }
                 
                 topicInfo.award = chain3.fromSha(item.Award, "mc");
-                topicInfo.owner = "0x" + item.Owner;
+                topicInfo.owner = item.Owner;
                 topicInfo.status = item.Status;
                 if (topicInfo.status == 1) {
                   topicInfo.desc = config.sensitiveInfo;
@@ -314,7 +315,7 @@ export var getSubTopicList = function (topicHash, pageNum, pageSize, subChainAdd
               var listObj = JSON.parse(subTopicList);
               listObj.forEach(function (item, index) {
                   var subTopicInfo = {};
-                  subTopicInfo.subTopicHash = "0x" + item.Hash;
+                  subTopicInfo.subTopicHash = item.Hash;
                   //subTopicInfo.desc = item.Desc.replace(/-456/g, "\n");
                   var descValue = UnicodeToAscii(item.Desc);
                   if (descValue == "") {
@@ -322,7 +323,7 @@ export var getSubTopicList = function (topicHash, pageNum, pageSize, subChainAdd
                   } else {
                     subTopicInfo.desc = descValue;
                   }
-                  subTopicInfo.owner = "0x" + item.Owner;
+                  subTopicInfo.owner = item.Owner;
                   subTopicInfo.reward = chain3.fromSha(item.Reward, "mc");
                   subTopicInfo.voteCount = item.VoteCount;
                   subTopicInfo.status = item.Status;
@@ -446,8 +447,8 @@ export var myTopicList = function (userAddr, subChainAddr, pwd,keystore, rpcIp, 
         
         for (key in topicArr) {
           var myTopic = {};
-          myTopic.topicHash = "0x" + topicArr[key].Hash;
-          myTopic.owner = "0x" + topicArr[key].Owner;
+          myTopic.topicHash = topicArr[key].Hash;
+          myTopic.owner = topicArr[key].Owner;
           myTopic.award = chain3.fromSha(topicArr[key].Award, 'mc');
           myTopic.duration = topicArr[key].Expblk * config.packPerBlockTime;
           
@@ -684,7 +685,7 @@ export var getBoardOwner = async function (rpcIp, subChainAddr, deployLwSolAdmin
       "Params": ["getDechatInfo"]
     };
     getContractInfo(rpcIp,"ScsRPCMethod.AnyCall", postParam3).then(function(result){
-      resolve("0x" + JSON.parse(result)[0]);
+      resolve(JSON.parse(result)[0]);
       
     });
   }); 
@@ -822,6 +823,7 @@ function checkTime (subChainAddr, topicHash,rpcIp,userAddr) {
     var postParam4 = {
       "SubChainAddr": subChainAddr
     };
+    console.log("-----------" + topicHash);
     getContractInfo(rpcIp,"ScsRPCMethod.GetBlockNumber", postParam4).then(function(currentBlockNum){
           var postParam2 = {
             "SubChainAddr": subChainAddr,
@@ -910,6 +912,8 @@ export var currentNonce = async function (subChainAddr, userAddr, rpcIp) {
   });
   
 }
+
+
 
 // 根据nonce获取操作结果（暂不用，针对提问，回答，点赞）
 export var getResult = function (subChainAddr, userAddr, nonce, rpcIp){

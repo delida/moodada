@@ -53,8 +53,8 @@ export function getInstance(subChainAddr) {
 	chain3 = getChain3();
 	var subchainbaseaddr = subChainAddr;
 	var subchainbaseAbi = config.subchainbaseAbi;
-	var subchainbaseContract=chain3.mc.contract(JSON.parse(subchainbaseAbi));
-	var subchainbase=subchainbaseContract.at(subchainbaseaddr);
+	var subchainbaseContract = chain3.mc.contract(JSON.parse(subchainbaseAbi));
+	var subchainbase = subchainbaseContract.at(subchainbaseaddr);
 	return subchainbase;
 }
 	
